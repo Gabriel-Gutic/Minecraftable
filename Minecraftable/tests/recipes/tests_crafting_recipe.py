@@ -16,7 +16,7 @@ class  CraftingRecipeTest(TestCase):
 
         crs.remove_ingredient('gunpowder')
 
-        crs.write('jsons/crafting_recipe_shapeless.json')
+        crs.write('test files/crafting_recipe_shapeless.json')
 
 
     def test_crafting_shaped(self):
@@ -43,5 +43,5 @@ class  CraftingRecipeTest(TestCase):
 
         crs.set_result('diamond_horse_armor')
 
-        crs.write('jsons/crafting_recipe_shaped.json')
+        crs.write('test files/crafting_recipe_shaped.json')
 

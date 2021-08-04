@@ -1,5 +1,3 @@
-import json
-
 from .recipe import Recipe
 from Minecraftable.printer.error import print_error
 
@@ -27,18 +25,15 @@ class CraftingRecipeShapeless(Recipe):
     def ingredients_number(self):
         return len(self.ingredients)
 
-    def write(self, path):
-        dictionary = {
-            "type": self.type(),
-            "ingredients": self.ingredients,
-            "result": {
+    def _fill_dictionary_(self):
+        if self.ingredients_number() < 1:
+            return 'No ingredients in ' + self.type() + ' recipe'
+        self.dictionary["ingredients"] = self.ingredients
+        self.dictionary["result"] = {
                 "item": self.result, 
                 "count": self.result_count
             }
-        }
-
-        with open(path, 'w') as json_file:
-            json.dump(dictionary, json_file, indent=4)
+        return None
 
 
 class CraftingRecipeShaped(Recipe):
@@ -81,7 +76,7 @@ class CraftingRecipeShaped(Recipe):
         else:
             print_error('Key not found!')
 
-    def write(self, path):
+    def _fill_dictionary_(self):
 
         sp = self.pattern
 
@@ -91,18 +86,17 @@ class CraftingRecipeShaped(Recipe):
             sp[2][0] + sp[2][1] + sp[2][2],
         ]
 
-        dictionary = {
-            "type": self.type(),
-            "pattern": pattern,
-            "key": self.key,
-            "result": {
+        self.dictionary["pattern"] = pattern
+        if len(self.key) < 1:
+            return 'No keys in ' + self.type() + ' recipe'
+        self.dictionary["key"] = self.key
+        self.dictionary["result"] = {
                 "item": self.result, 
                 "count": self.result_count
             }
-        }
+        return None
 
-        with open(path, 'w') as json_file:
-            json.dump(dictionary, json_file, indent=4)
+        
 
 
 
