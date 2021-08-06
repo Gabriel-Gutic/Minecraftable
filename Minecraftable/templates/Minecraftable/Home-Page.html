@@ -1,12 +1,37 @@
-<!DOCTYPE html>
-<html>
+{% extends "Minecraftable/base.html" %}
 
-<head>
-    <title>Minecraftable Home</title>
-</head>
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-<body>
-    <h1>Minecraftable Home</h1>
-</body>
+<div class="container mt-3 d-flex justify-content-center">
+    <div class="card p-4 mt-3 bg-black" style="width: 25rem;">
+        <form>
+            {% for field in form %}
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">{{field.label}}</span>
+                    <input id="{{field.id_for_label}}" type="text" class="form-control">
 
-</html>
+                    {% if field.id_for_label == 'location-field' %}
+                        <input id="dir-selector" type="file" onchange="getFolderPath(event)" webkitdirectory directory multiple="false" style="display:none" />
+                        <button class="btn btn-outline-secondary" type="button" onclick="getElementById('dir-selector').click();">
+                            <i class="fa fa-folder"></i>
+                        </button>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <br>
+            <div class="position-relative">
+                <div class="position-absolute top-50 start-50 translate-middle">
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'js/home-page.js' %}"></script>
+{% endblock scripts %}

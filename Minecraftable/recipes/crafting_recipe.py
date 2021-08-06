@@ -35,6 +35,17 @@ class CraftingRecipeShapeless(Recipe):
             }
         return None
 
+    def fill_data_from_dictionary(self, dictionary):
+        with dictionary as d:
+            if 'ingredients' in d:
+                self.ingredients = d['ingredients']
+            if 'result' in d:
+                result = d['result']
+                if 'item' in result:
+                    self.result = result['item']
+                if 'count' in result:
+                    self.count = result['count']
+
 
 class CraftingRecipeShaped(Recipe):
 
@@ -95,6 +106,24 @@ class CraftingRecipeShaped(Recipe):
                 "count": self.result_count
             }
         return None
+
+    def fill_data_from_dictionary(self, dictionary):
+        with dictionary as d:
+            if 'key' in d:
+                self.key = d['key']
+            if 'pattern' in d:
+                pattern = d['pattern']
+                for i in range(len(pattern)):
+                    row = pattern[i]
+                    for j in range(len(row)):
+                        self.pattern[i][j] = row[j]
+            if 'result' in d:
+                result = d['result']
+                if 'item' in result:
+                    self.result = result['item']
+                if 'count' in result:
+                    self.count = result['count']
+
 
         
 

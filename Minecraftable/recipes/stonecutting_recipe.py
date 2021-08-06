@@ -46,3 +46,12 @@ class StonecuttingRecipe(Recipe):
         self.dictionary['result'] = self.result
         self.dictionary['count'] = self.result_count
         return None
+
+    def fill_data_from_dictionary(self, dictionary):
+        with dictionary as d:
+            if 'ingredients' in d:
+                self.ingredients = d['ingredients']
+            if 'result' in d:
+                self.result = d['result']
+            if 'count' in d:
+                self.result_count = d['count']
