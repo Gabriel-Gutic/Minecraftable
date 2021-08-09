@@ -8,11 +8,11 @@ class Error():
     def get_error_message(self):
         return self.message
 
-    def get_error(self):
-        return bcolors.FAIL + "ERROR: " + self.message + bcolors.ENDC
+    def print(self):
+        print_error(self.get_error_message())
 
     def __str__(self):
-        return self.get_error()
+        return self.get_error_message()
 
-def print_error(message):
+def print_error(message : str):
     print(bcolors.FAIL + "ERROR: " + message + bcolors.ENDC)

@@ -1,0 +1,15 @@
+{% extends "Minecraftable/base.html" %} 
+
+{% block title %} Thank you! {% endblock title %} 
+
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/logout.css' %}">
+
+<br>
+<div id="logout-message">
+    <h6>Thank you for your registration!</h6> 
+    <a href="/Minecraftable/home/">Back to Home Page</a>
+</div>
+
+{% endblock content %}

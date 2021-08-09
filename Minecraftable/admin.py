@@ -7,3 +7,5 @@ admin.site.register(models.Client)
 
 admin.site.register(models.Datapack)
 admin.site.register(models.Recipe)
+
+EMAIL_ADMIN = 'minecraftable-admin@gmail.com'

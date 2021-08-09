@@ -135,3 +135,16 @@ MEDIA_URL = '/media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'Minecraftable.User'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+
+json_file = open('D:/VS CODE/PYTHON/DJANGO/Minecraftable/config.json')
+import json
+config = json.loads(json_file.read())
+
+EMAIL_HOST_USER = config['email']
+EMAIL_HOST_PASSWORD = config['password']
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False

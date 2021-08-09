@@ -1,0 +1,29 @@
+{% extends "Minecraftable/base.html" %} {% block title %} Register {% endblock title %} {% block content %} {% load static %}
+<link href="{% static '/css/login.css' %}" rel="stylesheet">
+
+<br>
+
+<main class="form-signin">
+    <form method="post">
+        <h1 class="h3 mb-3 fw-normal">Sign Up</h1>
+
+        {% csrf_token %} 
+        {% for field in form %}
+        {{ field.errors }}
+        <div class="mb-3 row">
+            {{field.label_tag}}
+
+            {% if field.id_for_label == 'username-field' %}
+            <div class="fw-lighter">*only letters, numbers and '_'</div>
+            {% endif %}
+
+            <div class="col-sm-10">
+                {{field}}
+            </div>
+        </div>
+        {% endfor %}
+        <button id="signup-btn" class="w-100 btn btn-lg btn-primary" type="submit">Sign Up</button>
+    </form>
+</main>
+
+{% endblock content %}

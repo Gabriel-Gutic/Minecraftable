@@ -60,7 +60,33 @@ class Client(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key = True)
 
     @staticmethod
-    def create(email, username, password, password_again, **other_fields):
+    def validation(email, username, password, password_again):
+        user_model = get_user_model()
+
+        filtered_list = user_model.objects.filter(username=username)
+        if len(filtered_list) != 0:
+            return Error('Username already used!')
+
+        for c in username:
+            if not c.isalnum() and c != '_':
+                print(c)
+                return Error('Invalid username!') 
+
+        filtered_list = user_model.objects.filter(email=email)
+        if len(filtered_list) != 0:
+            return Error('Email already used!')
+
+        if password != password_again:
+            return Error("Passwords don't match!")
+
+        if len(password) < 8:
+            return Error("Password must be at least 8 characters!")
+            
+        return None
+
+
+    @staticmethod
+    def create_client(email, username, password, **other_fields):
 
         other_fields.setdefault('is_staff', False)
         other_fields.setdefault('is_superuser', False)
@@ -73,23 +99,15 @@ class Client(models.Model):
 
         user_model = get_user_model()
 
-        filtered_list = user_model.objects.filter(username=username)
-        if len(filtered_list) != 0:
-            return Error('Username already used!')
-
-        filtered_list = user_model.objects.filter(email=email)
-        if len(filtered_list) != 0:
-            return Error('Email already used!')
-
-        if password != password_again:
-            return Error("Passwords don't match!")
-
-        return user_model.objects.create(
-            email,
-            username,
-            password,
+        user = user_model.objects.create_user(
+            email=email,
+            username=username,
+            password=password,
             **other_fields
         )
+
+        client = Client.objects.create(user=user)
+        return client
         
 
 class Datapack(models.Model):
