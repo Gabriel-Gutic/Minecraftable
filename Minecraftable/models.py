@@ -109,15 +109,23 @@ class Client(models.Model):
         client = Client.objects.create(user=user)
         return client
         
-
 class Datapack(models.Model):
+    VERSIONS = [
+        (4, ('1.13 - 1.14.4')),
+        (5, ('1.15 - 1.16.1')),
+        (6, ('1.16.2 - 1.16.5')),
+        (7, ('1.17')),
+    ]
+
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=100)
+    description = models.CharField(max_length=200, blank=True, null=True)
+    version = models.PositiveSmallIntegerField(choices=VERSIONS, default=7)
 
     client =  models.ForeignKey(Client, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name + ' --- ' + self.client.username
+        return self.name + ' --- ' + self.client.user.username
     
 
 from Minecraftable.recipes.creator import create_recipe_from_json

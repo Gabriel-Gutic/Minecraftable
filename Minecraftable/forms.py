@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 
+from .models import Datapack
+
 
 class LoginForm(forms.Form):
     username_email = forms.CharField(label='Username or Email', max_length=100, widget=forms.TextInput(attrs={'id': 'username-email-field', 'class': 'form-control'}))
@@ -16,5 +18,6 @@ class RegisterForm(forms.Form):
 
 
 class NewDatapackForm(forms.Form):
-    location = forms.CharField(label='Location', max_length=200, widget=forms.TextInput(attrs={'id': 'location-field'}))
     name = forms.CharField(label='Name', max_length=200, widget=forms.TextInput(attrs={'id': 'name-field'}))
+    description = forms.CharField(label='Description', required=False, max_length=200, widget=forms.TextInput(attrs={'id': 'description-field'}))
+    version = forms.ChoiceField(label='Version', choices=Datapack.VERSIONS, widget=forms.Select(attrs={'id': 'version-field'}))

@@ -8,8 +8,8 @@ from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 import ast
 
-from .forms import NewDatapackForm, LoginForm, RegisterForm
-from .models import User, Client
+from Minecraftable.forms import NewDatapackForm, LoginForm, RegisterForm
+from Minecraftable.models import Datapack, User, Client
 from Minecraftable.printer.error import Error
 
 
@@ -17,9 +17,14 @@ def home(request):
     
     template =  loader.get_template('Minecraftable/Home-Page.html')
 
-    form = NewDatapackForm()
+    user = request.user
+    datapacks = []
+
+    if user.is_authenticated:
+        datapacks = Datapack.objects.filter(client=Client.objects.get(user=user))
+
     context = {
-        'form': form,
+        'datapacks': datapacks,
     }
 
     return HttpResponse(template.render(context, request))

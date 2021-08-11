@@ -3,5 +3,5 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('Minecraftable/', include('Minecraftable.urls')),
+    path('Minecraftable/', include('Minecraftable.urls.urls')),
 ]
