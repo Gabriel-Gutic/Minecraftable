@@ -152,4 +152,23 @@ class Recipe(models.Model):
             return Error('Recipe could not be created!')
 
 
+class Tag(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    name = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Item(models.Model):
+    id = models.CharField(max_length=100, unique=True, primary_key=True)
+    name = models.CharField(max_length=100)
+    image = models.ImageField(null=True, blank=True, upload_to="items")
+
+    tag = models.ManyToManyField(Tag, blank=True)
+
+    def __str__(self):
+        return self.name
+
+
 

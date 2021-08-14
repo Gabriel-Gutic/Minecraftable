@@ -6,6 +6,12 @@
     font-size: 20px;
 }
 
+#profile-picture {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+}
+
 #navbar-icon {
     width: 27px;
     height: 27px;

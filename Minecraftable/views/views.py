@@ -1,4 +1,4 @@
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template import loader
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password
@@ -16,6 +16,14 @@ from Minecraftable.printer.error import Error
 def home(request):
     
     template =  loader.get_template('Minecraftable/Home-Page.html')
+
+    if request.method == 'POST':
+        if 'datapack-delete' in request.POST:
+            datapack_id = int(request.POST.get('datapack-id'))
+            datapack = Datapack.objects.get(id=datapack_id)
+            datapack.delete()
+
+            return JsonResponse({}, status=200)
 
     user = request.user
     datapacks = []

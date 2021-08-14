@@ -4,6 +4,7 @@
 <head>
     {% load static %}
     <link rel="icon" href="{% static 'images/webapp-icon.png' %}">
+    <link rel="stylesheet" href="{% static 'css/base-page.css' %}">
     <title>{% block title %}Minecraftable{% endblock title %}</title>
 
     <meta charset="UTF-8">
@@ -33,10 +34,11 @@
                             {% if not user.image %}
                             <i class="far fa-user-circle" style="font-size:30px"></i>
                             {% else %}
-                            <img id="profile-picture" src="{{user.image.url}}" alt="">
+                            <img id="profile-picture" src="{{user.image.url}}" alt="" style="width: 30px; height: 30px;">
                             {% endif %}
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark" aria-labelledby="navbarDropdownMenuLink">
+                            <li><a class="dropdown-item" href="/Minecraftable/home/">Home</a></li>
                             <li><a class="dropdown-item" href="/Minecraftable/profile/">Profile</a></li>
                             <li>
                                 <hr class="dropdown-divider">

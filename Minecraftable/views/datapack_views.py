@@ -3,7 +3,8 @@ from django.http import HttpResponse
 from django.shortcuts import redirect
 
 from Minecraftable.forms import NewDatapackForm
-from Minecraftable.models import Datapack, Client
+from Minecraftable.models import Datapack, Client, Item
+from Minecraftable.scripts.minecraft_data_filler import Filler
 
 
 def create(request):
@@ -32,9 +33,34 @@ def settings(request, id):
 
     datapack = Datapack.objects.get(id=id)
 
+    if request.method == 'GET':
+        if request.is_ajax():
+            if 'changed-settings' in request.GET:
+                name = request.GET.get('name')
+                description = request.GET.get('description')
+                version = request.GET.get('version')
+
+                datapack.name = name
+                datapack.description = description
+                datapack.version = version
+                datapack.save(force_update=True)
+
     context = {
         'datapack': datapack,
         'versions': Datapack.VERSIONS,
     }
+
+    return HttpResponse(template.render(context, request))
+
+
+# TODO: items filler
+def datapack(request, id):
+    filler = Filler()
+    filler.remove_all_items()
+    filler.fill()
+
+    template = loader.get_template('Minecraftable/Datapack/Datapack.html')
+
+    context = {}
 
     return HttpResponse(template.render(context, request))

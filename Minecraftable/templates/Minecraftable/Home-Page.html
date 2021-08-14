@@ -15,7 +15,7 @@
                     <div>
                         <a href="/Minecraftable/datapack/{{datapack.id}}/" class="btn btn-primary">Open</a>
                         <a href="/Minecraftable/datapack/{{datapack.id}}/settings/" class="btn btn-secondary">Settings</a>
-                        <a class="btn btn-danger">Delete</a>
+                        <a id="{{datapack.id}}-delete" class="btn btn-danger delete-button"><p id="{{datapack.id}}-name" style="display: none;">{{datapack.name}}</p>Delete</a>
                     </div>
                 </li>
             {% endfor %}
@@ -23,6 +23,8 @@
                 <a href="/Minecraftable/datapack/create/" class="btn btn-primary">Create a new datapack</a>
             </li>
         </ul>
+        
+        <p id="deleted-datapack-id" style="display: none;"></p>
     </div>
 {% else %}
 
@@ -38,8 +40,27 @@
 
 {% endif %}
 
+<div class="modal fade" id="delete-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Be careful!</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div id="delete-modal-body" class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button id="confirm-delete-button" type="button" class="btn btn-danger">Yes</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% csrf_token %}
 {% endblock content %}
 
 {% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.0/dist/js.cookie.min.js"></script>
 <script src="{% static 'js/home-page.js' %}"></script>
 {% endblock scripts %}
