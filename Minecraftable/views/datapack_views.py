@@ -55,10 +55,6 @@ def settings(request, id):
 
 # TODO: items filler
 def datapack(request, id):
-    filler = Filler()
-    filler.remove_all_items()
-    filler.fill()
-
     template = loader.get_template('Minecraftable/Datapack/Datapack.html')
 
     context = {}
