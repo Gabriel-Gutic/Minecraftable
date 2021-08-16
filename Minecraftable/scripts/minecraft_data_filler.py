@@ -1,7 +1,8 @@
 from bs4 import BeautifulSoup
 import urllib.request
 import json
-from django.core.files import File
+from django.contrib.staticfiles.storage import staticfiles_storage
+from django.core.files.storage import FileSystemStorage
 
 from Minecraftable.models import Item, Tag
 
@@ -20,7 +21,9 @@ class Filler():
         json_file = open('D:/VS CODE/PYTHON/DJANGO/Minecraftable/config.json')
         config = json.loads(json_file.read())
 
-        static_url = config['static']
+        static_url = config.get('static')
+
+        file_system_storage = FileSystemStorage()
 
         #Iterate through all 9 pages that contain ids
         for index in range(1, 10):
@@ -47,9 +50,11 @@ class Filler():
 
                     list_ = image_url.split('/')
                     filename = list_[len(list_) - 1]
-                    image_path = static_url + '/images/items/' + filename
 
-                    result = urllib.request.urlretrieve(self.url + image_url, image_path)
+                    image_path = 'items/' + filename
+                    result = urllib.request.urlretrieve(self.url + image_url, static_url + '/images/' + image_path)
+                    
+
 
                 #If the item is not already existing, create it
                 items = Item.objects.filter(id=id)
