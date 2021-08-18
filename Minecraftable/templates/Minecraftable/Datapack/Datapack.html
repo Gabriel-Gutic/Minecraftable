@@ -1,3 +1,26 @@
 {% extends "Minecraftable/base.html" %}
 
 {% block title %} Datapack {{datapack.name}} {% endblock title %}
+
+{% block content %}
+
+<div class="card p-4 position-absolute start-50 translate-middle-x text-center" style="max-width: 35rem; min-width: 35rem;">
+    <h1 class="jumbotron-heading">Datapack: {{datapack.name}}</h1>
+    <br>
+    <ul class="list-group">
+        {% for recipe in recipes %}
+            <li id="recipe-{{recipe.id}}" class="list-group-item d-flex justify-content-between align-items-center">
+                {{recipe.name}}
+                <div>
+                    <a href="recipe/{{recipe.id}}/" class="btn btn-primary">Open</a>
+                    <a id="{{recipe.id}}-delete" class="btn btn-danger delete-button"><p id="{{recipe.id}}-name" style="display: none;">{{recipe.name}}</p>Delete</a>
+                </div>
+            </li>
+        {% endfor %}
+        <li class="list-group-item justify-content-between align-items-center">
+            <a href="recipe/create/" class="btn btn-primary">Create a new recipe</a>
+        </li>
+    </ul>
+</div>
+
+{% endblock content %}

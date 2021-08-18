@@ -26,6 +26,7 @@ class Filler():
         file_system_storage = FileSystemStorage()
 
         #Iterate through all 9 pages that contain ids
+        '''
         for index in range(1, 10):
             print(index)
             page=urllib.request.urlopen(self.url + '/' + str(index))
@@ -38,6 +39,8 @@ class Filler():
 
                 #Get the item's name and id
                 name = parts[1].string
+                if name == 'Air':
+                    continue
                 id = parts[2].string[10:]
                 print(id)
 
@@ -57,14 +60,14 @@ class Filler():
 
 
                 #If the item is not already existing, create it
-                items = Item.objects.filter(id=id)
+                items = Item.objects.filter(id_name=id)
                 if len(items) == 0:
                     Item.objects.create(
-                        id=id,
+                        id_name=id,
                         name=name,
                         image=image_path,
                     )
-
+        '''
         #Open the page with tags
         url = 'https://minecraft.fandom.com/wiki/Tag'
         page=urllib.request.urlopen(url)
@@ -86,7 +89,7 @@ class Filler():
                 #The tag names have a '\n' character at the end, except the last one
                 #So if it's not the last one, erase the last character
                 if item != page_find[-1]:
-                    tag_name = parts[0].string[:-2]
+                    tag_name = parts[0].string[:-1]
                 else:
                     tag_name = parts[0].string
 
@@ -106,9 +109,9 @@ class Filler():
 
                             #Check if this tag already exists:
                             t = Tag.objects.filter(name=other_tag_name)
-                            if len(t):
-                                other_tag_items = Item.objects.filter(tag=t[0])
-                                ids.extend(other_tag_items.values_list('name'))
+                            if len(t) > 0:
+                                other_tag_items = Item.objects.filter(tags=t[0])
+                                ids.extend(other_tag_items.values_list('id_name'))
 
                                 print("Tag:" + tag_name)
                                 print(ids)
@@ -122,12 +125,12 @@ class Filler():
                         new_tag.save()
                         for id in ids:
                             try:
-                                item = Item.objects.get(id=id)
-
+                                item = Item.objects.get(id_name=id)
                                 item.tags.add(new_tag)
+
+
                             except Item.DoesNotExist:
                                 print("Item '" + id + "' does not exist!" )
-                            
 
 
 

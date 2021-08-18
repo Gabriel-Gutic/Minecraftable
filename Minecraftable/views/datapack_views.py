@@ -3,8 +3,9 @@ from django.http import HttpResponse
 from django.shortcuts import redirect
 
 from Minecraftable.forms import NewDatapackForm
-from Minecraftable.models import Datapack, Client, Item
+from Minecraftable.models import Datapack, Recipe
 from Minecraftable.scripts.minecraft_data_filler import Filler
+from Minecraftable.decorators import datapack_owned
 
 
 def create(request):
@@ -17,7 +18,7 @@ def create(request):
             name = form.cleaned_data['name']
             description = form.cleaned_data['description']
             version = form.cleaned_data['version']
-            datapack = Datapack.objects.create(name=name, description=description, version=version, client=Client.objects.get(user=request.user))
+            datapack = Datapack.objects.create(name=name, description=description, version=version, user=request.user)
             datapack.save()
             return redirect('/Minecraftable/home/')
 
@@ -28,10 +29,16 @@ def create(request):
     return HttpResponse(template.render(context, request))
 
 
-def settings(request, id):
+def not_exist(request):
+    template = loader.get_template('Minecraftable/Datapack/not-exist.html')
+    return HttpResponse(template.render({}, request))
+
+
+@datapack_owned()
+def settings(request, datapack_id):
     template = loader.get_template('Minecraftable/Datapack/Settings.html')
 
-    datapack = Datapack.objects.get(id=id)
+    datapack = Datapack.objects.get(id=datapack_id)
 
     if request.method == 'GET':
         if request.is_ajax():
@@ -53,15 +60,15 @@ def settings(request, id):
     return HttpResponse(template.render(context, request))
 
 
-# TODO: items filler
-def datapack(request, id):
-    filler = Filler()
-    filler.remove_all_items()
-    filler.remove_all_tags()
-    filler.fill()
-
+@datapack_owned()
+def datapack(request, datapack_id):
     template = loader.get_template('Minecraftable/Datapack/Datapack.html')
 
-    context = {}
+    datapack = Datapack.objects.get(id=datapack_id)
+    recipes = Recipe.objects.filter(datapack=datapack)
+
+    context = {
+        'datapack': datapack,
+    }
 
     return HttpResponse(template.render(context, request))

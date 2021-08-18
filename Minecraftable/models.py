@@ -55,10 +55,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.username
 
-
-class Client(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key = True)
-
     @staticmethod
     def validation(email, username, password, password_again):
         user_model = get_user_model()
@@ -86,7 +82,7 @@ class Client(models.Model):
 
 
     @staticmethod
-    def create_client(email, username, password, **other_fields):
+    def create_user(email, username, password, **other_fields):
 
         other_fields.setdefault('is_staff', False)
         other_fields.setdefault('is_superuser', False)
@@ -106,8 +102,8 @@ class Client(models.Model):
             **other_fields
         )
 
-        client = Client.objects.create(user=user)
-        return client
+        return user
+    
         
 class Datapack(models.Model):
     VERSIONS = [
@@ -122,10 +118,10 @@ class Datapack(models.Model):
     description = models.CharField(max_length=200, blank=True, null=True)
     version = models.PositiveSmallIntegerField(choices=VERSIONS, default=7)
 
-    client =  models.ForeignKey(Client, on_delete=models.CASCADE)
+    user =  models.ForeignKey(User, on_delete=models.CASCADE, default=1)
 
     def __str__(self):
-        return self.name + ' --- ' + self.client.user.username
+        return self.name + ' --- ' + self.user.username
     
 
 from Minecraftable.recipes.creator import create_recipe_from_json
@@ -161,7 +157,8 @@ class Tag(models.Model):
 
 
 class Item(models.Model):
-    id = models.CharField(max_length=100, unique=True, primary_key=True)
+    id = models.BigAutoField(primary_key=True)
+    id_name = models.CharField(max_length=100, unique=True)
     name = models.CharField(max_length=100)
     image = models.ImageField(null=True, blank=True, upload_to="items")
 

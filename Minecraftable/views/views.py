@@ -9,12 +9,12 @@ from django.utils.encoding import force_bytes
 import ast
 
 from Minecraftable.forms import NewDatapackForm, LoginForm, RegisterForm
-from Minecraftable.models import Datapack, User, Client
+from Minecraftable.models import Datapack, User
 from Minecraftable.printer.error import Error
+from Minecraftable.scripts.minecraft_data_filler import Filler
 
 
 def home(request):
-    
     template =  loader.get_template('Minecraftable/Home-Page.html')
 
     if request.method == 'POST':
@@ -29,7 +29,7 @@ def home(request):
     datapacks = []
 
     if user.is_authenticated:
-        datapacks = Datapack.objects.filter(client=Client.objects.get(user=user))
+        datapacks = Datapack.objects.filter(user=user)
 
     context = {
         'datapacks': datapacks,
@@ -97,7 +97,7 @@ def register(request):
             password = form.cleaned_data['password']
             password_again = form.cleaned_data['password_again']
 
-            result = Client.validation(username=username, email=email, password=password, password_again=password_again)
+            result = User.validation(username=username, email=email, password=password, password_again=password_again)
             if result is not None:
                 result.print()
                 messages.error(request, result)
@@ -118,7 +118,7 @@ def register(request):
                 'path': register_path,
             })
 
-            from .admin import EMAIL_ADMIN
+            from Minecraftable.admin import EMAIL_ADMIN
             mail = EmailMessage(
                 subject='Confirmation Email',
                 body=message,
@@ -151,7 +151,12 @@ def register_confirmed(request, data):
 
     data = ast.literal_eval(urlsafe_base64_decode(data).decode("UTF-8"))
 
-    Client.create_client(data['email'], data['username'], data['password'])
+    User.create_user(data['email'], data['username'], data['password'])
 
+    return HttpResponse(template.render({}, request))
+
+
+def not_permission(request):
+    template = loader.get_template('Minecraftable/User/not-permission.html')
     return HttpResponse(template.render({}, request))
 
