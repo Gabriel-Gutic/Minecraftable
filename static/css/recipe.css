@@ -4,13 +4,13 @@
 }
 
 .recipe-image {
-    width: 450px;
+    width: 100%;
     z-index: 0;
 }
 
 #image-div {
+    width: 100%;
     position: relative;
-    width: 450px;
 }
 
 .recipe-image-plot {
@@ -28,12 +28,22 @@
     pointer-events: none;
 }
 
+.plot-item-image {
+    position: absolute;
+    z-index: 1;
+    pointer-events: none;
+}
+
 #item-list {
     max-height: 290px;
     overflow: auto;
 }
 
-#item-image {
-    width: 15px;
-    height: 15px;
+.item-image {
+    width: 32px;
+    height: 32px;
+}
+
+#image-rect {
+    display: none;
 }

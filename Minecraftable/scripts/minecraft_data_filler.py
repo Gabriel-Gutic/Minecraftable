@@ -26,7 +26,6 @@ class Filler():
         file_system_storage = FileSystemStorage()
 
         #Iterate through all 9 pages that contain ids
-        '''
         for index in range(1, 10):
             print(index)
             page=urllib.request.urlopen(self.url + '/' + str(index))
@@ -42,7 +41,6 @@ class Filler():
                 if name == 'Air':
                     continue
                 id = parts[2].string[10:]
-                print(id)
 
                 image_path = None
                 image = item.find('img')
@@ -50,6 +48,7 @@ class Filler():
                 #If the item has an image, copy the image in the static folder
                 if image is not None:
                     image_url = image['src']
+                    image_url = image_url.replace("32", "128", 1) #Get images in higher resolution
 
                     list_ = image_url.split('/')
                     filename = list_[len(list_) - 1]
@@ -67,7 +66,6 @@ class Filler():
                         name=name,
                         image=image_path,
                     )
-        '''
         #Open the page with tags
         url = 'https://minecraft.fandom.com/wiki/Tag'
         page=urllib.request.urlopen(url)

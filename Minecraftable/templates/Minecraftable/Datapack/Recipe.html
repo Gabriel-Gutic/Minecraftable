@@ -27,25 +27,18 @@
             </select>
 
             <div class="mt-3 d-flex justify-content-center">
-                <div id="image-div" class="text-center">
-                    <img src="{% static 'images/crafting-table-interface.png' %}" class="rounded recipe-image" alt="Crafting-Interface" usemap="#crafting-table-map">
+                <div id="image-div" class="text-center mb-2">
+                    <p id="image-rect">0,0</p>
+                    <img id="crafting-recipe-image" src="{% static 'images/crafting-table-interface.png' %}" class="rounded recipe-image" alt="Crafting-Interface" usemap="#crafting-table-map">
                     <img id="plot-hover-image" src="{% static 'images/hover.jpg' %}">
                 </div>
                 <map name="crafting-table-map">
-                    <area id="plot-355-88" class="recipe-image-plot" shape="rect" coords="342,76,424,157">
-                    {% load index %}
-                    {% load cast %}
-                    {% with  list1='25 88 150' list2='80 143 206' indicies='012'|make_list %}
-                        {% with left_top_corners=list1.split right_down_corners=list2.split %}
-                            {% for i in indicies|to_int %}
-                                {% for j in indicies|to_int %}
-                                    <div class="plot">
-                                        <area id="plot-{{left_top_corners|index:j}}-{{left_top_corners|index:i}}" class="recipe-image-plot" shape="rect" coords="{{left_top_corners|index:j}},{{left_top_corners|index:i}},{{right_down_corners|index:j}},{{right_down_corners|index:i}}">
-                                    </div>
-                                {% endfor %}
-                            {% endfor %}
-                        {% endwith %}
-                    {% endwith %} 
+                    <area id="crafting-plot-result" class="recipe-image-plot" shape="rect" coords="0,0,0,0">
+                    {% for i in '012'|make_list %}
+                        {% for j in '012'|make_list %}
+                            <area id="crafting-plot-{{i}}-{{j}}" class="recipe-image-plot" shape="rect" coords="0,0,0,0">
+                        {% endfor %}
+                    {% endfor %}
                 </map>
             </div>
         </div>
@@ -56,7 +49,7 @@
                 <label for="search-item-input">Search Item</label>
             </div>
 
-            <ul id="item-list" class="list-group mt-3"></ul>
+            <ul id="item-list" class="list-group mt-3 border border-light border-2"></ul>
         </div>
     </div>
 
