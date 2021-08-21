@@ -34,16 +34,20 @@
     pointer-events: none;
 }
 
-#item-list {
+.object-list {
     max-height: 290px;
     overflow: auto;
 }
 
-.item-image {
-    width: 32px;
-    height: 32px;
+.element-image {
+    max-height: 32px;
+    max-width: 32px;
 }
 
 #image-rect {
+    display: none;
+}
+
+.undisplayed-data {
     display: none;
 }

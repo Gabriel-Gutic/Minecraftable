@@ -53,13 +53,77 @@ $(document).ready(function() {
                 li.append(`<div id="item-line-` + items[i].id + `"></div>`)
 
                 var div = $("#item-line-" + items[i].id);
-                div.append(`<input class="form-check-input" type="radio" name="item-radio-list" id="radio-item-` + items[i].id + `" value="` + items[i].id + `~` + items[i].image + `">`)
-                div.append(`<label id="label-item-` + items[i].id + `" class="form-check-label ms-2" for="radio-item-{{item.id}}">
+                div.append(`<input class="form-check-input" type="radio" name="data-radio-list" id="radio-item-` + items[i].id + `" value="` + items[i].id + `~` + items[i].image + `">`)
+                div.append(`<label id="label-item-` + items[i].id + `" class="form-check-label ms-2" for="radio-item-` + items[i].id + `">
                                 ` + items[i].name + `
                             </label>`);
 
                 if (items[i].image != null) {
-                    li.append(`<img id="item-image-` + items[i].id + `" src="` + items[i].image + `" class="item-image">`)
+                    li.append(`<img id="item-image-` + items[i].id + `" src="` + items[i].image + `" class="item-image element-image">`)
+                }
+            }
+        }
+    })
+
+    $.ajax({
+        url: "",
+        type: "GET",
+        data: {
+            'prepare-tags': '',
+        },
+        success: function(data) {
+            var list = $("#tag-list")
+            const tags = data.tags;
+            for (var i = 0; i < tags.length; i++) {
+                tag_id = tags[i].id
+                const id = "list-group-tag-" + tag_id
+                list.append(`<li id="` + id + `" class="list-group-item tag-element d-flex justify-content-between align-items-center"></li>`)
+                var li = $("#" + id)
+                li.css("display", "none")
+                li.append(`<div id="tag-line-` + tag_id + `"></div>`)
+
+                var div = $("#tag-line-" + tag_id);
+                div.append(`<input class="form-check-input" type="radio" name="data-radio-list" id="radio-tag-` + tag_id + `" value="` + tag_id + `">`)
+                div.append(`<label id="label-tag-` + tag_id + `" class="form-check-label ms-2" for="radio-tag-` + tag_id + `">
+                                ` + tags[i].name + `
+                            </label>`);
+
+                if (tags[i].image != null) {
+                    image_id = "tag-image-" + tag_id
+                    li.append(`<img id="` + image_id + `" src="` + tags[i].image + `" class="tag-image element-image">`)
+
+                    let content = `<ul id="tag-` + tag_id + `-list-items" class="list-group object-list mt-3 border border-light border-2">`
+
+                    items = tags[i].items
+                    for (let i = 0; i < items.length; i++) {
+                        content += `
+                        <li id="tag-` + tag_id + `-list-item-` + items[i].id + `" class="list-group-item d-flex justify-content-between align-items-center">
+                            ` + items[i].name + `
+                            <img id="image-tag-` + tag_id + `-list-item-` + items[i].id + `" src="` + items[i].image + `" class="element-image ms-2">
+                        </li>`
+                    }
+
+                    content += `</ul>`
+
+                    $("#" + image_id).popover({
+                        trigger: 'manual',
+                        placement: 'right',
+                        html: true,
+                        content: content,
+                    }).on("mouseenter", function() {
+                        let this_ = $(this)
+                        this_.popover("show")
+                        $(".popover").on("mouseleave", function() {
+                            this_.popover('hide');
+                        });
+                    }).on("mouseleave", function() {
+                        let this_ = $(this)
+                        setTimeout(function() {
+                            if (!$(".popover:hover").length) {
+                                this_.popover("hide");
+                            }
+                        }, 100)
+                    })
                 }
             }
         }
@@ -98,12 +162,11 @@ $(document).ready(function() {
         hover.css("opacity", 0.7);
     }).mouseout(function() {
         $("#plot-hover-image").css("opacity", 0);
-    }).on("click", function() {
-        console.log("Plot pressed!")
+    }).on("click", function(event) {
 
-        selected_item = $("input[type=radio][name=item-radio-list]:checked").val()
+        selected_item = $("input[type=radio][name=data-radio-list]:checked").val()
         if (selected_item == null) {
-            console.log("Not any item slected");
+            console.log("Not any item selected");
         } else {
             let parts = selected_item.split("~");
 
@@ -111,7 +174,7 @@ $(document).ready(function() {
             let item_image = parts[1];
 
             let id = $(this).attr("id");
-            img_id = id + "-image"
+            img_id = id + "-image";
 
             let hover_plot = $("#plot-hover-image");
             let x = hover_plot.css("left");
@@ -125,6 +188,7 @@ $(document).ready(function() {
                 image.attr("src", item_image);
             } else {
                 $("#image-div").append(`<img id="` + img_id + `" src="` + item_image + `" class="plot-item-image">`)
+                $("#image-div").append(`<p id="` + img_id + `-data" class="undisplayed-data">` + item_id + `</p>`)
                 image = $("#" + img_id);
             }
 
@@ -133,6 +197,18 @@ $(document).ready(function() {
             image.css("width", hover_width)
             image.css("height", hover_width)
         }
+    }).on("contextmenu", function() {
+        let id = $(this).attr("id");
+        img_id = id + "-image";
+
+        $(".plot-item-image").each(function(i, obj) {
+            if (obj.id.includes(img_id)) {
+                obj.remove();
+
+                $("#" + obj.id + "-data").remove();
+            }
+        })
+        return false;
     })
 
     $("#search-item-input").on("input", function() {
@@ -149,5 +225,70 @@ $(document).ready(function() {
             }
         })
 
+    })
+
+    $("#save-button").on("click", function() {
+
+        let name = $("#name-input").val()
+        if (name == null || name.length == 0) {
+            Error("Your recipe deserve a name!")
+            return
+        }
+
+        let select = $("#recipe-type-select").find(":selected").val();
+
+        switch (select) {
+            case "crafting_shapeless":
+                {
+                    let valid = false
+
+                    for (let i = 0; i < 3 && !valid; i++)
+                        for (let j = 0; j < 3 && !valid; j++)
+                            valid = ($("#crafting-plot-" + i + "-" + j + "-image").length) > 0
+
+                    if (valid) {
+                        valid = ($("#crafting-plot-result-image").length) > 0
+                    }
+
+                    if (!valid) {
+                        Error("Not a valid recipe!")
+                        return
+                    }
+
+                    recipe = [
+                        null, null, null,
+                        null, null, null,
+                        null, null, null,
+                    ]
+                    for (let i = 0; i < 3; i++)
+                        for (let j = 0; j < 3; j++) {
+                            recipe[3 * i + j] = $("#crafting-plot-" + i + "-" + j + "-image-data").text();
+                        }
+                    result = $("#crafting-plot-result-image-data").text();
+                }
+                break;
+        }
+
+        $.ajax({
+            headers: { "X-CSRFToken": Cookies.get("csrftoken") },
+            url: "",
+            type: "POST",
+            dataType: 'json',
+            data: {
+                'new-recipe': '',
+                'name': name,
+                'type': select,
+                'recipe': recipe,
+                'result': result,
+            },
+            success: function(data) {
+                window.location.href = '/Minecraftable/datapack/' + data.datapack_id + '/'
+            }
+        })
+    })
+
+    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+    var popoverList = popoverTriggerList.map(function(popoverTriggerEl) {
+        return new bootstrap.Popover(popoverTriggerEl)
     })
 })

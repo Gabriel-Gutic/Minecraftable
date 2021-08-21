@@ -1,0 +1,1 @@
+exec(open('MineSite/Minecraftable/scripts/minecraft_data_filler.py').read())

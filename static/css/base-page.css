@@ -16,3 +16,7 @@
     width: 27px;
     height: 27px;
 }
+
+.error-message {
+    min-width: 400px;
+}

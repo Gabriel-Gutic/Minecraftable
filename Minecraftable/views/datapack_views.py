@@ -4,7 +4,6 @@ from django.shortcuts import redirect
 
 from Minecraftable.forms import NewDatapackForm
 from Minecraftable.models import Datapack, Recipe
-from Minecraftable.scripts.minecraft_data_filler import Filler
 from Minecraftable.decorators import datapack_owned
 
 
@@ -41,7 +40,8 @@ def settings(request, datapack_id):
     datapack = Datapack.objects.get(id=datapack_id)
 
     if request.method == 'GET':
-        if request.is_ajax():
+        is_ajax = request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+        if is_ajax:
             if 'changed-settings' in request.GET:
                 name = request.GET.get('name')
                 description = request.GET.get('description')
@@ -69,6 +69,7 @@ def datapack(request, datapack_id):
 
     context = {
         'datapack': datapack,
+        'recipes': recipes,
     }
 
     return HttpResponse(template.render(context, request))

@@ -11,7 +11,6 @@ import ast
 from Minecraftable.forms import NewDatapackForm, LoginForm, RegisterForm
 from Minecraftable.models import Datapack, User
 from Minecraftable.printer.error import Error
-from Minecraftable.scripts.minecraft_data_filler import Filler
 
 
 def home(request):
