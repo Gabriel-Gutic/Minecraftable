@@ -61,9 +61,7 @@
         </div>
     </div>
     <div class="d-grid gap-2 col-2 mx-auto mt-4">
-    <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Disabled popover">
         <button id="save-button" class="btn btn-primary" type="button">Save</button>
-    </span>
     </div>
 </div>
 
@@ -73,5 +71,12 @@
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.0/dist/js.cookie.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
 <script type="text/javascript" src="{% static 'js/errors.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/recipe.js' %}"></script>
+
+<script type="text/javascript" src="{% static 'js/recipe/fill-item-list.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/recipe/fill-tag-list.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/recipe/resize.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/recipe/search-input.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/recipe/image-plot.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/recipe/save.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/recipe/popover-setup.js' %}"></script>
 {% endblock scripts %}
