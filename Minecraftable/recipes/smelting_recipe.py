@@ -61,15 +61,15 @@ class SmeltingRecipe(RawRecipe):
         return None
     
     def fill_data_from_dictionary(self, dictionary):
-        with dictionary as d:
-            if 'ingredients' in d:
-                self.ingredients = d['ingredients']
-            if 'cookingtime' in d:
-                self.cooking_time = d['cookingtime']
-            if 'experience' in d:
-                self.experience = d['experience']
-            if 'result' in d:
-                self.result = d['result']
+        d = dictionary
+        if 'ingredients' in d:
+            self.ingredients = d['ingredients']
+        if 'cookingtime' in d:
+            self.cooking_time = d['cookingtime']
+        if 'experience' in d:
+            self.experience = d['experience']
+        if 'result' in d:
+            self.result = d['result']
 
 
 class BlastingRecipe(SmeltingRecipe):

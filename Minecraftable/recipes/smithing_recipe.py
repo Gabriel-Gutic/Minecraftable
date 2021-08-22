@@ -43,22 +43,22 @@ class SmithingRecipe(RawRecipe):
         return None
 
     def fill_data_from_dictionary(self, dictionary):
-        with dictionary as d:
-            if 'addition' in d:
-                addition = d['addition']
-                if 'tag' in addition:
-                    self.addition['tag'] = addition['tag']
-                elif 'item' in addition:
-                    self.addition['item'] = addition['item']
-            if 'addition' in d:
-                addition = d['addition']
-                if 'tag' in addition:
-                    self.addition['tag'] = addition['tag']
-                elif 'item' in addition:
-                    self.addition['item'] = addition['item']
-            if 'result' in d:
-                if 'item' in d['result']:
-                    self.result = d['result']['item']
+        d = dictionary
+        if 'addition' in d:
+            addition = d['addition']
+            if 'tag' in addition:
+                self.addition['tag'] = addition['tag']
+            elif 'item' in addition:
+                self.addition['item'] = addition['item']
+        if 'addition' in d:
+            addition = d['addition']
+            if 'tag' in addition:
+                self.addition['tag'] = addition['tag']
+            elif 'item' in addition:
+                self.addition['item'] = addition['item']
+        if 'result' in d:
+            if 'item' in d['result']:
+                self.result = d['result']['item']
             
 
 

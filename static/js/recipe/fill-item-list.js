@@ -26,6 +26,8 @@ $(document).ready(function() {
                     li.append(`<img id="` + image_id + `" src="` + items[i].image + `" class="item-image element-image">`)
                 }
             }
+
+            $("#item-list-finished").val("true").change();
         }
     })
 })

@@ -5,7 +5,7 @@ from .smelting_recipe import SmeltingRecipe, BlastingRecipe, SmokingRecipe, Camp
 from .smithing_recipe import SmithingRecipe
 from .stonecutting_recipe import StonecuttingRecipe
 
-def create_recipe_from_json(self, json_data):
+def create_recipe_from_json(json_data):
     dictionary = json.loads(json_data)
 
     if 'type' not in dictionary:

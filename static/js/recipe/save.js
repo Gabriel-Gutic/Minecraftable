@@ -2,9 +2,18 @@ $(document).ready(function() {
     $("#save-button").on("click", function() {
 
         let name = $("#name-input").val()
+        name = name.trim()
         if (name == null || name.length == 0) {
             Error("Your recipe deserve a name!")
             return
+        } else {
+            for (let i = 0; i < name.length; i++) {
+                let char = name[i]
+                if (!(IsLetter(char) && char == char.toLowerCase() || IsNumeric(char) || char == '_')) {
+                    Error("The name can contains only lowercase letters, numbers and underline!")
+                    return
+                }
+            }
         }
 
         let select = $("#recipe-type-select").find(":selected").val();

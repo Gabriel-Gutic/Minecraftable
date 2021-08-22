@@ -11,6 +11,9 @@ class CraftingRecipeShapeless(RawRecipe):
     def type(self):
         return 'crafting_shapeless'
 
+    def get_ingredients(self):
+        return self.ingredients
+
     def  add_item_as_ingredient(self, item):
         if self.ingredients_number() >= 9:
             print_error('The max of 9 ingradients exceeded!')
@@ -51,15 +54,15 @@ class CraftingRecipeShapeless(RawRecipe):
         return None
 
     def fill_data_from_dictionary(self, dictionary):
-        with dictionary as d:
-            if 'ingredients' in d:
-                self.ingredients = d['ingredients']
-            if 'result' in d:
-                result = d['result']
-                if 'item' in result:
-                    self.result = result['item']
-                if 'count' in result:
-                    self.count = result['count']
+        d = dictionary
+        if 'ingredients' in d:
+            self.ingredients = d['ingredients']
+        if 'result' in d:
+            result = d['result']
+            if 'item' in result:
+                self.result = result['item']
+            if 'count' in result:
+                self.result_count = result['count']
 
 
 class CraftingRecipeShaped(RawRecipe):
@@ -123,21 +126,21 @@ class CraftingRecipeShaped(RawRecipe):
         return None
 
     def fill_data_from_dictionary(self, dictionary):
-        with dictionary as d:
-            if 'key' in d:
-                self.key = d['key']
-            if 'pattern' in d:
-                pattern = d['pattern']
-                for i in range(len(pattern)):
-                    row = pattern[i]
-                    for j in range(len(row)):
-                        self.pattern[i][j] = row[j]
-            if 'result' in d:
-                result = d['result']
-                if 'item' in result:
-                    self.result = result['item']
-                if 'count' in result:
-                    self.count = result['count']
+        d = dictionary
+        if 'key' in d:
+            self.key = d['key']
+        if 'pattern' in d:
+            pattern = d['pattern']
+            for i in range(len(pattern)):
+                row = pattern[i]
+                for j in range(len(row)):
+                    self.pattern[i][j] = row[j]
+        if 'result' in d:
+            result = d['result']
+            if 'item' in result:
+                self.result = result['item']
+            if 'count' in result:
+                self.result_count = result['count']
 
 
         

@@ -42,6 +42,8 @@ $(document).ready(function() {
                     SetTagPopover($("#" + image_id), content);
                 }
             }
+
+            $("#tag-list-finished").val("true").change();
         }
     })
 })

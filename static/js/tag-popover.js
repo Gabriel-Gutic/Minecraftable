@@ -1,4 +1,4 @@
-function SetTagPopover(element, content) {
+function SetTagPopover(element, content, timeout = 200) {
     element.popover({
         trigger: "manual",
         placement: "right",
@@ -6,6 +6,7 @@ function SetTagPopover(element, content) {
         content: content,
     }).on("mouseenter", function() {
         let this_ = $(this)
+        $(".popover").popover('hide');
         this_.popover("show")
         $(".popover").on("mouseleave", function() {
             this_.popover('hide');
@@ -16,6 +17,6 @@ function SetTagPopover(element, content) {
             if (!$(".popover:hover").length) {
                 this_.popover("hide");
             }
-        }, 200)
+        }, timeout)
     })
 }
