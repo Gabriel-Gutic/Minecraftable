@@ -32,19 +32,32 @@ $(document).ready(function() {
         $("#plot-hover-image").css("opacity", 0);
     }).on("click", function(event) {
 
+
         let selected = $("input[type=radio][name=data-radio-list]:checked")
         selected_value = selected.val()
-
-        let type = null
-        if (selected.attr("id").includes("item"))
-            type = "item"
-        else if (selected.attr("id").includes("tag"))
-            type = "tag"
 
         if (selected_value == null) {
             console.log("Not any item selected");
         } else {
-            let parts = selected_value.split("~");
+            $(this).popover('dispose')
+
+            let type = null
+            if (selected.attr("id").includes("item"))
+                type = "item"
+            else if (selected.attr("id").includes("tag")) {
+                if ($(this).attr("id").includes("result")) {
+                    Error("The result can not be a tag!")
+                    return
+                }
+                type = "tag";
+
+                let parts = selected.attr("id").split("-")
+                let popover = bootstrap.Popover.getInstance(document.getElementById("tag-image-" + parts[2]))
+                SetTagPopover($(this), popover._config.content)
+                $(this).popover('show')
+            }
+
+            parts = selected_value.split("~");
 
             let element_id = parts[0];
             let element_image = parts[1];

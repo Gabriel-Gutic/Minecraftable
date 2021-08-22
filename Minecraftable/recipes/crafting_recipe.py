@@ -1,7 +1,8 @@
-from .recipe import Recipe
+from .recipe import RawRecipe
 from Minecraftable.printer.error import print_error
+from Minecraftable.printer.info import print_info
 
-class CraftingRecipeShapeless(Recipe):
+class CraftingRecipeShapeless(RawRecipe):
 
     def __init__(self):
         super().__init__()
@@ -10,17 +11,31 @@ class CraftingRecipeShapeless(Recipe):
     def type(self):
         return 'crafting_shapeless'
 
-    def  add_ingredient(self, item):
+    def  add_item_as_ingredient(self, item):
         if self.ingredients_number() >= 9:
             print_error('The max of 9 ingradients exceeded!')
         else:
             self.ingredients.append({'item': item})
 
-    def remove_ingredient(self, item):
-        for i in range(len(self.ingredients)):
-            if self.ingredients[i]['item'] == item:
-                del self.ingredients[i]
-                break
+    def remove_item_from_ingredients(self, item):
+        for ingredient in self.ingredients:
+            if 'item' in ingredient:
+                if ingredient['item'] == item:
+                    self.ingredients.remove(ingredient)
+                    break
+    
+    def add_tag_as_ingredient(self, tag):
+        if self.ingredients_number() >= 9:
+            print_error('The max of 9 ingradients exceeded!')
+        else:
+            self.ingredients.append({'tag': tag})
+    
+    def remove_tag_from_ingredients(self, tag):
+        for ingredient in self.ingredients:
+            if 'tag' in ingredient:
+                if ingredient['tag'] == tag:
+                    self.ingredients.remove(ingredient)
+                    break
 
     def ingredients_number(self):
         return len(self.ingredients)
@@ -47,7 +62,7 @@ class CraftingRecipeShapeless(Recipe):
                     self.count = result['count']
 
 
-class CraftingRecipeShaped(Recipe):
+class CraftingRecipeShaped(RawRecipe):
 
     def __init__(self):
         super().__init__()

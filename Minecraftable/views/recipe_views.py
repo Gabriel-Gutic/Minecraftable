@@ -3,6 +3,7 @@ from django.http import HttpResponse, JsonResponse
 
 from Minecraftable.models import Item, Tag
 from Minecraftable.utils import get_matrix_from_request_post
+from Minecraftable.recipes.creator_from_data import create_from_data
 
 
 def recipe(request, datapack_id, recipe_id):
@@ -18,13 +19,16 @@ def create(request, datapack_id):
             if 'new-recipe' in request.POST:
                 name = request.POST.get('name')
                 type_ = request.POST.get('type')
-                recipe = get_matrix_from_request_post(request.POST, 'recipe')
+                recipe = request.POST.getlist('recipe[]')
                 result = request.POST.get('result')
     
-                print(name)
-                print(type_)
-                print(recipe)
-                print(result)
+                create_from_data(
+                    name=name, 
+                    recipe_type=type_, 
+                    recipe_list=recipe,
+                    result=result,
+                    datapack_id=datapack_id,
+                    )
 
                 return JsonResponse({'datapack_id': datapack_id}, status=200)
 

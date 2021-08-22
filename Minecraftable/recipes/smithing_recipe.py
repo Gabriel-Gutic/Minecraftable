@@ -1,7 +1,7 @@
-from .recipe import Recipe
+from .recipe import RawRecipe
 
 
-class SmithingRecipe(Recipe):
+class SmithingRecipe(RawRecipe):
 
     def __init__(self):
         super().__init__()

@@ -8,13 +8,18 @@ class  CraftingRecipeTest(TestCase):
     def test_crafting_shapeless(self):
         crs = CraftingRecipeShapeless()
 
-        crs.add_ingredient('bone')
-        crs.add_ingredient('gunpowder')
-        crs.add_ingredient('steak')
+        crs.add_item_as_ingredient('bone')
+        crs.add_item_as_ingredient('gunpowder')
+        crs.add_item_as_ingredient('steak')
 
+        crs.remove_item_from_ingredients('gunpowder')
+
+        crs.add_tag_as_ingredient('wool')
+        crs.add_tag_as_ingredient('slabs')
+
+        crs.remove_tag_from_ingredients('slabs')
+        
         crs.set_result('diamond')
-
-        crs.remove_ingredient('gunpowder')
 
         crs.write('test files/crafting_recipe_shapeless.json')
 

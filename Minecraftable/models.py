@@ -1,11 +1,10 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager, Group, Permission
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as gtl
 from django.contrib.auth import get_user_model
 
 from Minecraftable.printer.error import Error
-from Minecraftable.recipes.recipe import Recipe
 
 
 class AccountManager(BaseUserManager):
@@ -124,7 +123,7 @@ class Datapack(models.Model):
         return self.name + ' --- ' + self.user.username
     
 
-from Minecraftable.recipes.creator import create_recipe_from_json
+from Minecraftable.recipes.creator_from_json import create_recipe_from_json
 
 class Recipe(models.Model):
     id = models.BigAutoField(primary_key=True)

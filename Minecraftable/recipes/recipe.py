@@ -3,7 +3,7 @@ import json
 from Minecraftable.printer.error import print_error
 
 
-class Recipe():
+class RawRecipe():
 
     def __init__(self):
         self.dictionary = {}
