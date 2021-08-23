@@ -49,7 +49,6 @@ function FillRecipeData() {
                                 }
                             }
                             result_id = data.result
-                            console.log(result_id)
                             var list = $(".item-element")
                             item_id = BinarySearchUnorderedList(list, result_id, 0, list.length)
 
@@ -57,7 +56,7 @@ function FillRecipeData() {
                             plot_id = "crafting-plot-result"
                             SetHoverInPlot(plot_id)
                             SetElementInPlot($("#" + plot_id), element)
-                            $("#crafting-recipe-image").trigger("resize");
+                            $("#crafting-recipe-image").trigger("resize").change();
                         }
                         break;
                 }

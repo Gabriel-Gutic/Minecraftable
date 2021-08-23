@@ -40,8 +40,12 @@ $(document).ready(function() {
         let id = $(this).attr("id");
         img_id = id + "-image";
 
+        this_ = $(this)
         $(".plot-item-image").each(function(i, obj) {
             if (obj.id.includes(img_id)) {
+                this_.popover('dispose');
+                this_.off("mouseenter");
+                this_.off("mouseleave");
                 obj.remove();
 
                 $("#" + obj.id + "-data").remove();

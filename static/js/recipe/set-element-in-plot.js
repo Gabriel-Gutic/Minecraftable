@@ -4,8 +4,6 @@ function SetElementInPlot(plot, element, show_popover = true) {
     if (value == null) {
         console.log("Not any item selected");
     } else {
-        plot.popover('dispose')
-
         let type = null
         if (element.attr("id").includes("item"))
             type = "item"

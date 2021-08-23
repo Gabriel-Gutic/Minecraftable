@@ -14,17 +14,14 @@ $(document).ready(function() {
                 list.append(`<li id="` + id + `" class="list-group-item tag-element d-flex justify-content-between align-items-center"></li>`)
                 var li = $("#" + id)
                 li.css("display", "none")
-                li.append(`<div id="tag-line-` + tag_id + `"></div>`)
 
-                var div = $("#tag-line-" + tag_id);
-                div.append(`<input class="form-check-input" type="radio" name="data-radio-list" id="radio-tag-` + tag_id + `" value="` + tag_id + `~` + tags[i].image + `">`)
-                div.append(`<label id="label-tag-` + tag_id + `" class="form-check-label ms-2" for="radio-tag-` + tag_id + `">
-                                ` + tags[i].name + `
-                            </label>`);
 
-                if (tags[i].image != null) {
-                    image_id = "tag-image-" + tag_id
-                    li.append(`<img id="` + image_id + `" src="` + tags[i].image + `" class="tag-image element-image">`)
+                tag = new ElementList(tags[i], 'tag')
+                li.append(tag.input)
+
+                image = tag.image
+                if (image != null) {
+                    li.append(image)
 
                     let content = `<ul id="tag-` + tag_id + `-list-items" class="list-group object-list mt-3 border border-light border-2">`
 
@@ -39,7 +36,7 @@ $(document).ready(function() {
 
                     content += `</ul>`
 
-                    SetTagPopover($("#" + image_id), content);
+                    SetTagPopover($("#tag-image-" + tags[i].id), content);
                 }
             }
 
