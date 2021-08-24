@@ -5,6 +5,8 @@ import shutil
 import os
 
 from Minecraftable.models import Item, Tag
+from Minecraftable.printer import print_info, print_error
+
 
 class Filler():
 
@@ -30,8 +32,10 @@ class Filler():
     def fill_items(self):
         #Iterate through all 9 pages that contain ids
         for index in range(1, 10):
-            print(index)
-            page=urllib.request.urlopen(self.url + '/' + str(index))
+            page_url = self.url + '/' + str(index)
+            page=urllib.request.urlopen(page_url)
+
+            print_info("Page %p opened!" % page_url)
 
             soup = BeautifulSoup(page, 'html.parser')
             page_data = soup.find_all('tr', {'class': 'tsr'})
@@ -66,12 +70,14 @@ class Filler():
                 #If the item is not already existing, create it
                 items = Item.objects.filter(id_name=id)
                 if len(items) == 0 and (image_path is not None):
-                    Item.objects.create(
+                    item = Item.objects.create(
                         id_name=id,
                         name=name,
                         image=image_path,
                     )
-        
+                    item.save()
+
+                    print_info("Item %i successfully created!" % item)
     
     def fill_tags(self):
         #Open the page with tags
@@ -131,7 +137,7 @@ class Filler():
                                     item.tags.add(new_tag)
                                 except Item.DoesNotExist:
                                     print("Item '" + id + "' does not exist!" )
-                            print("Tag " + tag_name + " finished!")
+                            print_info("Tag " + tag_name + " finished!")
                         else:
                             print("Image '" + image_path + "' not found!")
                             return

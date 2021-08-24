@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as gtl
 from django.contrib.auth import get_user_model
 
-from Minecraftable.printer.error import Error
+from Minecraftable.printer import Error, print_info
 
 
 class AccountManager(BaseUserManager):
@@ -76,7 +76,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
         if len(password) < 8:
             return Error("Password must be at least 8 characters!")
-            
+        
+        print_info("Data for user: %s is valid!" % username)
         return None
 
 
@@ -101,6 +102,7 @@ class User(AbstractBaseUser, PermissionsMixin):
             **other_fields
         )
 
+        print_info("User " + user + " successfully created!")
         return user
     
         

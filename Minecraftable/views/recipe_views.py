@@ -5,7 +5,7 @@ from Minecraftable.models import Item, Tag, Recipe
 from Minecraftable.utils import get_matrix_from_request_post
 from Minecraftable.recipes.creator_from_data import create_from_data
 from Minecraftable.recipes.recipe_types import RECIPE_TYPES
-from Minecraftable.printer.error import print_error
+from Minecraftable.printer import print_error, print_info
 
 
 def recipe(request, datapack_id, recipe_id):
@@ -61,6 +61,8 @@ def recipe(request, datapack_id, recipe_id):
                     else:
                         print_error("Unknown ingredient!")
             data['ingredients'] = ingredients_list
+
+            print_info("Load recipe with data: %s" % data)
             return JsonResponse(data, status=200)
         elif 'prepare-items' in request.GET:
             items = Item.objects.all()

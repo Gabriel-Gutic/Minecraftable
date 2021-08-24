@@ -1,6 +1,6 @@
 import json
 
-from Minecraftable.printer.error import print_error
+from Minecraftable.printer import print_error, print_info
 
 from .crafting_recipe import CraftingRecipeShapeless, CraftingRecipeShaped
 from .smelting_recipe import SmeltingRecipe, BlastingRecipe, SmokingRecipe, CampfireRecipe
@@ -10,6 +10,7 @@ from .stonecutting_recipe import StonecuttingRecipe
 from Minecraftable.models import Recipe, Datapack, Item, Tag
 
 
+#Create a recipe from the data got from the webapp
 def create_from_data(name : str, recipe_type, recipe_list, result : str, datapack_id : int):
     if recipe_type == "crafting_shapeless":
         recipe = CraftingRecipeShapeless()
@@ -35,7 +36,9 @@ def create_from_data(name : str, recipe_type, recipe_list, result : str, datapac
         recipe_instance = Recipe.objects.create(
             name=name,
             json_data=recipe.get_json_data(),
-            datapack= Datapack.objects.get(id=datapack_id)
+            datapack=Datapack.objects.get(id=datapack_id)
         )
         recipe_instance.save()
+
+        print_info("Recipe %r from the datapack %d successfully created!" % (recipe, recipe_instance.datapack) )
 

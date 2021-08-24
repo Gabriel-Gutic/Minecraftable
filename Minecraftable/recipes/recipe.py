@@ -1,6 +1,6 @@
 import json
 
-from Minecraftable.printer.error import print_error
+from Minecraftable.printer import print_error
 
 
 class RawRecipe():
@@ -23,9 +23,11 @@ class RawRecipe():
     def set_result_count(self, result_count):
         self.result_count = result_count
 
+    #Protected method to put every inherited recipe's data in self.dictionary
     def _fill_dictionary_(self):
         pass
     
+
     def get_json_data(self):
         self.dictionary['type'] = self.type()
         if self.group is not None:
@@ -45,7 +47,8 @@ class RawRecipe():
 
     def fill_data_from_dictionary(self, dictionary):
         pass
-
+    
+    #Write data to a .json file
     def write(self, path):
         json_data = self.get_json_data()
 

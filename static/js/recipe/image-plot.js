@@ -30,6 +30,10 @@ $(document).ready(function() {
         SetHoverInPlot(id);
         hover = $("#plot-hover-image")
         hover.css("opacity", 0.7);
+
+        $.ajax({
+
+        })
     }).mouseout(function() {
         $("#plot-hover-image").css("opacity", 0);
     }).on("click", function(event) {

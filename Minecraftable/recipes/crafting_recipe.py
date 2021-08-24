@@ -1,6 +1,6 @@
 from .recipe import RawRecipe
-from Minecraftable.printer.error import print_error
-from Minecraftable.printer.info import print_info
+from Minecraftable.printer import print_error, print_info
+
 
 class CraftingRecipeShapeless(RawRecipe):
 

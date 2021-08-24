@@ -2,6 +2,7 @@ from django.template import loader
 from django.http import HttpResponse
 from django.shortcuts import redirect
 
+from Minecraftable.printer import print_error, print_info
 from Minecraftable.forms import NewDatapackForm
 from Minecraftable.models import Datapack, Recipe
 from Minecraftable.decorators import datapack_owned
@@ -19,6 +20,7 @@ def create(request):
             version = form.cleaned_data['version']
             datapack = Datapack.objects.create(name=name, description=description, version=version, user=request.user)
             datapack.save()
+            print_info("Datapack %s successfully created!")
             return redirect('/Minecraftable/home/')
 
     context = {
@@ -29,6 +31,8 @@ def create(request):
 
 
 def not_exist(request):
+    print_error("Datapack does not exist!")
+
     template = loader.get_template('Minecraftable/Datapack/not-exist.html')
     return HttpResponse(template.render({}, request))
 
@@ -51,6 +55,8 @@ def settings(request, datapack_id):
                 datapack.description = description
                 datapack.version = version
                 datapack.save(force_update=True)
+
+                print_info("Datapack %s successfully updated!" % datapack)
 
     context = {
         'datapack': datapack,

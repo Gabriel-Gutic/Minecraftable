@@ -10,7 +10,7 @@ import ast
 
 from Minecraftable.forms import NewDatapackForm, LoginForm, RegisterForm
 from Minecraftable.models import Datapack, User
-from Minecraftable.printer.error import Error
+from Minecraftable.printer import Error, print_info
 
 
 def home(request):
@@ -20,7 +20,10 @@ def home(request):
         if 'datapack-delete' in request.POST:
             datapack_id = int(request.POST.get('datapack-id'))
             datapack = Datapack.objects.get(id=datapack_id)
+            datapack_name = datapack.name
             datapack.delete()
+
+            print_info("Datapack %s deleted", datapack_name)
 
             return JsonResponse({}, status=200)
 
@@ -65,7 +68,7 @@ def login(request):
                     request.session.set_expiry(7200) #one hour
                     request.session.modified = True
                 else:
-                    request.session.set_expiry(None)
+                    request.session.set_expiry(None) #unlimited time
                     request.session.modified = True
                 next = request.GET.get('next')
                 if next == "/Minecraftable/logout/" or next == None or next == "/Minecraftable/login/" or next == "/Minecraftable/register/":
@@ -128,6 +131,7 @@ def register(request):
 
             mail.content_subtype = 'html'
             mail.send()
+            print_info('Confirmation Email send successfully!')
             return HttpResponseRedirect('confirmation/')
 
     context = {
