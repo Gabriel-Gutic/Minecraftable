@@ -12,23 +12,46 @@
     <h1 class="jumbotron-heading">Recipe:</h1>
 
     <div class="row g-0 justify-content-md-center">
-        <div class="col-md-6 pe-2">
+        <div class="col-md-6">
 
-            <div class="form-floating mb-3">
+            <div class="col form-floating mb-3">
                 <input class="form-control" id="name-input" placeholder="irelevant">
                 <label for="name-input">Name</label>
             </div>
             <select id="recipe-type-select" class="form-select" aria-label="Default select example">
-
                 {% for type in recipe_types %}
                     <option value="{{type.1}}">{{type.2}}</option>
                 {% endfor %}
             </select>
 
+            <div class="row mt-3">
+                <div class="col-md-2">
+                    <button id="decrement-result-count-button" class="btn btn-danger" type="button">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+                <div class="col-md-2">
+                    <button id="increment-result-count-button" class="btn btn-success" type="button">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                <div class="col-md-2">
+                    <button id="erase-plot-button" class="btn" type="button">
+                        <i class="fas fa-eraser"></i>
+                    </button>
+                </div>
+            </div>
             <div class="mt-3 d-flex justify-content-center">
                 <div id="image-div" class="text-center mb-2">
-                    <p id="image-rect">0,0</p>
+                    <p id="crafting-recipe-image-rect" class="undisplayed-data recipe-image-rect">0,0</p>
                     <img id="crafting-recipe-image" src="{% static 'images/crafting-table-interface.png' %}" class="rounded recipe-image" alt="Crafting-Interface" usemap="#crafting-table-map">
+                    <p id="furnace-recipe-image-rect" class="undisplayed-data recipe-image-rect">0,0</p>
+                    <img id="furnace-recipe-image" src="{% static 'images/furnace-interface.gif' %}" class="rounded recipe-image undisplayed-data" alt="Furnace-Interface" usemap="#furnace-table-map">
+                    <p id="result-count" name="result-count" class="fw-bold fs-5 text-white">
+                        {% if recipe_id  is None %}
+                            1
+                        {% endif %}
+                    </p>
                     <img id="plot-hover-image" src="{% static 'images/hover.jpg' %}">
                 </div>
                 <map name="crafting-table-map">
@@ -38,6 +61,10 @@
                             <area id="crafting-plot-{{i}}-{{j}}" class="recipe-image-plot" shape="rect" coords="0,0,0,0">
                         {% endfor %}
                     {% endfor %}
+                </map>
+                <map name="furnace-table-map">
+                    <area id="furnace-plot-ingredient" class="recipe-list-plot" shape="rect" coords="0,0,0,0">
+                    <area id="furnace-plot-result" class="recipe-image-plot" shape="rect" coords="0,0,0,0">
                 </map>
             </div>
         </div>
@@ -77,15 +104,17 @@
 <script type="text/javascript" src="{% static 'js/binary-search.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/char-check.js' %}"></script>
 
+<script type="text/javascript" src="{% static 'js/recipe/utils-buttons.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/recipe/recipe-type-select.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/recipe/ElementList.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/recipe/set-element-in-plot.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/recipe/fill-item-list.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/recipe/fill-tag-list.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/recipe/resize.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/recipe/image-plot.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/recipe/fill-recipe-data.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/recipe/finished-lists.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/recipe/search-input.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/recipe/save.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/recipe/popover-setup.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/recipe/resize.js' %}"></script>
 {% endblock scripts %}

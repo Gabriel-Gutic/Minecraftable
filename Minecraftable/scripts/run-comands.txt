@@ -1,1 +1,3 @@
 exec(open('MineSite/Minecraftable/scripts/minecraft_data_filler.py').read())
+
+python MineSite/manage.py test Minecraftable.tests.recipes.tests_crafting_recipe

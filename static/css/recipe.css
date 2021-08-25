@@ -4,7 +4,7 @@
 }
 
 .recipe-image {
-    width: 100%;
+    width: 99%;
     z-index: 0;
 }
 
@@ -34,6 +34,13 @@
     pointer-events: none;
 }
 
+#result-count {
+    position: absolute;
+    top: 50%;
+    left: 89%;
+    z-index: 2;
+}
+
 .object-list {
     max-height: 290px;
     overflow: auto;
@@ -44,10 +51,6 @@
     max-width: 32px;
 }
 
-#image-rect {
-    display: none;
-}
-
 .undisplayed-data {
-    display: none;
+    display: none !important;
 }

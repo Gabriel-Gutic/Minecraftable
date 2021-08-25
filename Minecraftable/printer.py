@@ -23,8 +23,8 @@ class Error():
     def __str__(self):
         return self.get_error_message()
 
-def print_error(message : str):
-    print(bcolors.FAIL + "ERROR: " + message + bcolors.ENDC)
+def print_error(message):
+    print(bcolors.FAIL + "ERROR: " + str(message) + bcolors.ENDC)
 
 
 class Info():
@@ -40,5 +40,5 @@ class Info():
     def __str__(self):
         return self.get_info_message()
 
-def print_info(message : str):
-    print(bcolors.OKGREEN + "INFO: " + message + bcolors.ENDC)
+def print_info(message):
+    print(bcolors.OKGREEN + "INFO: " + str(message) + bcolors.ENDC)

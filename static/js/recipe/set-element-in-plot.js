@@ -39,7 +39,7 @@ function SetElementInPlot(plot, element, show_popover = true) {
         if (exists) {
             image = $("#" + img_id);
             image.attr("src", element_image);
-            $("#" + img_id + "-image").text(type + `~` + element_id)
+            $("#" + img_id + "-data").text(type + `~` + element_id)
         } else {
             $("#image-div").append(`<img id="` + img_id + `" src="` + element_image + `" class="plot-item-image">`)
             $("#image-div").append(`<p id="` + img_id + `-data" class="undisplayed-data">` + type + `~` + element_id + `</p>`)

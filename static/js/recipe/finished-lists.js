@@ -6,6 +6,10 @@ $(document).ready(function() {
 
         if (ok1 == "true" && ok2 == "true") {
             FillRecipeData()
+
+            setTimeout(function() {
+                $(".recipe-image").css("width", "100%").change()
+            }, 1000)
         }
     })
 

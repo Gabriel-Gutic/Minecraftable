@@ -1,5 +1,6 @@
 from .recipe import RawRecipe
 from Minecraftable.printer import print_error, print_info
+from Minecraftable.utils import next_alpha
 
 
 class CraftingRecipeShapeless(RawRecipe):
@@ -71,42 +72,45 @@ class CraftingRecipeShaped(RawRecipe):
         super().__init__()
 
         self.pattern = [[' ', ' ', ' '], [' ', ' ', ' '], [' ', ' ', ' ']]
-        self.key = {}
+        self.keys = {} #Example: {"D": {"item": "minecraft:diamond"}}
 
     def type(self):
         return 'crafting_shaped'
 
-    def set_pattern(self, key, i, j):
+    def get_pattern(self):
+        return self.pattern
+
+    def get_keys(self):
+        return self.keys
+
+    def add_value(self, element, i, j): #element format: type~id
+        type_, id = element.split('~')
+        for key, value in self.keys.items():
+            if type_ in value:
+                if value[type_] == id:
+                    self.pattern[i][j] = key
+                    return
+
+        key = 'A'
+        while key in self.keys.keys():
+            key = next_alpha(key) #Go to the next letter
         self.pattern[i][j] = key
+        self.keys[key] = {type_: id}
 
-    def add_key(self, key, value):
-        if key in self.key:
-            if type(self.key[key]) == list:
-                self.key[key].append({ "item": value })
-            else:
-                old_key = self.key[key]
-                self.key[key] = [old_key]
-                self.key[key].append({ "item": value })
-        else: 
-            self.key[key] = { "item": value }
-
-    def remove_key(self, key):
-        del self.key[key]
-
-    def remove_value_from_key(self, key, value):
-        if key in self.key:
-            if type(self.key[key]) == list:
-                for element in self.key[key]:
-                    if element['item'] == value:
-                        self.key[key].remove(element)
-                        break
-            else:
-                self.remove_key(key)
-        else:
-            print_error('Key not found!')
+    def remove_value(self, element): #element format: type~id
+        type_, id = element.split('~')
+        for key, value in self.keys.items():
+            if type_ in value:
+                if value[type_] == id:
+                    for line in self.pattern:
+                        for x in line:
+                            if x == key:
+                                x = ' '
+                    print(self.pattern)
+                    self.keys.pop(key, None)
+                    return
 
     def _fill_dictionary_(self):
-
         sp = self.pattern
 
         pattern = [
@@ -116,21 +120,22 @@ class CraftingRecipeShaped(RawRecipe):
         ]
 
         self.dictionary["pattern"] = pattern
-        if len(self.key) < 1:
+        if len(self.keys) < 1:
             return 'No keys in ' + self.type() + ' recipe'
-        self.dictionary["key"] = self.key
+        self.dictionary["key"] = self.keys
         self.dictionary["result"] = {
                 "item": self.result, 
-                "count": self.result_count
+                "count": self.result_count,
             }
         return None
 
     def fill_data_from_dictionary(self, dictionary):
         d = dictionary
         if 'key' in d:
-            self.key = d['key']
+            self.keys = d['key']
         if 'pattern' in d:
             pattern = d['pattern']
+            print_info(pattern)
             for i in range(len(pattern)):
                 row = pattern[i]
                 for j in range(len(row)):

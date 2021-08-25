@@ -9,3 +9,6 @@ def get_matrix_from_request_post(request_post, matrix_name : str):
         key = matrix_name + "[" + str(i) + "][]"
     
     return recipe
+
+def next_alpha(s):
+    return chr((ord(s.upper()) + 1 - 65) % 26 + 65)

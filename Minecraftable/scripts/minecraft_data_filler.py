@@ -35,7 +35,7 @@ class Filler():
             page_url = self.url + '/' + str(index)
             page=urllib.request.urlopen(page_url)
 
-            print_info("Page %p opened!" % page_url)
+            print_info("Page %s opened!" % page_url)
 
             soup = BeautifulSoup(page, 'html.parser')
             page_data = soup.find_all('tr', {'class': 'tsr'})
@@ -77,7 +77,7 @@ class Filler():
                     )
                     item.save()
 
-                    print_info("Item %i successfully created!" % item)
+                    print_info("Item %s successfully created!" % item)
     
     def fill_tags(self):
         #Open the page with tags

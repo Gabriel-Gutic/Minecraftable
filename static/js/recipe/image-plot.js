@@ -1,6 +1,7 @@
 function SetHoverInPlot(plot_id) {
     hover = $("#plot-hover-image")
-    let image_rect = $("#image-rect").text().split(",");
+    let image_rect = GetCurrentImageRect();
+
     const width = parseInt(image_rect[0]);
     const height = parseInt(image_rect[1]);
 
@@ -16,45 +17,44 @@ function SetHoverInPlot(plot_id) {
         const x = parseInt(list[2], 10);
         const y = parseInt(list[3], 10);
 
-        hover.css("left", margin + x * square_width);
-        hover.css("top", margin + y * square_width);
+        hover.css("top", margin + x * square_width);
+        hover.css("left", margin + y * square_width);
+    } else if (plot_id == "furnace-plot-result") {
+        hover.css("left", 72 / 100 * width);
+        hover.css("top", 44 / 100 * height)
     }
 
     hover.css("width", element_width);
     hover.css("height", element_width);
+    hover.css("opacity", 0.7);
 }
 
 $(document).ready(function() {
     $(".recipe-image-plot").mouseover(function() {
         const id = $(this).attr("id");
         SetHoverInPlot(id);
-        hover = $("#plot-hover-image")
-        hover.css("opacity", 0.7);
-
-        $.ajax({
-
-        })
     }).mouseout(function() {
         $("#plot-hover-image").css("opacity", 0);
     }).on("click", function(event) {
-        let selected = $("input[type=radio][name=data-radio-list]:checked")
+        if (IsEraseChecked()) {
+            let id = $(this).attr("id");
+            console.log(id)
+            img_id = id + "-image";
 
-        SetElementInPlot($(this), selected);
-    }).on("contextmenu", function() {
-        let id = $(this).attr("id");
-        img_id = id + "-image";
+            this_ = $(this)
+            $(".plot-item-image").each(function(i, obj) {
+                if (obj.id.includes(img_id)) {
+                    this_.popover('dispose');
+                    this_.off("mouseenter");
+                    this_.off("mouseleave");
+                    obj.remove();
 
-        this_ = $(this)
-        $(".plot-item-image").each(function(i, obj) {
-            if (obj.id.includes(img_id)) {
-                this_.popover('dispose');
-                this_.off("mouseenter");
-                this_.off("mouseleave");
-                obj.remove();
-
-                $("#" + obj.id + "-data").remove();
-            }
-        })
-        return false;
+                    $("#" + obj.id + "-data").remove();
+                }
+            })
+        } else {
+            let selected = $("input[type=radio][name=data-radio-list]:checked")
+            SetElementInPlot($(this), selected);
+        }
     })
 })

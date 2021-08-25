@@ -1,5 +1,4 @@
 class ElementList {
-
     constructor(element, type) {
         this.input = `<div id="` + type + `-line-` + element.id + `">
         <input class="form-check-input" type="radio" name="data-radio-list" id="radio-` + type + `-` + element.id + `" value="` + element.id + `~` + element.image + `"> 

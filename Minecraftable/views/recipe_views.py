@@ -14,17 +14,26 @@ def recipe(request, datapack_id, recipe_id):
     if request.method == 'POST':
         is_ajax = request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
         if is_ajax:
-            if 'new-recipe' in request.POST:
+            if 'recipe_id' in request.POST:
+                id = request.POST.get('recipe_id')
                 name = request.POST.get('name')
                 type_ = request.POST.get('type')
                 recipe_list = request.POST.getlist('recipe[]')
                 result = request.POST.get('result')
-    
+                print(result)
+                result, result_count = result.split('!')
+
+                if id == "None":
+                    id = -1
+                else:
+                    id = int(id)
                 create_from_data(
+                    recipe_id=id,
                     name=name, 
                     recipe_type=type_, 
                     recipe_list=recipe_list,
                     result=result,
+                    result_count=result_count,
                     datapack_id=datapack_id,
                     )
 
@@ -60,9 +69,25 @@ def recipe(request, datapack_id, recipe_id):
                         ingredients_list.append("tag~" + str(tag.id))
                     else:
                         print_error("Unknown ingredient!")
-            data['ingredients'] = ingredients_list
+                data['ingredients'] = ingredients_list
+            elif data['type'] == 'crafting_shaped':
+                crafting = [['', '', ''], ['', '', ''], ['', '', '']]
+                rp = recipe.get_pattern()
+                keys = recipe.get_keys()
+                for i in range(3):
+                    for j in range(3):
+                        if rp[i][j] in keys:
+                            key = keys[rp[i][j]]
+                            type_ = list(key.keys())[0]
+                            if type_ == 'item':
+                                obj = Item.objects.get(id_name=key[type_])
+                            else:
+                                obj = Tag.objects.filter(name=key[type_])[0] #TODO: 
+                            element = type_ + '~'  + str(obj.id)
+                            crafting[i][j] = element
+                data['crafting'] = crafting
 
-            print_info("Load recipe with data: %s" % data)
+            print_info("Load recipe %s with data: %s" % (recipe_.name, data))
             return JsonResponse(data, status=200)
         elif 'prepare-items' in request.GET:
             items = Item.objects.all()
