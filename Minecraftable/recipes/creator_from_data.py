@@ -7,40 +7,38 @@ from .smelting_recipe import SmeltingRecipe, BlastingRecipe, SmokingRecipe, Camp
 from .smithing_recipe import SmithingRecipe
 from .stonecutting_recipe import StonecuttingRecipe
 
-from Minecraftable.models import Recipe, Datapack, Item, Tag
+from Minecraftable.models import Recipe, Datapack, Item, Tag, GetElementTypeAndName
 
 
 #Create a recipe from the data got from the webapp
-def create_from_data(recipe_id : int, name : str, recipe_type, recipe_list, result : str, result_count : str, datapack_id : int):
+def create_from_data(recipe_id : int, name : str, recipe_type, recipe_list, result : str, datapack_id : int):
+    result_count = None
+    if recipe_type == "crafting_shapeless" or recipe_type == "crafting_shaped" or recipe_type == "campfire_cooking":
+        result, result_count = result.split('!')
+    
     if recipe_type == "crafting_shapeless":
         recipe = CraftingRecipeShapeless()
 
         for element in recipe_list:
             if element is not None and element != '':
-                element_type, element_id = element.split('~')
-
-                if element_type == 'item':
-                    recipe.add_item_as_ingredient(Item.objects.get(id=element_id).id_name)
-                elif element_type == 'tag':
-                     recipe.add_tag_as_ingredient(Tag.objects.get(id=element_id).name)
-                else:
-                    print_error("Unknown element type: " + element_type)
-                    return None
+                recipe.add_ingredient(GetElementTypeAndName(element))
     elif recipe_type == "crafting_shaped":
         recipe = CraftingRecipeShaped()
 
         i = 0
         for element in recipe_list:
             if element is not None and element != '':
-                element_type, element_id = element.split('~')
 
-                if element_type == 'item':
-                    id_name = Item.objects.get(id=element_id).id_name
-                else:
-                    id_name = Tag.objects.get(id=element_id).name
-                
-                recipe.add_value(element_type + '~' + id_name, int(i / 3), i % 3)
+                recipe.add_value(GetElementTypeAndName(element), int(i / 3), i % 3)
             i += 1
+    elif recipe_type == "smithing":
+        recipe = SmithingRecipe()
+        type_name = GetElementTypeAndName(recipe_list[0])
+        recipe.set_base(type_name)
+
+        type_name = GetElementTypeAndName(recipe_list[1])
+        recipe.set_addition(type_name)
+
     result_type, result_id = result.split('~')
     if result_type != 'item':
         print_error("Result must be item!")

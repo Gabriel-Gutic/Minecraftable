@@ -28,16 +28,40 @@ $(document).ready(function() {
     })
 
     $("#result-count").on("change", function() {
+        let selected = $("#recipe-type-select").val()
+
+        let increment = $("#increment-result-count-button")
+        let decrement = $("#decrement-result-count-button")
+
+        if (selected == "crafting_shapeless" || selected == "crafting_shaped" || selected == "stonecutting") {
+            $("#result-count").removeClass("undisplayed-data");
+            increment.attr("disabled", false)
+            decrement.attr("disabled", false)
+        } else {
+            $("#result-count").addClass("undisplayed-data");
+            increment.attr("disabled", true)
+            decrement.attr("disabled", true)
+            return
+        }
+        let top = null
+        let left = null
+        if (selected == "crafting_shapeless" || selected == "crafting_shaped") {
+            top = "50%"
+            left = 89
+        } else {
+            top = "63%"
+            left = 86
+        }
+        $(this).css("top", top)
+
         let counter = $("#result-count")
         let count = parseInt(counter.text(), 10)
-        let increment = $("#increment-result-count-button")
         if (count >= 64) {
             increment.attr("disabled", true)
         } else {
             increment.attr("disabled", false)
         }
 
-        let decrement = $("#decrement-result-count-button")
         if (count <= 1) {
             decrement.attr("disabled", true)
         } else {
@@ -45,9 +69,8 @@ $(document).ready(function() {
         }
 
         if (count > 9) {
-            $(this).css("left", "87%")
-        } else {
-            $(this).css("left", "89%")
+            left -= 3
         }
+        $(this).css("left", left + "%")
     })
 })

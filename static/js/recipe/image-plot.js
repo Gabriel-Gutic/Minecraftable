@@ -1,3 +1,15 @@
+function SetHoverCoords(plot_id, left_extra, top_extra) {
+    let hover = $("#plot-hover-image")
+
+    let plot = $("#" + plot_id)
+    let coords = plot.attr("coords").split(",")
+
+    let old_left = parseInt(coords[0], 10)
+    let old_top = parseInt(coords[1], 10)
+    hover.css("left", old_left + left_extra)
+    hover.css("top", old_top + top_extra)
+}
+
 function SetHoverInPlot(plot_id) {
     hover = $("#plot-hover-image")
     let image_rect = GetCurrentImageRect();
@@ -12,6 +24,7 @@ function SetHoverInPlot(plot_id) {
     if (plot_id == "crafting-plot-result") {
         hover.css("left", 78.8 / 100 * width);
         hover.css("top", 37.9 / 100 * height)
+
     } else if (plot_id.includes("crafting-plot")) {
         var list = plot_id.split("-");
         const x = parseInt(list[2], 10);
@@ -19,9 +32,14 @@ function SetHoverInPlot(plot_id) {
 
         hover.css("top", margin + x * square_width);
         hover.css("left", margin + y * square_width);
+
     } else if (plot_id == "furnace-plot-result") {
+
         hover.css("left", 72 / 100 * width);
         hover.css("top", 44 / 100 * height)
+
+    } else if (plot_id.includes("smithing-plot")) {
+        SetHoverCoords(plot_id, 2.8 / 100 * width, 4.0 / 100 * height)
     }
 
     hover.css("width", element_width);
@@ -38,7 +56,6 @@ $(document).ready(function() {
     }).on("click", function(event) {
         if (IsEraseChecked()) {
             let id = $(this).attr("id");
-            console.log(id)
             img_id = id + "-image";
 
             this_ = $(this)

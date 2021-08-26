@@ -6,35 +6,39 @@ class SmithingRecipe(RawRecipe):
     def __init__(self):
         super().__init__()
 
-        self.base = {"item": None, "tag": None}
-        self.addition = {"item": None, "tag": None}
+        self.base = {}
+        self.addition = {}
 
     def type(self):
         return 'smithing'
 
-    def set_base_by_item(self, item):
-        self.base['item'] = item
+    def get_base(self):
+        return self.base
 
-    def set_base_by_tag(self, tag):
-        self.base['tag'] = tag
+    def get_addition(self):
+        return self.addition
 
-    def set_addition_by_item(self, item):
-        self.addition['item'] = item
+    def set_base(self, base): #Format: type~name
+        type_, name = base.split('~')
+        self.base.clear()
+        self.base[type_] = name
 
-    def set_addition_by_tag(self, tag):
-        self.addition['tag'] = tag
+    def set_addition(self, addition): #Format: type~name
+        type_, name = addition.split('~')
+        self.addition.clear()
+        self.addition[type_] = name
 
     def _fill_dictionary_(self):
-        if self.base['item'] is not None:
+        if 'item' in self.base:
             self.dictionary['base'] = { 'item': self.base['item'] }
-        elif self.base['tag'] is not None:
+        elif 'tag' in self.base:
             self.dictionary['base'] = { 'tag': self.base['tag'] }
         else:
             return "No item or tag in " + self.type() + " recipe's base"
         
-        if self.addition['item'] is not None:
+        if 'item' in self.addition:
             self.dictionary['addition'] = { 'item': self.addition['item'] }
-        elif self.addition['tag'] is not None:
+        elif 'tag' in self.addition:
             self.dictionary['addition'] = { 'tag': self.addition['tag'] }
         else:
             return "No item or tag in " + self.type() + " recipe's addition"
@@ -44,12 +48,12 @@ class SmithingRecipe(RawRecipe):
 
     def fill_data_from_dictionary(self, dictionary):
         d = dictionary
-        if 'addition' in d:
-            addition = d['addition']
-            if 'tag' in addition:
-                self.addition['tag'] = addition['tag']
-            elif 'item' in addition:
-                self.addition['item'] = addition['item']
+        if 'base' in d:
+            base = d['base']
+            if 'tag' in base:
+                self.base['tag'] = base['tag']
+            elif 'item' in base:
+                self.base['item'] = base['item']
         if 'addition' in d:
             addition = d['addition']
             if 'tag' in addition:

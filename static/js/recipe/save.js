@@ -20,6 +20,7 @@ $(document).ready(function() {
         let select = $("#recipe-type-select").find(":selected").val();
 
         //Crafting recipes
+        let recipe = null
         if (select == "crafting_shapeless" || select == "crafting_shaped") {
             let valid = false
 
@@ -47,6 +48,25 @@ $(document).ready(function() {
                 }
             result_count = $("#result-count").text()
             result = $("#crafting-plot-result-image-data").text() + "!" + result_count;
+        } else if (select == "smithing") {
+            let valid = true;
+            $(".smithing-plot").each(function(i, obj) {
+                has_image = $("#" + obj.id + "-image").length > 0;
+                if (!has_image)
+                    valid = false;
+            })
+
+            if (!valid) {
+                Error("Not a valid recipe!")
+                return
+            }
+
+            recipe = [
+                $("#smithing-plot-base-image-data").text(),
+                $("#smithing-plot-addition-image-data").text(),
+            ]
+
+            result = $("#smithing-plot-result-image-data").text()
         } else {
             console.log("Invalid recipe type!")
             return

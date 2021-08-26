@@ -51,6 +51,10 @@
     max-width: 32px;
 }
 
+#image-rect {
+    display: none;
+}
+
 .undisplayed-data {
     display: none !important;
 }

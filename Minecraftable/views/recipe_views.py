@@ -1,8 +1,8 @@
 from django.template import loader
 from django.http import HttpResponse, JsonResponse
 
-from Minecraftable.models import Item, Tag, Recipe
-from Minecraftable.utils import get_matrix_from_request_post
+from Minecraftable.utils import first_from_dict
+from Minecraftable.models import Item, Tag, Recipe, GetElementTypeAndId
 from Minecraftable.recipes.creator_from_data import create_from_data
 from Minecraftable.recipes.recipe_types import RECIPE_TYPES
 from Minecraftable.printer import print_error, print_info
@@ -15,14 +15,13 @@ def recipe(request, datapack_id, recipe_id):
         is_ajax = request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
         if is_ajax:
             if 'recipe_id' in request.POST:
+                print(request.POST)
                 id = request.POST.get('recipe_id')
                 name = request.POST.get('name')
                 type_ = request.POST.get('type')
                 recipe_list = request.POST.getlist('recipe[]')
                 result = request.POST.get('result')
-                print(result)
-                result, result_count = result.split('!')
-
+                
                 if id == "None":
                     id = -1
                 else:
@@ -33,7 +32,6 @@ def recipe(request, datapack_id, recipe_id):
                     recipe_type=type_, 
                     recipe_list=recipe_list,
                     result=result,
-                    result_count=result_count,
                     datapack_id=datapack_id,
                     )
 
@@ -86,7 +84,15 @@ def recipe(request, datapack_id, recipe_id):
                             element = type_ + '~'  + str(obj.id)
                             crafting[i][j] = element
                 data['crafting'] = crafting
+            elif data['type'] == 'smithing':
+                base = first_from_dict(recipe.get_base())
+                base = GetElementTypeAndId(base[0] + "~" + base[1])
 
+                addition = first_from_dict(recipe.get_addition())
+                addition = GetElementTypeAndId(addition[0] + "~" + addition[1])
+
+                data['base'] = base
+                data['addition'] = addition 
             print_info("Load recipe %s with data: %s" % (recipe_.name, data))
             return JsonResponse(data, status=200)
         elif 'prepare-items' in request.GET:

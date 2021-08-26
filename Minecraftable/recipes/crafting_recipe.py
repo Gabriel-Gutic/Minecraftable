@@ -15,24 +15,23 @@ class CraftingRecipeShapeless(RawRecipe):
     def get_ingredients(self):
         return self.ingredients
 
-    def  add_item_as_ingredient(self, item):
+    def  add_ingredient(self, ingredient): #Format: type~name
         if self.ingredients_number() >= 9:
             print_error('The max of 9 ingradients exceeded!')
-        else:
-            self.ingredients.append({'item': item})
+            return
 
+        type_, name = ingredient.split('~')
+        if type_ == 'item':
+            self.ingredients.append({'item': name})
+        elif type_ == 'tag':
+            self.ingredients.append({'tag': name})
+    
     def remove_item_from_ingredients(self, item):
         for ingredient in self.ingredients:
             if 'item' in ingredient:
                 if ingredient['item'] == item:
                     self.ingredients.remove(ingredient)
                     break
-    
-    def add_tag_as_ingredient(self, tag):
-        if self.ingredients_number() >= 9:
-            print_error('The max of 9 ingradients exceeded!')
-        else:
-            self.ingredients.append({'tag': tag})
     
     def remove_tag_from_ingredients(self, tag):
         for ingredient in self.ingredients:

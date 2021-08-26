@@ -1,17 +1,17 @@
-function SetCraftingResult(result_id, count = "") {
+function SetResultInPlot(plot_id, result_id, count = "") {
     var list = $(".item-element")
     item_id = BinarySearchUnorderedList(list, result_id, 0, list.length)
 
     element = $("#radio-item-" + item_id)
-    plot_id = "crafting-plot-result"
     SetHoverInPlot(plot_id)
+    $("#plot-hover-image").css("opacity", 0);
     SetElementInPlot($("#" + plot_id), element)
     $("#result-count").text(count).change()
-    $("#crafting-recipe-image").trigger("resize").change();
 }
 
-function SetElementInCraftingPlot(data, i, j) {
-    parts = data.split("~")
+function SetElementInPlotByData(plot_id, data) //Data format: type~id
+{
+    let parts = data.split("~")
     let type = parts[0];
     let id = parts[1];
 
@@ -30,11 +30,10 @@ function SetElementInCraftingPlot(data, i, j) {
     }
 
     if (element != null) {
-        let plot_id = "crafting-plot-" + i + "-" + j
         SetHoverInPlot(plot_id)
+        $("#plot-hover-image").css("opacity", 0);
         SetElementInPlot($("#" + plot_id), element, false)
     }
-
 }
 
 function FillRecipeData() {
@@ -62,16 +61,20 @@ function FillRecipeData() {
                         let nr = Math.trunc(i / 3)
                         SetElementInCraftingPlot(ingredients[i], nr, (i - nr * 3))
                     }
-                    SetCraftingResult(data.result, data.count)
+                    SetResultInPlot("crafting-plot-result", data.result, data.count)
                 } else if (data.type == "crafting_shaped") {
                     crafting = data.crafting
 
                     for (var i = 0; i < crafting.length; i++)
                         for (var j = 0; j < crafting[i].length; j++) {
-                            SetElementInCraftingPlot(crafting[i][j], i, j)
+                            SetElementInPlotByData("crafting-plot-" + i + "-" + j, crafting[i][j])
                         }
 
-                    SetCraftingResult(data.result, data.count)
+                    SetResultInPlot("crafting-plot-result", data.result, data.count)
+                } else if (data.type == "smithing") {
+                    SetElementInPlotByData("smithing-plot-base", data.base)
+                    SetElementInPlotByData("smithing-plot-addition", data.addition)
+                    SetResultInPlot("smithing-plot-result", data.result)
                 }
             }
         })

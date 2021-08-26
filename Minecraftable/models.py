@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as gtl
 from django.contrib.auth import get_user_model
 
-from Minecraftable.printer import Error, print_info
+from Minecraftable.printer import Error, print_error, print_info
 
 
 class AccountManager(BaseUserManager):
@@ -171,5 +171,21 @@ class Item(models.Model):
     def __str__(self):
         return self.name
 
+def GetElementTypeAndName(data): #Data format: type~id
+    type_, id = data.split('~')
+    if type_ == 'item':
+        return type_ + "~" + Item.objects.get(id=id).id_name
+    elif type_ == 'tag':
+        return type_ + "~" + Tag.objects.get(id=id).name
+    print_error("Unknown type: %s" % type_)
+    return None
 
+def GetElementTypeAndId(data): #Data format: type~name
+    type_, name = data.split('~')
+    if type_ == 'item':
+        return type_ + "~" + str(Item.objects.get(id_name=name).id)
+    elif type_ == 'tag':
+        return type_ + "~" + str(Tag.objects.filter(name=name)[0].id)
+    print_error("Unknown type: %s" % type_)
+    return None
 
