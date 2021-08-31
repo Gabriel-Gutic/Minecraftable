@@ -1,4 +1,5 @@
 from .recipe import RawRecipe
+from Minecraftable.printer import print_error
 
 
 class SmeltingRecipe(RawRecipe):
@@ -14,38 +15,44 @@ class SmeltingRecipe(RawRecipe):
     def type(self):
         return 'smelting'
 
-    def add_ingredient_by_item(self, item):
-        self.ingredients.append({ 'item': item })
+    def add_ingredient(self, type_, name): #ingredient format: type~name
+        for ingredient in self.ingredients:
+            if name in ingredient.values():
+                return
+        self.ingredients.append({ type_: name })
 
-    def add_ingredient_by_tag(self, tag):
-        self.ingredients.append({ 'tag': tag })
-    
-    def remove_ingredient_by_item(self, item):
+    def remove_ingredient(self, data): #ingredient format: type~name
+        
+        type_, name = data.split('~')
+
         i = 0
         for ingredient in self.ingredients:
-            if 'item' in ingredient:
-                if ingredient['item'] == item:
+            if type_ in ingredient:
+                if ingredient[type_] == name:
                     self.ingredients.pop(i)
-                    break
+                    return
             i += 1
     
-    def remove_ingredient_by_tag(self, tag):
-        i = 0
-        for ingredient in self.ingredients:
-            if 'tag' in ingredient:
-                if ingredient['tag'] == tag:
-                    self.ingredients.pop(i)
-                    break
-            i += 1
+    def get_ingredients(self):
+        return self.ingredients
 
     def set_experience(self, experience):
         self.experience = experience
+
+    def get_experience(self):
+        return self.experience
 
     def set_cooking_time_in_ticks(self, ticks):
         self.cooking_time = ticks
 
     def set_cooking_time_in_seconds(self, seconds):
         self.cooking_time = seconds * 20
+
+    def get_cooking_time(self):
+        return self.cooking_time
+
+    def get_cooking_time_in_seconds(self):
+        return int(self.cooking_time / 20)
 
     def _fill_dictionary_(self):
         if len(self.ingredients) == 1:
@@ -62,8 +69,8 @@ class SmeltingRecipe(RawRecipe):
     
     def fill_data_from_dictionary(self, dictionary):
         d = dictionary
-        if 'ingredients' in d:
-            self.ingredients = d['ingredients']
+        if 'ingredient' in d:
+            self.ingredients = d['ingredient']
         if 'cookingtime' in d:
             self.cooking_time = d['cookingtime']
         if 'experience' in d:

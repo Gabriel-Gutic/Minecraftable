@@ -86,13 +86,26 @@ def recipe(request, datapack_id, recipe_id):
                 data['crafting'] = crafting
             elif data['type'] == 'smithing':
                 base = first_from_dict(recipe.get_base())
-                base = GetElementTypeAndId(base[0] + "~" + base[1])
+                type_, id = GetElementTypeAndId(base[0], base[1])
+                base = type_ + "~" + id
 
                 addition = first_from_dict(recipe.get_addition())
-                addition = GetElementTypeAndId(addition[0] + "~" + addition[1])
+                type_, id = GetElementTypeAndId(addition[0] + "~" + addition[1])
+                addition = type_ + "~" + id
 
                 data['base'] = base
                 data['addition'] = addition 
+            elif data['type'] in {'smelting', 'smoking', 'blasting'}:
+                data['xp'] = recipe.get_experience()
+                data['cooking_time'] = recipe.get_cooking_time_in_seconds()
+                ingredients = recipe.get_ingredients()
+                data['ingredients'] = []
+                for ingredient in ingredients:
+                    for key, value in ingredient.items():
+                        type_, id = GetElementTypeAndId(key, value)
+
+                        data['ingredients'].append((type_, id))
+
             print_info("Load recipe %s with data: %s" % (recipe_.name, data))
             return JsonResponse(data, status=200)
         elif 'prepare-items' in request.GET:

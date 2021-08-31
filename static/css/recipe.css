@@ -1,3 +1,12 @@
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    overflow-x: hidden;
+}
+
 #main-card {
     width: 60%;
     min-width: 500px;
@@ -13,7 +22,7 @@
     position: relative;
 }
 
-.recipe-image-plot {
+area {
     cursor: pointer;
 }
 
@@ -28,17 +37,38 @@
     pointer-events: none;
 }
 
-.plot-item-image {
+.plot-image {
     position: absolute;
     z-index: 1;
     pointer-events: none;
 }
 
-#result-count {
+.recipe-data {
     position: absolute;
+    z-index: 2;
+}
+
+#result-count {
     top: 50%;
     left: 89%;
-    z-index: 2;
+}
+
+@font-face {
+    font-family: "digital-clock-font";
+    src: url(/static/fonts/digital-7.ttf);
+}
+
+#timer-data {
+    top: 15.3%;
+    left: 71.2%;
+    font-family: "digital-clock-font";
+    font-size: 64px;
+}
+
+#xp-data {
+    top: 74%;
+    left: 68%;
+    font-size: 70px;
 }
 
 .object-list {
@@ -57,4 +87,21 @@
 
 .undisplayed-data {
     display: none !important;
+}
+
+.image-popover {
+    margin-left: 1% !important;
+}
+
+.plot-list-image {
+    position: absolute;
+    pointer-events: none;
+    z-index: -1000;
+}
+
+#furnace-plot-ingredient-image {
+    max-width: 125px;
+    max-height: 125px;
+    top: 137px;
+    left: 256px;
 }

@@ -44,52 +44,58 @@
             <div class="mt-3 d-flex justify-content-center">
                 <div id="image-div" class="text-center mb-2">
 
-                    <p id="crafting-recipe-image-rect" class="undisplayed-data recipe-image-rect">0,0</p>
                     <img id="crafting-recipe-image" src="{% static 'images/crafting-table-interface.png' %}" class="rounded recipe-image" alt="Crafting-Interface" usemap="#crafting-table-map">
                     
-                    <p id="furnace-recipe-image-rect" class="undisplayed-data recipe-image-rect">0,0</p>
-                    <img id="furnace-recipe-image" src="{% static 'images/furnace-interface.gif' %}" class="rounded recipe-image undisplayed-data" alt="Furnace-Interface" usemap="#furnace-map">
+                    <img id="furnace-recipe-image" src="{% static 'images/furnace-interface.gif' %}"         class="rounded recipe-image undisplayed-data" alt="Furnace-Interface" usemap="#furnace-map">
+                    <img id="furnace-plot-ingredient-image" src="{% static 'images/hover.jpg' %}"            class="plot-list-image">
 
-                    <p id="smithing-recipe-image-rect" class="undisplayed-data recipe-image-rect">0,0</p>
                     <img id="smithing-recipe-image" src="{% static 'images/smithing_table_interface.png' %}" class="rounded recipe-image undisplayed-data" alt="Smithing-Table-Interface" usemap="#smithing-table-map">
 
-                    <p id="stonecutter-recipe-image-rect" class="undisplayed-data recipe-image-rect">0,0</p>
                     <img id="stonecutter-recipe-image" src="{% static 'images/stonecutter_interface.gif' %}" class="rounded recipe-image undisplayed-data" alt="Stonecutter-Interface" usemap="#stonecutter-map">
 
-                    <p id="campfire-recipe-image-rect" class="undisplayed-data recipe-image-rect">0,0</p>
-                    <img id="campfire-recipe-image" src="{% static 'images/campfire_interface.gif' %}" class="rounded recipe-image undisplayed-data" alt="Campfire-Interface" usemap="#campfire-map">
+                    <img id="campfire-recipe-image" src="{% static 'images/campfire_interface.gif' %}"       class="rounded recipe-image undisplayed-data" alt="Campfire-Interface" usemap="#campfire-map">
 
-                    <p id="result-count" name="result-count" class="fw-bold fs-5 text-white">
+                    <p id="result-count" name="result-count" class="recipe-data fw-bold fs-5 text-white">
                         {% if recipe_id  is None %}
                             1
                         {% endif %}
                     </p>
+                    <p id="timer-data" name="timer-data" class="recipe-data cooking-data fw-bold text-black undisplayed-data">00: 10</p>
+                    <p id="xp-data"    name="xp-data"    class="recipe-data cooking-data fw-bold text-black undisplayed-data">0</p>
                     <img id="plot-hover-image" src="{% static 'images/hover.jpg' %}">
                 </div>
                 <map name="crafting-table-map">
-                    <area id="crafting-plot-result" class="recipe-image-plot" shape="rect" coords="0,0,0,0">
-                    {% for i in '012'|make_list %}
-                        {% for j in '012'|make_list %}
-                            <area id="crafting-plot-{{i}}-{{j}}" class="recipe-image-plot" shape="rect" coords="0,0,0,0">
-                        {% endfor %}
-                    {% endfor %}
+                    <area id="crafting-plot-0-0"    class="crafting-area recipe-image-plot recipe-plot" coords="25,24,80,80"     shape="rect">
+                    <area id="crafting-plot-0-1"    class="crafting-area recipe-image-plot recipe-plot" coords="88,24,143,80"    shape="rect">
+                    <area id="crafting-plot-0-2"    class="crafting-area recipe-image-plot recipe-plot" coords="150,24,206,81"   shape="rect">
+                    <area id="crafting-plot-1-0"    class="crafting-area recipe-image-plot recipe-plot" coords="24,88,80,143"    shape="rect">
+                    <area id="crafting-plot-1-1"    class="crafting-area recipe-image-plot recipe-plot" coords="88,88,143,144"   shape="rect">
+                    <area id="crafting-plot-1-2"    class="crafting-area recipe-image-plot recipe-plot" coords="150,88,206,143"  shape="rect">
+                    <area id="crafting-plot-2-0"    class="crafting-area recipe-image-plot recipe-plot" coords="25,150,80,206"   shape="rect">
+                    <area id="crafting-plot-2-1"    class="crafting-area recipe-image-plot recipe-plot" coords="88,150,143,206"  shape="rect">
+                    <area id="crafting-plot-2-2"    class="crafting-area recipe-image-plot recipe-plot" coords="151,151,206,206" shape="rect">
+                    <area id="crafting-plot-result" class="crafting-area recipe-image-plot recipe-plot" coords="341,73,424,158"  shape="rect">
                 </map>
                 <map name="furnace-map">
-                    <area id="furnace-plot-ingredient" class="recipe-list-plot" shape="rect" coords="0,0,0,0">
-                    <area id="furnace-plot-result" class="recipe-image-plot" shape="rect" coords="0,0,0,0">
+                    <area id="furnace-plot-ingredient" class="furnace-area recipe-list-plot recipe-plot"  coords="253,136,380,260" shape="rect">
+                    <area id="furnace-plot-result"     class="furnace-area recipe-image-plot recipe-plot" coords="704,248,893,435" shape="rect">
+                    <area id="furnace-timer-increment" class="furnace-button furnace-xp-button"           coords="912,136,948,81,991,136"  shape="poly">
+                    <area id="furnace-timer-decrement" class="furnace-button furnace-xp-button"           coords="952,199,910,145,988,145" shape="poly">
+                    <area id="furnace-xp-increment"    class="furnace-button furnace-timer-button"        coords="945,461,909,516,987,517" shape="poly">
+                    <area id="furnace-xp-decrement"    class="furnace-button furnace-timer-button"        coords="908,525,951,579,987,524" shape="poly">
                 </map>
                 <map name="smithing-table-map">
-                    <area id="smithing-plot-base" class="recipe-image-plot smithing-plot" shape="rect" coords="0,0,0,0">
-                    <area id="smithing-plot-addition" class="recipe-image-plot smithing-plot" shape="rect" coords="0,0,0,0">
-                    <area id="smithing-plot-result" class="recipe-image-plot smithing-plot" shape="rect" coords="0,0,0,0">
+                    <area id="smithing-plot-base"     class="smithing-area recipe-image-plot smithing-plot recipe-plot" coords="24,86,72,135"   shape="rect">
+                    <area id="smithing-plot-addition" class="smithing-area recipe-image-plot smithing-plot recipe-plot" coords="124,86,173,135" shape="rect">
+                    <area id="smithing-plot-result"   class="smithing-area recipe-image-plot smithing-plot recipe-plot" coords="236,86,284,135" shape="rect">
                 </map>
                 <map name="stonecutter-map">
-                    <area id="stonecutter-plot-ingredient" class="recipe-list-plot" shape="rect" coords="0,0,0,0">
-                    <area id="stonecutter-plot-result" class="recipe-image-plot" shape="rect" coords="0,0,0,0">
+                    <area id="stonecutter-plot-ingredient" class="stonecutter-area recipe-list-plot recipe-plot"  coords="14,42,62,90"   shape="rect">
+                    <area id="stonecutter-plot-result"     class="stonecutter-area recipe-image-plot recipe-plot" coords="126,42,174,90" shape="rect">
                 </map>
                 <map name="campfire-map">
-                    <area id="campfire-plot-ingredient" class="recipe-list-plot" shape="rect" coords="0,0,0,0">
-                    <area id="campfire-plot-result" class="recipe-image-plot" shape="rect" coords="0,0,0,0">
+                    <area id="campfire-plot-ingredient" class="campfire-area recipe-list-plot recipe-plot"  coords="14,42,62,90"   shape="rect">
+                    <area id="campfire-plot-result"     class="campfire-area recipe-image-plot recipe-plot" coords="126,42,174,90" shape="rect">
                 </map>
             </div>
         </div>
@@ -125,11 +131,14 @@
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.0/dist/js.cookie.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
 <script type="text/javascript" src="{% static 'js/errors.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/tag-popover.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/binary-search.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/char-check.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/popover-list/main.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/popover-list/utils.js' %}"></script>
 
-<script type="text/javascript" src="{% static 'js/recipe/utils-buttons.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/recipe/utils-buttons/count.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/recipe/utils-buttons/timer.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/recipe/utils-buttons/xp.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/recipe/recipe-type-select.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/recipe/ElementList.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/recipe/set-element-in-plot.js' %}"></script>
@@ -137,9 +146,9 @@
 <script type="text/javascript" src="{% static 'js/recipe/fill-tag-list.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/recipe/resize.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/recipe/image-plot.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/recipe/fill-recipe-data.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/recipe/finished-lists.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/recipe/search-input.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/recipe/fill-recipe-data.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/recipe/save.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/recipe/popover-setup.js' %}"></script>
 {% endblock scripts %}

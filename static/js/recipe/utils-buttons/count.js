@@ -1,7 +1,3 @@
-function IsEraseChecked() {
-    return $("#erase-plot-button").hasClass("btn-primary")
-}
-
 $(document).ready(function() {
 
     $("#erase-plot-button").on("click", function() {
@@ -73,4 +69,7 @@ $(document).ready(function() {
         }
         $(this).css("left", left + "%")
     })
+
+
+    
 })

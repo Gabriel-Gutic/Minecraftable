@@ -1,66 +1,88 @@
-function SetHoverCoords(plot_id, left_extra, top_extra) {
-    let hover = $("#plot-hover-image")
-
-    let plot = $("#" + plot_id)
-    let coords = plot.attr("coords").split(",")
-
-    let old_left = parseInt(coords[0], 10)
-    let old_top = parseInt(coords[1], 10)
-    hover.css("left", old_left + left_extra)
-    hover.css("top", old_top + top_extra)
+function IsEraseChecked() {
+    return $("#erase-plot-button").hasClass("btn-primary")
 }
 
 function SetHoverInPlot(plot_id) {
-    hover = $("#plot-hover-image")
-    let image_rect = GetCurrentImageRect();
-
-    const width = parseInt(image_rect[0]);
-    const height = parseInt(image_rect[1]);
-
-    const element_width = 12.22 / 100 * width;
-    const margin = 5.70 / 100 * width;
-    const square_width = 14.0 / 100 * width;
-
-    if (plot_id == "crafting-plot-result") {
-        hover.css("left", 78.8 / 100 * width);
-        hover.css("top", 37.9 / 100 * height)
-
-    } else if (plot_id.includes("crafting-plot")) {
-        var list = plot_id.split("-");
-        const x = parseInt(list[2], 10);
-        const y = parseInt(list[3], 10);
-
-        hover.css("top", margin + x * square_width);
-        hover.css("left", margin + y * square_width);
-
-    } else if (plot_id == "furnace-plot-result") {
-
-        hover.css("left", 72 / 100 * width);
-        hover.css("top", 44 / 100 * height)
-
-    } else if (plot_id.includes("smithing-plot")) {
-        SetHoverCoords(plot_id, 2.8 / 100 * width, 4.0 / 100 * height)
-    }
-
-    hover.css("width", element_width);
-    hover.css("height", element_width);
+    let hover = $("#plot-hover-image")
+    SetImageRectForPlot(hover, $("#" + plot_id));
     hover.css("opacity", 0.7);
 }
 
+function IsTagInPlot(plot_id) {
+    image = $("#" + plot_id + "-image")
+    if (image.length > 0) {
+        data = $("#" + plot_id + "-image-data")
+
+        if (data.text().includes("tag"))
+            return true
+    }
+    return false
+}
+
+function IsListInPlot(plot_id) {
+    return $("#" + plot_id).hasClass("recipe-list-plot");
+}
+
+function ShowList(plot_id) {
+    plot_image = $("#" + plot_id + "-image");
+    if (plot_image.length > 0) {
+        popover_list = plot_image.data("popover-list");
+        if (popover_list) {
+            if (IsListInPlot(plot_id)) {
+                count = popover_list.Size();
+                if (count <= 0)
+                    return
+                HidePopoversByClass("plot-list-popover");
+            } else if (IsTagInPlot(plot_id)) {
+                HidePopoversByClass("plot-tag-popover");
+            }
+            popover_list.Show();
+            popover_list.OnMouseLeave(function() {
+                setTimeout(function() {
+                    if (!IsPopoverHovered()) {
+                        popover_list.Hide();
+                    }
+                }, 300)
+            });
+        }
+    }
+}
+
+function HideList(plot_id) {
+    if (IsTagInPlot(plot_id) || IsListInPlot(plot_id)) {
+        setTimeout(function() {
+            if (!$(".popover:hover").length) {
+                image = $("#" + plot_id + "-image")
+                image.popover("hide");
+            }
+        }, 200)
+    }
+}
+
+
 $(document).ready(function() {
-    $(".recipe-image-plot").mouseover(function() {
+
+    $(".recipe-plot").mouseover(function() {
         const id = $(this).attr("id");
         SetHoverInPlot(id);
+        ShowList(id);
     }).mouseout(function() {
         $("#plot-hover-image").css("opacity", 0);
-    }).on("click", function(event) {
+        const id = $(this).attr("id");
+        HideList(id);
+    })
+
+    $(".recipe-image-plot").on("click", function(event) {
         if (IsEraseChecked()) {
             let id = $(this).attr("id");
             img_id = id + "-image";
 
             this_ = $(this)
-            $(".plot-item-image").each(function(i, obj) {
+            $(".plot-image").each(function(i, obj) {
                 if (obj.id.includes(img_id)) {
+                    image = $("#" + img_id)
+                    image.popover("hide");
+
                     this_.popover('dispose');
                     this_.off("mouseenter");
                     this_.off("mouseleave");
@@ -72,6 +94,21 @@ $(document).ready(function() {
         } else {
             let selected = $("input[type=radio][name=data-radio-list]:checked")
             SetElementInPlot($(this), selected);
+        }
+    })
+
+    $(".recipe-list-plot").on("click", function(event) {
+        let selected = $("input[type=radio][name=data-radio-list]:checked");
+        if (selected.length > 0) {
+            AddElementInPlotList($(this).attr("id"), selected);
+            popover_list = $("#" + $(this).attr("id") + "-image").data("popover-list");
+            popover_list.OnMouseLeave(function() {
+                setTimeout(function() {
+                    if (!IsPopoverHovered()) {
+                        popover_list.Hide();
+                    }
+                }, 300)
+            });
         }
     })
 })

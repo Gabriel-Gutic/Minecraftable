@@ -15,12 +15,11 @@ class CraftingRecipeShapeless(RawRecipe):
     def get_ingredients(self):
         return self.ingredients
 
-    def  add_ingredient(self, ingredient): #Format: type~name
+    def  add_ingredient(self, type_, name):
         if self.ingredients_number() >= 9:
             print_error('The max of 9 ingradients exceeded!')
             return
 
-        type_, name = ingredient.split('~')
         if type_ == 'item':
             self.ingredients.append({'item': name})
         elif type_ == 'tag':
@@ -82,8 +81,7 @@ class CraftingRecipeShaped(RawRecipe):
     def get_keys(self):
         return self.keys
 
-    def add_value(self, element, i, j): #element format: type~id
-        type_, id = element.split('~')
+    def add_value(self, type_, name, i, j): #element format: type~id
         for key, value in self.keys.items():
             if type_ in value:
                 if value[type_] == id:
@@ -94,13 +92,12 @@ class CraftingRecipeShaped(RawRecipe):
         while key in self.keys.keys():
             key = next_alpha(key) #Go to the next letter
         self.pattern[i][j] = key
-        self.keys[key] = {type_: id}
+        self.keys[key] = {type_: name}
 
-    def remove_value(self, element): #element format: type~id
-        type_, id = element.split('~')
+    def remove_value(self, type_, name): #element format: type~id
         for key, value in self.keys.items():
             if type_ in value:
-                if value[type_] == id:
+                if value[type_] == name:
                     for line in self.pattern:
                         for x in line:
                             if x == key:

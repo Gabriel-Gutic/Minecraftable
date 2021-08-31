@@ -1,31 +1,119 @@
-function GetCurrentImageRect() {
-    let image_rect = null
-    $(".recipe-image-rect").each(function(i, obj) {
-        let id = obj.id.replace("-rect", "")
-        let image = $("#" + id)
-        if (!image.hasClass("undisplayed-data")) {
-            image_rect = $("#" + obj.id).text().split(",");
-        }
-    })
-    return image_rect
+function ResizeArea(area, base_image)
+{
+    let width = base_image.width();
+    let height = base_image.height();
+
+    if (width == 0 || height == 0)
+        return;
+
+    let previousWidth = base_image.data("previous-width");
+    let previousHeight = base_image.data("previous-height");
+
+    old_coords = area.attr("coords").split(",");
+    new_coords = "";
+    for (let i = 0; i < old_coords.length; i+=2)
+    {
+        new_coords += parseFloat(old_coords[i]) * width / previousWidth + ",";
+        new_coords += parseFloat(old_coords[i+1]) * height / previousHeight;
+        if (i + 2 < old_coords.length)
+            new_coords += ",";
+    }
+
+    area.attr("coords", new_coords);
 }
 
-function ResizePlotImage(plot, new_width, x, y) {
-    let image = $("#" + plot.attr("id") + "-image")
-    if (image.length > 0) {
-        image.css("max-width", new_width)
-        image.css("max-height", new_width)
+function ResizeAreaById(area_id, base_image)
+{
+    area = $("#" + area_id);
+    ResizeArea(area, base_image);
+}
 
-        let width = image.width()
-        let height = image.height()
-
-        image.css("left", x + (new_width - width) / 2.0);
-        image.css("top", y + (new_width - height) / 2.0);
+function GetCurrentImageRect() {
+    image = $(".recipe-image").not(".undisplayed-data")
+    return {
+        width: parseFloat(image.width()),
+        height: parseFloat(image.height()),
     }
 }
 
-$(document).ready(function() {
+function ResizePlotImage(plot, base_image) {
+    let width = base_image.width();
+    let height = base_image.height();
+    let plot_image = $("#" + plot.attr("id") + "-image");
+    if (width == 0 || height == 0)
+    {
+        plot_image.addClass("undisplayed-data");
+        return;
+    }
+    plot_image.removeClass("undisplayed-data");
+    let previousWidth = base_image.data("previous-width");
+    let previousHeight = base_image.data("previous-height");
 
+    if (plot_image.length > 0) {
+        old_width = parseFloat(plot_image.css("max-width"));
+        old_height = parseFloat(plot_image.css("max-height"));
+
+        plot_image.css("max-width", old_width * width / previousWidth);
+        plot_image.css("max-height", old_height * height / previousHeight);
+
+        old_left = parseFloat(plot_image.css("left"));
+        old_top = parseFloat(plot_image.css("top"));
+
+        plot_image.css("left", old_left * width / previousWidth);
+        plot_image.css("top", old_top * height / previousHeight);
+    }
+}
+
+function ResizePlotImageById(plot_id, base_image)
+{
+    plot = $("#" + plot_id);
+    ResizePlotImage(plot, base_image);
+}
+
+function GetPlotImageRect(plot)
+{
+    const rect = GetCurrentImageRect();
+
+    let coords = plot.attr("coords").split(",")
+    for (let i = 0; i < coords.length; i++)
+        coords[i] = parseFloat(coords[i])
+
+    const plot_width = coords[2] - coords[0];
+    const image_width = 12.0 / 100 * rect.width;
+
+    const left = coords[0] + 1;
+    const top = coords[1] + 1;
+
+    return {
+        width: image_width,
+        height: image_width,
+        left: left + (plot_width - image_width) / 2.0,
+        top: top + (plot_width - image_width) / 2.0, 
+    }
+}
+
+function SetImageRectForPlot(image, plot)
+{
+    rect = GetPlotImageRect(plot)
+
+    image.css("left", rect.left);
+    image.css("top", rect.top);
+
+    image.css("width", rect.width);
+    image.css("height", rect.height);
+}
+
+function ResizeFont(parent, base_image)
+{
+    let width = base_image.width();
+    if (width == 0)
+        return;
+    let previousWidth = base_image.data("previous-width");
+
+    old_font_size = parseFloat(parent.css("font-size"));
+    parent.css("font-size", old_font_size * width / previousWidth);
+}
+$(document).ready(function() {
     const resize_object = new ResizeObserver(function(entries) {
         for (let entry of entries) {
             let image_id = entry.target.id
@@ -33,60 +121,39 @@ $(document).ready(function() {
 
             const width = rect.width;
             const height = rect.height;
+
+            let image = $("#" + image_id)
             if (image_id.includes("crafting")) {
 
-                $("#crafting-recipe-image-rect").text(width + "," + height);
-
-                let lu = [] //Left Up Corner Coords
-                let rd = [] //Right Down Corner Coords
-
-                //Margin and SquareWidth in pixels
-                const margin = 5.55 / 100 * width;
-                const square_width = 14.0 / 100 * width;
-                const image_width = 12.0 / 100 * width;
-
-                lu.push(margin);
-                lu.push(margin + square_width);
-                lu.push(margin + 2 * square_width);
-
-                const point = margin + 12.22 / 100 * width;
-                rd.push(point);
-                rd.push(point + square_width);
-                rd.push(point + 2 * square_width);
-
-                for (let i = 0; i < 3; i++)
-                    for (let j = 0; j < 3; j++) {
-                        area = $("#crafting-plot-" + i + "-" + j);
-                        area.attr("coords", lu[j] + "," + lu[i] + "," + rd[j] + "," + rd[i]);
-
-                        ResizePlotImage(area, image_width, lu[j], lu[i])
-                    }
-                let plot = $("#crafting-plot-result")
-                plot.attr("coords", 75.5 / 100 * width + "," + 32.3 / 100 * height + "," + 94.2 / 100 * width + "," + 67.6 / 100 * height);
-                ResizePlotImage(plot, image_width, 78.8 / 100 * width, 37.9 / 100 * height)
+                $(".crafting-area").each(function(i, obj){
+                    ResizeAreaById(obj.id, image);
+                    ResizePlotImageById(obj.id, image);
+                })
             } else if (image_id.includes("furnace")) {
 
-                $("#furnace-recipe-image-rect").text(width + "," + height);
-                let image_width = 12.0 / 100 * width;
+                $(".furnace-area").each(function(i, obj){
+                    ResizeAreaById(obj.id, image);
+                    ResizePlotImageById(obj.id, image);
+                })
 
-                let plot = $("#furnace-plot-result")
-                plot.attr("coords", 68.7 / 100 * width + "," + 39 / 100 * height + "," + 87 / 100 * width + "," + 69 / 100 * height);
-                ResizePlotImage(plot, image_width, 72 / 100 * width, 44 / 100 * height)
+                $(".furnace-button").each(function(i, obj){
+                    ResizeAreaById(obj.id, image)
+                })
+
+                ResizeFont($("#timer-data"), image);
+                ResizeFont($("#xp-data"), image);
             } else if (image_id.includes("smithing")) {
-                $("#smithing-recipe-image-rect").text(width + "," + height);
-                let image_width = 12.0 / 100 * width;
 
-                let plot = $("#smithing-plot-base")
-                plot.attr("coords", 7 / 100 * width + "," + 56 / 100 * height + "," + 24 / 100 * width + "," + 87 / 100 * height);
-                ResizePlotImage(plot, image_width, 9.8 / 100 * width, 59.5 / 100 * height)
+                $(".smithing-area").each(function(i, obj){
+                    ResizeAreaById(obj.id, image);
+                    ResizePlotImageById(obj.id, image);
+                })
+            }
 
-                plot = $("#smithing-plot-addition")
-                plot.attr("coords", 40 / 100 * width + "," + 56 / 100 * height + "," + 57 / 100 * width + "," + 87 / 100 * height);
-                ResizePlotImage(plot, image_width, 42.8 / 100 * width, 59.5 / 100 * height)
 
-                plot = $("#smithing-plot-result")
-                plot.attr("coords", 77 / 100 * width + "," + 56 / 100 * height + "," + 94 / 100 * width + "," + 87 / 100 * height);
-                ResizePlotImage(plot, image_width, 79.8 / 100 * width, 59.5 / 100 * height)
+            if (width > 0 && height > 0) {
+                image.data("previous-width", width);
+                image.data("previous-height", height);
             }
         }
 
@@ -94,6 +161,9 @@ $(document).ready(function() {
 
     images = document.getElementsByClassName("recipe-image");
     for (let i = 0; i < images.length; i++) {
+        $("#" + images[i].id).data("previous-width", images[i].naturalWidth)
+        $("#" + images[i].id).data("previous-height", images[i].naturalHeight)
+
         resize_object.observe(images[i]);
     }
 })

@@ -171,21 +171,41 @@ class Item(models.Model):
     def __str__(self):
         return self.name
 
-def GetElementTypeAndName(data): #Data format: type~id
-    type_, id = data.split('~')
+def GetElementTypeAndName(*args):
+    if len(args) == 0:
+        print_error("Not enough args for function GetElementTypeAndId")
+        return
+    elif len(args) == 1:
+        type_, id = args[0].split("~")
+    elif len(args) == 2:
+        type_, id = args[0], args[1]
+    else:
+        print_error("Too many args for function GetElementTypeAndId")
+        return
+
     if type_ == 'item':
-        return type_ + "~" + Item.objects.get(id=id).id_name
+        return (type_, Item.objects.get(id=id).id_name)
     elif type_ == 'tag':
-        return type_ + "~" + Tag.objects.get(id=id).name
+        return (type_, Tag.objects.get(id=id).name)
     print_error("Unknown type: %s" % type_)
     return None
 
-def GetElementTypeAndId(data): #Data format: type~name
-    type_, name = data.split('~')
+
+def GetElementTypeAndId(*args):
+    if len(args) == 0:
+        print_error("Not enough args for function GetElementTypeAndId")
+        return
+    elif len(args) == 1:
+        type_, name = args[0].split("~")
+    elif len(args) == 2:
+        type_, name = args[0], args[1]
+    else:
+        print_error("Too many args for function GetElementTypeAndId")
+        return
     if type_ == 'item':
-        return type_ + "~" + str(Item.objects.get(id_name=name).id)
+        return (type_, Item.objects.get(id_name=name).id)
     elif type_ == 'tag':
-        return type_ + "~" + str(Tag.objects.filter(name=name)[0].id)
+        return (type_, Tag.objects.filter(name=name)[0].id)
     print_error("Unknown type: %s" % type_)
     return None
 

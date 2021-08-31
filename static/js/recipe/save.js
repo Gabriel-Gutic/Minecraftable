@@ -67,7 +67,40 @@ $(document).ready(function() {
             ]
 
             result = $("#smithing-plot-result-image-data").text()
-        } else {
+        } 
+        else if (select == "smelting" || select == "blasting" || select == "smoking")
+        {
+            popover_list = $("#furnace-plot-ingredient-image").data("popover-list");
+            recipe = []
+
+            popover_list.ForEach(function(i, obj)
+            {
+                let parts = obj.id.split("-")
+
+                let type = parts[parts.length - 2]
+                let id = parts[parts.length - 1]
+
+                recipe.push(type + "~" + id);
+            })
+            let data = $("#furnace-plot-result-image-data");
+            let valid = data.length > 0 && recipe.length > 0;
+
+            if (!valid)
+            {
+                Error("Not a valid recipe!");
+                return;
+            }
+
+            let timer = $("#timer-data").text().replaceAll(" ", "").split(":");
+            let minutes = parseInt(timer[0], 10);
+            let seconds = parseInt(timer[1], 10);
+
+            timer = 60 * minutes + seconds; // Turn timer in seconds only
+
+            let xp = $("#xp-data").text();
+            result = data.text() + "!" + timer + "!" + xp;
+        }
+        else {
             console.log("Invalid recipe type!")
             return
         }

@@ -13,8 +13,10 @@ from Minecraftable.models import Recipe, Datapack, Item, Tag, GetElementTypeAndN
 #Create a recipe from the data got from the webapp
 def create_from_data(recipe_id : int, name : str, recipe_type, recipe_list, result : str, datapack_id : int):
     result_count = None
-    if recipe_type == "crafting_shapeless" or recipe_type == "crafting_shaped" or recipe_type == "campfire_cooking":
+    if recipe_type in {"crafting_shapeless", "crafting_shaped"}:
         result, result_count = result.split('!')
+    elif recipe_type in {"smelting", "blasting", "smoking"}:
+        result, timer, xp = result.split('!')
     
     if recipe_type == "crafting_shapeless":
         recipe = CraftingRecipeShapeless()
@@ -28,16 +30,30 @@ def create_from_data(recipe_id : int, name : str, recipe_type, recipe_list, resu
         i = 0
         for element in recipe_list:
             if element is not None and element != '':
-
-                recipe.add_value(GetElementTypeAndName(element), int(i / 3), i % 3)
+                type_, name_ = GetElementTypeAndName(element)
+                recipe.add_value(type_, name_, int(i / 3), i % 3)
             i += 1
     elif recipe_type == "smithing":
         recipe = SmithingRecipe()
-        type_name = GetElementTypeAndName(recipe_list[0])
-        recipe.set_base(type_name)
+        type_, name_ = GetElementTypeAndName(recipe_list[0])
+        recipe.set_base(type_, name_)
 
-        type_name = GetElementTypeAndName(recipe_list[1])
-        recipe.set_addition(type_name)
+        type_, name_ = GetElementTypeAndName(recipe_list[1])
+        recipe.set_addition(type_, name_)
+    elif recipe_type == "smelting":
+        recipe = SmeltingRecipe()
+    elif recipe_type == "smoking":
+        recipe = SmokingRecipe()
+    elif recipe_type == "blasting":
+        recipe = BlastingRecipe()
+    
+    if recipe_type in ["smelting", "smoking", "blasting"]:
+        for type_id in recipe_list:
+            type_, name_ = GetElementTypeAndName(type_id)
+            recipe.add_ingredient(type_, name_)
+        print(recipe)
+        recipe.set_cooking_time_in_seconds(int(timer))
+        recipe.set_experience(int(xp))
 
     result_type, result_id = result.split('~')
     if result_type != 'item':

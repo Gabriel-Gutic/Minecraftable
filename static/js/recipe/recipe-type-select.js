@@ -6,6 +6,7 @@ $(document).ready(function() {
         if (selected == "crafting_shapeless" || selected == "crafting_shaped") {
             $("#crafting-recipe-image").removeClass("undisplayed-data");
         } else if (selected == "smelting" || selected == "smoking" || selected == "blasting") {
+            
             $("#furnace-recipe-image").removeClass("undisplayed-data");
         } else if (selected == "smithing") {
             $("#smithing-recipe-image").removeClass("undisplayed-data");
@@ -17,6 +18,7 @@ $(document).ready(function() {
             console.error("Invalid type " + selected + " selected!");
         }
 
+        $(".cooking-data").trigger("change");
         $("#result-count").trigger("change");
     })
 
