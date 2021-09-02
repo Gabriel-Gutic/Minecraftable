@@ -8,7 +8,7 @@ from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 import ast
 
-from Minecraftable.forms import NewDatapackForm, LoginForm, RegisterForm
+from Minecraftable.forms import LoginForm, RegisterForm, ResetPasswordForm
 from Minecraftable.models import Datapack, User
 from Minecraftable.printer import Error, print_info
 
@@ -105,13 +105,14 @@ def register(request):
                 messages.error(request, result)
                 return redirect('/Minecraftable/register/')
             
+            user = User.create_user(email=email, username=username, password=password)
+            auth_login(request, user)
+
             #Send confirmation email
             from django.core.mail import EmailMessage
 
             data = {
                 'username': username,
-                'email': email,
-                'password': password,
             }
 
             register_path = request.build_absolute_uri(request.path)
@@ -154,12 +155,81 @@ def register_confirmed(request, data):
 
     data = ast.literal_eval(urlsafe_base64_decode(data).decode("UTF-8"))
 
-    User.create_user(data['email'], data['username'], data['password'])
+    user = User.objects.get(username=data['username'])
+    user.email_confirmed = True
+    user.save()
 
     return HttpResponse(template.render({}, request))
 
 
 def not_permission(request):
     template = loader.get_template('Minecraftable/User/not-permission.html')
+    return HttpResponse(template.render({}, request))
+
+
+def forgot_password(request):
+    template = loader.get_template('Minecraftable/User/forgot-password.html')
+
+    if request.method == 'GET' and request.is_ajax():
+        text = request.GET.get('text')
+
+        user = User.find_user(text)
+        if type(user) == Error:
+            user.print()
+            return JsonResponse({'error': user.get_error_message()}, status=200)
+        
+        from django.core.mail import EmailMessage
+
+        data = {
+            'username': user.username,
+        }
+        register_path = request.build_absolute_uri(request.path)
+        message = loader.get_template('Minecraftable/User/password-recovery-email.html').render({
+            'data': urlsafe_base64_encode(force_bytes(data)),
+            'path': register_path,
+        })
+        from Minecraftable.admin import EMAIL_ADMIN
+        mail = EmailMessage(
+            subject='Password Recovery',
+            body=message,
+            from_email=EMAIL_ADMIN,
+            to=[user.email],
+            reply_to=[],
+        )
+        mail.content_subtype = 'html'
+        mail.send()
+        print_info('Password Recovery Email send successfully!')
+        return JsonResponse({}, status=200)
+
+    return HttpResponse(template.render({}, request))
+
+
+def reset_password(request, data):
+    template = loader.get_template('Minecraftable/User/reset-password.html')
+    
+    if request.method == 'POST':
+        form = ResetPasswordForm(request.POST)
+        if form.is_valid():
+            data = ast.literal_eval(urlsafe_base64_decode(data).decode("UTF-8"))
+
+            user = User.objects.get(username=data['username'])
+
+            password = form.cleaned_data['password']
+            user.set_password(password)
+            user.save()
+            return redirect('/Minecraftable/home/')
+
+    form = ResetPasswordForm()
+
+    context = {
+        'form': form,
+    }
+
+    return HttpResponse(template.render(context, request))
+
+
+def recovery_email_send(request):
+    template = loader.get_template('Minecraftable/User/recovery-email-send.html')
+
     return HttpResponse(template.render({}, request))
 

@@ -47,15 +47,17 @@
                     <img id="crafting-recipe-image" src="{% static 'images/crafting-table-interface.png' %}" class="rounded recipe-image" alt="Crafting-Interface" usemap="#crafting-table-map">
                     
                     <img id="furnace-recipe-image" src="{% static 'images/furnace-interface.gif' %}"         class="rounded recipe-image undisplayed-data" alt="Furnace-Interface" usemap="#furnace-map">
-                    <img id="furnace-plot-ingredient-image" src="{% static 'images/hover.jpg' %}"            class="plot-list-image">
+                    <img id="furnace-plot-ingredient-image" src="{% static 'images/hover.jpg' %}"            class="plot-list-image undisplayed-data">
 
                     <img id="smithing-recipe-image" src="{% static 'images/smithing_table_interface.png' %}" class="rounded recipe-image undisplayed-data" alt="Smithing-Table-Interface" usemap="#smithing-table-map">
 
                     <img id="stonecutter-recipe-image" src="{% static 'images/stonecutter_interface.gif' %}" class="rounded recipe-image undisplayed-data" alt="Stonecutter-Interface" usemap="#stonecutter-map">
+                    <img id="stonecutter-plot-ingredient-image" src="{% static 'images/hover.jpg' %}"            class="plot-list-image undisplayed-data">
 
-                    <img id="campfire-recipe-image" src="{% static 'images/campfire_interface.gif' %}"       class="rounded recipe-image undisplayed-data" alt="Campfire-Interface" usemap="#campfire-map">
+                    <img id="campfire-recipe-image" src="{% static 'images/campfire_interface.gif' %}" class="rounded recipe-image undisplayed-data" alt="Campfire-Interface" usemap="#campfire-map">
+                    <img id="campfire-plot-ingredient-image" src="{% static 'images/hover.jpg' %}"  class="plot-list-image undisplayed-data">
 
-                    <p id="result-count" name="result-count" class="recipe-data fw-bold fs-5 text-white">
+                    <p id="result-count" name="result-count" class="recipe-data fw-bold text-white">
                         {% if recipe_id  is None %}
                             1
                         {% endif %}
@@ -77,25 +79,27 @@
                     <area id="crafting-plot-result" class="crafting-area recipe-image-plot recipe-plot" coords="341,73,424,158"  shape="rect">
                 </map>
                 <map name="furnace-map">
-                    <area id="furnace-plot-ingredient" class="furnace-area recipe-list-plot recipe-plot"  coords="253,136,380,260" shape="rect">
-                    <area id="furnace-plot-result"     class="furnace-area recipe-image-plot recipe-plot" coords="704,248,893,435" shape="rect">
-                    <area id="furnace-timer-increment" class="furnace-button furnace-xp-button"           coords="912,136,948,81,991,136"  shape="poly">
-                    <area id="furnace-timer-decrement" class="furnace-button furnace-xp-button"           coords="952,199,910,145,988,145" shape="poly">
-                    <area id="furnace-xp-increment"    class="furnace-button furnace-timer-button"        coords="945,461,909,516,987,517" shape="poly">
-                    <area id="furnace-xp-decrement"    class="furnace-button furnace-timer-button"        coords="908,525,951,579,987,524" shape="poly">
+                    <area id="furnace-plot-ingredient" class="furnace-area recipe-list-plot recipe-plot"           coords="253,136,380,260" shape="rect">
+                    <area id="furnace-plot-result"     class="furnace-area recipe-image-plot recipe-plot"          coords="704,248,893,435" shape="rect">
+                    <area id="furnace-timer-increment" class="furnace-button furnace-timer-button timer-increment" coords="912,136,948,81,991,136"  shape="poly">
+                    <area id="furnace-timer-decrement" class="furnace-button furnace-timer-button timer-decrement" coords="952,199,910,145,988,145" shape="poly">
+                    <area id="furnace-xp-increment"    class="furnace-button furnace-xp-button"                    coords="945,461,909,516,987,517" shape="poly">
+                    <area id="furnace-xp-decrement"    class="furnace-button furnace-xp-button"                    coords="908,525,951,579,987,524" shape="poly">
                 </map>
                 <map name="smithing-table-map">
-                    <area id="smithing-plot-base"     class="smithing-area recipe-image-plot smithing-plot recipe-plot" coords="24,86,72,135"   shape="rect">
-                    <area id="smithing-plot-addition" class="smithing-area recipe-image-plot smithing-plot recipe-plot" coords="124,86,173,135" shape="rect">
-                    <area id="smithing-plot-result"   class="smithing-area recipe-image-plot smithing-plot recipe-plot" coords="236,86,284,135" shape="rect">
+                    <area id="smithing-plot-base"     class="smithing-area recipe-image-plot smithing-plot recipe-plot" coords="22,84,72,135"   shape="rect">
+                    <area id="smithing-plot-addition" class="smithing-area recipe-image-plot smithing-plot recipe-plot" coords="122,84,173,135" shape="rect">
+                    <area id="smithing-plot-result"   class="smithing-area recipe-image-plot smithing-plot recipe-plot" coords="234,84,284,135" shape="rect">
                 </map>
                 <map name="stonecutter-map">
                     <area id="stonecutter-plot-ingredient" class="stonecutter-area recipe-list-plot recipe-plot"  coords="14,42,62,90"   shape="rect">
                     <area id="stonecutter-plot-result"     class="stonecutter-area recipe-image-plot recipe-plot" coords="126,42,174,90" shape="rect">
                 </map>
                 <map name="campfire-map">
-                    <area id="campfire-plot-ingredient" class="campfire-area recipe-list-plot recipe-plot"  coords="14,42,62,90"   shape="rect">
-                    <area id="campfire-plot-result"     class="campfire-area recipe-image-plot recipe-plot" coords="126,42,174,90" shape="rect">
+                    <area id="campfire-plot-ingredient" class="campfire-area recipe-list-plot recipe-plot"            coords="72,227,334,483"          shape="rect">
+                    <area id="campfire-plot-result"     class="campfire-area recipe-image-plot recipe-plot"           coords="687,226,944,485"         shape="rect">
+                    <area id="campfire-timer-increment" class="campfire-button campfire-timer-button timer-increment" coords="867,126,906,85,944,126"  shape="poly">
+                    <area id="campfire-timer-decrement" class="campfire-button campfire-timer-button timer-decrement" coords="867,136,944,136,906,180" shape="poly">
                 </map>
             </div>
         </div>

@@ -12,6 +12,10 @@ body {
     min-width: 500px;
 }
 
+.form-check-input {
+    cursor: pointer;
+}
+
 .recipe-image {
     width: 99%;
     z-index: 0;
@@ -31,8 +35,6 @@ area {
     position: absolute;
     top: 25px;
     left: 25px;
-    width: 55px;
-    height: 55px;
     z-index: 2;
     pointer-events: none;
 }
@@ -49,8 +51,11 @@ area {
 }
 
 #result-count {
+    font-size: 25px;
     top: 50%;
     left: 89%;
+    font-family: 'Times New Roman';
+    line-height: 25px;
 }
 
 @font-face {
@@ -59,10 +64,10 @@ area {
 }
 
 #timer-data {
-    top: 15.3%;
+    top: 15.4%;
     left: 71.2%;
     font-family: "digital-clock-font";
-    font-size: 64px;
+    /*font-size: 64px;*/
 }
 
 #xp-data {
@@ -100,8 +105,26 @@ area {
 }
 
 #furnace-plot-ingredient-image {
-    max-width: 125px;
-    max-height: 125px;
-    top: 137px;
     left: 256px;
+    top: 137px;
+    max-height: 125px;
+    max-width: 125px;
+}
+
+#stonecutter-plot-ingredient-image {
+    left: 14px;
+    top: 42px;
+    max-height: 47px;
+    max-width: 47px;
+}
+
+#campfire-plot-ingredient-image {
+    left: 79px;
+    top: 233px;
+    max-height: 255px;
+    max-width: 255px;
+}
+
+.fa-trash-alt {
+    cursor: pointer;
 }

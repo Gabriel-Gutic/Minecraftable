@@ -68,6 +68,7 @@ def recipe(request, datapack_id, recipe_id):
                     else:
                         print_error("Unknown ingredient!")
                 data['ingredients'] = ingredients_list
+                
             elif data['type'] == 'crafting_shaped':
                 crafting = [['', '', ''], ['', '', ''], ['', '', '']]
                 rp = recipe.get_pattern()
@@ -105,6 +106,23 @@ def recipe(request, datapack_id, recipe_id):
                         type_, id = GetElementTypeAndId(key, value)
 
                         data['ingredients'].append((type_, id))
+            elif data['type'] == 'stonecutting':
+                ingredients = recipe.get_ingredients()
+                data['ingredients'] = []
+                for ingredient in ingredients:
+                    for key, value in ingredient.items():
+                        type_, id = GetElementTypeAndId(key, value)
+
+                        data['ingredients'].append((type_, id))
+            elif data['type'] == 'campfire_cooking':
+                ingredients = recipe.get_ingredients()
+                data['ingredients'] = []
+                for ingredient in ingredients:
+                    for key, value in ingredient.items():
+                        type_, id = GetElementTypeAndId(key, value)
+
+                        data['ingredients'].append((type_, id))
+                data['cooking_time'] = recipe.get_cooking_time_in_seconds()
 
             print_info("Load recipe %s with data: %s" % (recipe_.name, data))
             return JsonResponse(data, status=200)

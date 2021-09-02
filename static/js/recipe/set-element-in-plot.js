@@ -74,51 +74,6 @@ function SetElementInPlot(plot, element, show_popover = true) {
     SetImageRectForPlot(image, plot);
 }
 
-$(document).ready(function() {
-    popover_list = new PopoverList({
-        parent: $("#furnace-plot-ingredient-image"),
-        id: "furnace-plot-ingredient-popover",
-        popover_classes: "plot-list-popover"});
-    
-    popover_list.SetSpecialComponent(function(type, id){
-        return `<i id="` + this.GetId() + `-` + type + `-` + id + `-delete` + `" class="`+ this.GetId() + `-delete fas fa-trash-alt"></i>`
-    })
-    popover_list.OnShow(function() {
-        popover_list.OnMouseLeaveParent(function() {
-            popover_list.Hide();
-        });
-
-        $(".popover-list-element-tag").each(function(i, obj) {
-            let image = $("#" + obj.id + "-image")
-            let parts = obj.id.split("-")
-            let tag_id = parts[parts.length - 1]
-            SetPopoverFromTagId(image, tag_id, "popover-list-element-tag-popover", "popover-list-element-tag-popover", false)
-
-            let popover_tag = image.data("popover-list")
-            popover_tag.OnShow(function() {
-                popover_tag.OnMouseLeave(function() {
-                    popover_tag.Hide();
-                    if (!popover_list.IsHovered()) {
-                        popover_list.Hide();
-                    }
-                })
-            })
-        })
-
-        $("." + popover_list.GetId() + "-delete").on("click", function(e) {
-            let attr_id = $(this).attr("id");
-            let parts = attr_id.split("-")
-            let nr = parts.length
-
-            let type =  parts[nr - 3]
-            let id = parts[nr - 2]
-            popover_list.RemoveElement(type, id);
-            if (popover_list.Size() == 0) 
-                popover_list.Hide()
-            else popover_list.Show();
-        })
-    })
-})
 
 function AddElementInPlotList(plot_id, element, show_popover = true) {
     let image = $("#" + plot_id + "-image")
@@ -161,3 +116,69 @@ function AddElementInPlotList(plot_id, element, show_popover = true) {
     if (show_popover)
         popover_list.Show();
 }
+
+function SetPopoverListSettings(popover_list)
+{
+    popover_list.SetSpecialComponent(function(type, id){
+        return `<i id="` + this.GetId() + `-` + type + `-` + id + `-delete` + `" class="`+ this.GetId() + `-delete fas fa-trash-alt"></i>`
+    })
+    popover_list.OnShow(function() {
+        popover_list.OnMouseLeaveParent(function() {
+            popover_list.Hide();
+        });
+
+        $(".popover-list-element-tag").each(function(i, obj) {
+            let image = $("#" + obj.id + "-image")
+            let parts = obj.id.split("-")
+            let tag_id = parts[parts.length - 1]
+            SetPopoverFromTagId(image, tag_id, "popover-list-element-tag-popover", "popover-list-element-tag-popover", false)
+
+            let popover_tag = image.data("popover-list")
+            popover_tag.OnShow(function() {
+                popover_tag.OnMouseLeave(function() {
+                    popover_tag.Hide();
+                    if (!popover_list.IsHovered()) {
+                        popover_list.Hide();
+                    }
+                })
+            })
+        })
+
+        $("." + popover_list.GetId() + "-delete").on("click", function(e) {
+            let attr_id = $(this).attr("id");
+            let parts = attr_id.split("-")
+            let nr = parts.length
+
+            let type =  parts[nr - 3]
+            let id = parts[nr - 2]
+                popover_list.RemoveElement(type, id);
+            if (popover_list.Size() == 0) 
+                popover_list.Hide()
+            else popover_list.Show();
+        })
+    })
+}
+$(document).ready(function() {
+    let furnace_popover_list = new PopoverList({
+        parent: $("#furnace-plot-ingredient-image"),
+        id: "furnace-plot-ingredient-popover",
+        popover_classes: "plot-list-popover"});
+    
+    SetPopoverListSettings(furnace_popover_list);
+
+    let stonecutter_popover_list = new PopoverList({
+        parent: $("#stonecutter-plot-ingredient-image"),
+        id: "stonecutter-plot-ingredient-popover",
+        popover_classes: "plot-list-popover"
+    });
+
+    SetPopoverListSettings(stonecutter_popover_list);
+
+    let campfire_popover_list = new PopoverList({
+        parent: $("#campfire-plot-ingredient-image"),
+        id: "campfire-plot-ingredient-popover",
+        popover_classes: "plot-list-popover"
+    });
+
+    SetPopoverListSettings(campfire_popover_list);
+})

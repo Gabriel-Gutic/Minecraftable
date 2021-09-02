@@ -45,6 +45,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
+    email_confirmed = models.BooleanField(default=False)
 
     objects = AccountManager()
 
@@ -102,9 +103,20 @@ class User(AbstractBaseUser, PermissionsMixin):
             **other_fields
         )
 
-        print_info("User " + user + " successfully created!")
+        print_info("User " + str(user) + " successfully created!")
         return user
     
+    @staticmethod
+    def find_user(data):
+        try:
+            user = User.objects.get(username=data)
+        except User.DoesNotExist:
+            try:
+                user = User.objects.get(email=data)
+            except User.DoesNotExist:
+                return Error("User does not exist!")
+        
+        return user
         
 class Datapack(models.Model):
     VERSIONS = [

@@ -1,0 +1,15 @@
+{% extends "Minecraftable/base.html" %} 
+
+{% block title %} Recovery Email Send {% endblock title %} 
+
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/logout.css' %}">
+
+<br>
+<div id="logout-message">
+    <p>A recovery email has been sent to your email address.</p>
+    <a href="/Minecraftable/home/">Back to Home Page</a>
+</div>
+
+{% endblock content %}

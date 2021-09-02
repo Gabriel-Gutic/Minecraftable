@@ -11,9 +11,10 @@ from Minecraftable.models import Recipe, Datapack, Item, Tag, GetElementTypeAndN
 
 
 #Create a recipe from the data got from the webapp
+#result format: type~id!other_attrs
 def create_from_data(recipe_id : int, name : str, recipe_type, recipe_list, result : str, datapack_id : int):
     result_count = None
-    if recipe_type in {"crafting_shapeless", "crafting_shaped"}:
+    if recipe_type in {"crafting_shapeless", "crafting_shaped", "stonecutting"}:
         result, result_count = result.split('!')
     elif recipe_type in {"smelting", "blasting", "smoking"}:
         result, timer, xp = result.split('!')
@@ -46,12 +47,25 @@ def create_from_data(recipe_id : int, name : str, recipe_type, recipe_list, resu
         recipe = SmokingRecipe()
     elif recipe_type == "blasting":
         recipe = BlastingRecipe()
-    
-    if recipe_type in ["smelting", "smoking", "blasting"]:
+    elif recipe_type == "stonecutting":
+        recipe = StonecuttingRecipe()
         for type_id in recipe_list:
             type_, name_ = GetElementTypeAndName(type_id)
             recipe.add_ingredient(type_, name_)
-        print(recipe)
+    elif recipe_type == "campfire_cooking":
+        recipe = CampfireRecipe()
+        result, timer = result.split('!')
+
+        for type_id in recipe_list:
+            type_, name_ = GetElementTypeAndName(type_id)
+            recipe.add_ingredient(type_, name_)
+
+        recipe.set_cooking_time_in_seconds(int(timer))
+    
+    if recipe_type in {"smelting", "smoking", "blasting"}:
+        for type_id in recipe_list:
+            type_, name_ = GetElementTypeAndName(type_id)
+            recipe.add_ingredient(type_, name_)
         recipe.set_cooking_time_in_seconds(int(timer))
         recipe.set_experience(int(xp))
 

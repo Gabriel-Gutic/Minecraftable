@@ -13,7 +13,17 @@ function SetElementInPlotByData(plot_id, data) //Data format: type~id
 
 function SetResultInPlot(plot_id, result_id, count = "") {
     SetElementInPlotByData(plot_id, "item~" + result_id)
-    $("#result-count").text(count).change()
+    $("#result-count").text(count == "" ? "1" : count).change()
+}
+
+function SetTimerFromData(data) 
+{
+    let timer = data;
+
+    const minutes = parseInt(timer / 60, 10);
+    const seconds = timer % 60;
+
+    SetTimer(minutes, seconds);
 }
 
 function FillRecipeData() {
@@ -65,12 +75,7 @@ function FillRecipeData() {
                     } 
                     else if (["smelting", "smoking", "blasting"].includes(data.type))
                     {
-                        let timer = data.cooking_time;
-
-                        const minutes = parseInt(timer / 60, 10);
-                        const seconds = timer % 60;
-
-                        SetTimer(minutes, seconds);
+                        SetTimerFromData(data.cooking_time)
                         SetXP(data.xp);
 
                         let ingredients = data.ingredients;
@@ -81,6 +86,31 @@ function FillRecipeData() {
                         }
 
                         SetResultInPlot("furnace-plot-result", data.result)
+                    }
+                    else if (data.type == "stonecutting")
+                    {
+                        let ingredients = data.ingredients;
+                        for (var i = 0; i < ingredients.length; i++)
+                        {
+                            let element = BinarySearchElement(ingredients[i][0], ingredients[i][1]);
+                            AddElementInPlotList("stonecutter-plot-ingredient", element, false);
+                        }
+
+                        SetResultInPlot("stonecutter-plot-result", data.result, data.count);
+                    }
+                    else if (data.type == "campfire_cooking")
+                    {
+                        SetTimerFromData(data.cooking_time)
+
+                        let ingredients = data.ingredients;
+                        for (var i = 0; i < ingredients.length; i++)
+                        {
+                            let element = BinarySearchElement(ingredients[i][0], ingredients[i][1]);
+                            AddElementInPlotList("campfire-plot-ingredient", element, false);
+                        }
+
+                        SetResultInPlot("campfire-plot-result", data.result);
+
                     }
                 }, 10)
             }

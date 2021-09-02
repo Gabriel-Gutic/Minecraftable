@@ -70,7 +70,7 @@ $(document).ready(function() {
         } 
         else if (select == "smelting" || select == "blasting" || select == "smoking")
         {
-            popover_list = $("#furnace-plot-ingredient-image").data("popover-list");
+            let popover_list = $("#furnace-plot-ingredient-image").data("popover-list");
             recipe = []
 
             popover_list.ForEach(function(i, obj)
@@ -100,7 +100,65 @@ $(document).ready(function() {
             let xp = $("#xp-data").text();
             result = data.text() + "!" + timer + "!" + xp;
         }
-        else {
+        else if (select == "stonecutting")
+        {
+            let popover_list = $("#stonecutter-plot-ingredient-image").data("popover-list");
+            recipe = []
+
+            popover_list.ForEach(function(i, obj)
+            {
+                let parts = obj.id.split("-")
+
+                let type = parts[parts.length - 2]
+                let id = parts[parts.length - 1]
+
+                recipe.push(type + "~" + id);
+            })
+            let data = $("#stonecutter-plot-result-image-data");
+            let valid = data.length > 0 && recipe.length > 0;
+
+            if (!valid)
+            {
+                Error("Not a valid recipe!");
+                return;
+            }
+
+            result_count = $("#result-count").text()
+            result = data.text() + "!" + result_count;
+        }
+        else if (select == "campfire_cooking")
+        {
+            let popover_list = $("#campfire-plot-ingredient-image").data("popover-list");
+            recipe = []
+
+            popover_list.ForEach(function(i, obj)
+            {
+                let parts = obj.id.split("-")
+
+                let type = parts[parts.length - 2]
+                let id = parts[parts.length - 1]
+
+                recipe.push(type + "~" + id);
+            })
+            let data = $("#campfire-plot-result-image-data");
+            let valid = data.length > 0 && recipe.length > 0;
+
+            if (!valid)
+            {
+                Error("Not a valid recipe!");
+                return;
+            }
+
+            let timer = $("#timer-data").text().replaceAll(" ", "").split(":");
+            let minutes = parseInt(timer[0], 10);
+            let seconds = parseInt(timer[1], 10);
+
+            timer = 60 * minutes + seconds; // Turn timer in seconds only
+
+            result = data.text() + "!" + timer;
+        }
+        else 
+        {
             console.log("Invalid recipe type!")
             return
         }
@@ -122,6 +180,7 @@ $(document).ready(function() {
                 window.location.href = '/Minecraftable/datapack/' + data.datapack_id + '/'
             }
         })
+        
     })
 
 })

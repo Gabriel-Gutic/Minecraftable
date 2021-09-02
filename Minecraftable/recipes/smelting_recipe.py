@@ -21,10 +21,8 @@ class SmeltingRecipe(RawRecipe):
                 return
         self.ingredients.append({ type_: name })
 
-    def remove_ingredient(self, data): #ingredient format: type~name
-        
-        type_, name = data.split('~')
 
+    def remove_ingredient(self, type_, name): #ingredient format: type~name
         i = 0
         for ingredient in self.ingredients:
             if type_ in ingredient:
@@ -63,14 +61,18 @@ class SmeltingRecipe(RawRecipe):
             return 'No ingredients in ' + self.type() + ' recipe'
 
         self.dictionary['result'] = self.result
-        self.dictionary['experience'] = self.experience
+        if self.experience != 0:
+            self.dictionary['experience'] = self.experience
         self.dictionary['cookingtime'] = self.cooking_time 
         return None
     
     def fill_data_from_dictionary(self, dictionary):
         d = dictionary
         if 'ingredient' in d:
-            self.ingredients = d['ingredient']
+            if len(d['ingredient']) == 1:
+                self.ingredients = [d['ingredient']]
+            else:
+                self.ingredients = d['ingredient']
         if 'cookingtime' in d:
             self.cooking_time = d['cookingtime']
         if 'experience' in d:

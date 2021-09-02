@@ -12,46 +12,55 @@ $(document).ready(function() {
     })
 
     $("#increment-result-count-button").on("click", function() {
-        let counter = $("#result-count")
-        let count = parseInt(counter.text(), 10)
-        counter.text(count + 1).change()
+        let counter = $("#result-count");
+        let count = parseInt(counter.text(), 10);
+        counter.text(count + 1).change();
     })
 
     $("#decrement-result-count-button").on("click", function() {
-        let counter = $("#result-count")
-        let count = parseInt(counter.text(), 10)
-        counter.text(count - 1).change()
+        let counter = $("#result-count");
+        let count = parseInt(counter.text(), 10);
+        counter.text(count - 1).change();
     })
 
     $("#result-count").on("change", function() {
         let selected = $("#recipe-type-select").val()
-
+        
         let increment = $("#increment-result-count-button")
         let decrement = $("#decrement-result-count-button")
-
+        
+        let counter = $(this)
         if (selected == "crafting_shapeless" || selected == "crafting_shaped" || selected == "stonecutting") {
-            $("#result-count").removeClass("undisplayed-data");
+            counter.removeClass("undisplayed-data");
             increment.attr("disabled", false)
             decrement.attr("disabled", false)
         } else {
-            $("#result-count").addClass("undisplayed-data");
+            counter.addClass("undisplayed-data");
             increment.attr("disabled", true)
             decrement.attr("disabled", true)
             return
         }
+
         let top = null
         let left = null
-        if (selected == "crafting_shapeless" || selected == "crafting_shaped") {
-            top = "50%"
-            left = 89
-        } else {
-            top = "63%"
-            left = 86
-        }
-        $(this).css("top", top)
-
-        let counter = $("#result-count")
         let count = parseInt(counter.text(), 10)
+
+        if (selected == "crafting_shapeless" || selected == "crafting_shaped") {
+            top = "53%"
+            left = 89
+            if (count > 9) {
+                left -= 4;
+            }
+        } else {
+            top = "66%"
+            left = 85
+            if (count > 9) {
+                left -= 5;
+            }
+        }
+        counter.css("top", top)
+        counter.css("left", left + "%")
+
         if (count >= 64) {
             increment.attr("disabled", true)
         } else {
@@ -63,13 +72,5 @@ $(document).ready(function() {
         } else {
             decrement.attr("disabled", false)
         }
-
-        if (count > 9) {
-            left -= 3
-        }
-        $(this).css("left", left + "%")
     })
-
-
-    
 })

@@ -17,6 +17,11 @@ class RegisterForm(forms.Form):
     password_again = forms.CharField(label='Password(again)', max_length=50, widget=forms.PasswordInput(attrs={'id': 'password-again-field', 'class': 'form-control'}))
 
 
+class ResetPasswordForm(forms.Form):
+    password = forms.CharField(label='Password', max_length=50, widget=forms.PasswordInput(attrs={'id': 'password-field', 'class': 'form-control'}), required=False)
+    password_again = forms.CharField(label='Password(again)', max_length=50, widget=forms.PasswordInput(attrs={'id': 'password-again-field', 'class': 'form-control'}), required=False)
+
+
 class NewDatapackForm(forms.Form):
     name = forms.CharField(label='Name', max_length=200, widget=forms.TextInput(attrs={'id': 'name-field'}))
     description = forms.CharField(label='Description', required=False, max_length=200, widget=forms.TextInput(attrs={'id': 'description-field'}))

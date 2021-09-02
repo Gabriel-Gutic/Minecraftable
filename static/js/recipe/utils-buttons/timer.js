@@ -17,7 +17,7 @@ function SetTimer(minutes, seconds) {
 
 $(document).ready(function(){
 
-    $("#furnace-timer-increment").on("click", function(){
+    $(".timer-increment").on("click", function(){
         let parts = $("#timer-data").text().split(":");
         minutes = parseInt(parts[0].replaceAll(" ", ""))
         seconds = parseInt(parts[1].replaceAll(" ", ""))
@@ -35,7 +35,7 @@ $(document).ready(function(){
         SetTimer(minutes, seconds);
     })
 
-    $("#furnace-timer-decrement").on("click", function(){
+    $(".timer-decrement").on("click", function(){
         let parts = $("#timer-data").text().split(":");
         minutes = parseInt(parts[0].replaceAll(" ", ""))
         seconds = parseInt(parts[1].replaceAll(" ", ""))
@@ -55,8 +55,25 @@ $(document).ready(function(){
 
     $("#timer-data").on("change", function(){
         type = $("#recipe-type-select").val();
-        if (['smelting','smoking','blasting'].includes(type))
+        if (['smelting','smoking','blasting', 'campfire_cooking'].includes(type))
+        {
+            let left, top;
+            if (type == "campfire_cooking")
+            {
+                left = "69.5%";
+                top = "15.9%";
+            }
+            else
+            {
+                left = "71.2%";
+                top = "15.4%";
+            }
+
+            $(this).css("left", left);
+            $(this).css("top", top);
+
             $(this).removeClass("undisplayed-data");
+        }    
         else 
             $(this).addClass("undisplayed-data");
     })

@@ -11,28 +11,22 @@ class StonecuttingRecipe(RawRecipe):
     def type(self):
         return 'stonecutting'
 
-    def add_ingredient_by_item(self, item):
-        self.ingredients.append({ 'item': item })
+    def get_ingredients(self):
+        return self.ingredients
 
-    def add_ingredient_by_tag(self, tag):
-        self.ingredients.append({ 'tag': tag })
+    def add_ingredient(self, type_, name): #ingredient format: type~name
+        for ingredient in self.ingredients:
+            if name in ingredient.values():
+                return
+        self.ingredients.append({ type_: name })
     
-    def remove_ingredient_by_item(self, item):
+    def remove_ingredient(self, type_, name): #ingredient format: type~name
         i = 0
         for ingredient in self.ingredients:
-            if 'item' in ingredient:
-                if ingredient['item'] == item:
+            if type_ in ingredient:
+                if ingredient[type_] == name:
                     self.ingredients.pop(i)
-                    break
-            i += 1
-    
-    def remove_ingredient_by_tag(self, tag):
-        i = 0
-        for ingredient in self.ingredients:
-            if 'tag' in ingredient:
-                if ingredient['tag'] == tag:
-                    self.ingredients.pop(i)
-                    break
+                    return
             i += 1
 
     def _fill_dictionary_(self):
@@ -49,8 +43,11 @@ class StonecuttingRecipe(RawRecipe):
 
     def fill_data_from_dictionary(self, dictionary):
         d = dictionary
-        if 'ingredients' in d:
-            self.ingredients = d['ingredients']
+        if 'ingredient' in d:
+            if len(d['ingredient']) == 1:
+                self.ingredients = [d['ingredient']]
+            else:
+                self.ingredients = d['ingredient']
         if 'result' in d:
             self.result = d['result']
         if 'count' in d:
