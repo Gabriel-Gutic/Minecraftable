@@ -1,16 +1,14 @@
 {% extends "Minecraftable/base.html" %} 
-{% block title %} Login {% endblock title %} 
+{% block title %} Reset Email {% endblock title %} 
 
 {% block content %} 
 {% load static %}
-<link href="{% static '/css/login.css' %}" rel="stylesheet">
 <link rel="stylesheet" href="{% static 'css/validation.css' %}">
-
-<br>
+<link href="{% static '/css/login.css' %}" rel="stylesheet">
 
 <main class="form-signin">
-    <form id="login-form" method="post">
-        <h1 class="h3 mb-3 fw-normal">Log In</h1>
+    <form id="reset-email-form" method="post">
+        <h1 class="h3 mb-3 fw-normal">Reset Email</h1>
 
         {% csrf_token %} 
         {% for field in form %}
@@ -30,14 +28,13 @@
             {% endif %}
         </div>
         {% endfor %}
-        <button id="login-btn" class="w-100 btn btn-lg btn-primary" type="submit">Log in</button>
+        <button id="login-btn" class="w-100 btn btn-lg btn-primary" type="submit">Set New Email</button>
     </form>
-    <a href="/Minecraftable/forgot-password/">Forgot your password?</a>
 </main>
 
 {% endblock content %}
 
 {% block scripts %}
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.js"></script>
-<script type="text/javascript" src="{% static 'js/login.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/reset-email.js' %}"></script>
 {% endblock scripts %}

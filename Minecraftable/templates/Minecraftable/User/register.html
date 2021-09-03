@@ -1,10 +1,14 @@
-{% extends "Minecraftable/base.html" %} {% block title %} Register {% endblock title %} {% block content %} {% load static %}
-<link href="{% static '/css/login.css' %}" rel="stylesheet">
+{% extends "Minecraftable/base.html" %} 
+{% block title %} Register {% endblock title %} 
 
+{% block content %} 
+{% load static %}
+<link href="{% static '/css/login.css' %}" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/validation.css' %}">
 <br>
 
 <main class="form-signin">
-    <form method="post">
+    <form id="regiter-form" method="post">
         <h1 class="h3 mb-3 fw-normal">Sign Up</h1>
 
         {% csrf_token %} 
@@ -27,3 +31,8 @@
 </main>
 
 {% endblock content %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.js"></script>
+<script type="text/javascript" src="{% static 'js/sign-up.js' %}"></script>
+{% endblock scripts %}

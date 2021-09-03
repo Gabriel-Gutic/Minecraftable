@@ -6,8 +6,10 @@ from Minecraftable.printer import print_error, print_info
 from Minecraftable.forms import NewDatapackForm
 from Minecraftable.models import Datapack, Recipe
 from Minecraftable.decorators import datapack_owned
+from Minecraftable.decorators import login_required
 
 
+@login_required()
 def create(request):
     template = loader.get_template('Minecraftable/Datapack/Create.html')
 

@@ -21,3 +21,26 @@ def datapack_owned():
             
         return wrapper_func
     return decorator
+
+
+def login_required():
+    def decorator(view_func):
+        def wrapper_func(request, *args, **kwargs):
+            user = request.user
+
+            if not user.is_authenticated:
+                return redirect('/Minecraftable/login/') 
+            return view_func(request, *args, **kwargs)
+        return wrapper_func
+    return decorator
+
+def login_not_required():
+    def decorator(view_func):
+        def wrapper_func(request, *args, **kwargs):
+            user = request.user
+
+            if user.is_authenticated:
+                return redirect('/Minecraftable/home/') 
+            return view_func(request, *args, **kwargs)
+        return wrapper_func
+    return decorator

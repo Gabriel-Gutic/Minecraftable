@@ -1,16 +1,18 @@
+import json
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template import loader
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password
 from django.shortcuts import redirect
 from django.contrib.auth import login as auth_login
-from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
-from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_decode
 import ast
 
 from Minecraftable.forms import LoginForm, RegisterForm, ResetPasswordForm
-from Minecraftable.models import Datapack, User
+from Minecraftable.models import Datapack, User, Recipe
 from Minecraftable.printer import Error, print_info
+from Minecraftable.decorators import login_not_required, login_required
+from Minecraftable.utils import reset_password_send, reset_email_send, send_confirmation_email
 
 
 def home(request):
@@ -39,7 +41,53 @@ def home(request):
 
     return HttpResponse(template.render(context, request))
 
+@login_required()
+def profile(request):
 
+    user = request.user
+    if request.method == 'GET' and request.is_ajax():
+        if 'change-email' in request.GET:
+            if user.email_confirmed:
+                url = request.get_host() + '/Minecraftable/reset-email/'
+                reset_email_send(url, user.username, user.email)
+                print_info('Reset Email send successfully!')
+            else:
+                return JsonResponse({'error': "Sorry, the last email associated with this account was not confirmed. So you can't reset your email until you confirm it. Please check out your email history to find your confirmation email"}, status=200)
+        elif 'change-password' in request.GET:
+            if user.email_confirmed:
+                url = request.get_host() + '/Minecraftable/reset-password/'
+                reset_password_send(url, user.username, user.email)
+                print_info('Password Reset Email send successfully!')
+            else:
+                return JsonResponse({'error': "Sorry, the last email associated with this account was not confirmed. So you can't reset your pasword until you confirm it. Please check out your email history to find your confirmation email"}, status=200)
+
+    if request.method == 'POST':
+        if request.is_ajax():
+            image = request.FILES.get('image')
+            user.image = image
+            user.save()
+            
+            response_data = {
+                'url': user.image.url,
+            }
+            return HttpResponse(json.dumps(response_data))
+
+    template = loader.get_template('Minecraftable/User/profile.html')
+
+    datapacks =  Datapack.objects.filter(user=request.user)
+
+    count = 0
+    for datapack in datapacks:
+        count += Recipe.objects.filter(datapack=datapack).count()
+
+    context = {
+        'datapack_number': datapacks.count(),
+        'recipe_number': count,
+    }
+
+    return HttpResponse(template.render(context, request))
+
+@login_not_required()
 def login(request):
     template = loader.get_template('Minecraftable/User/login.html')
 
@@ -87,6 +135,7 @@ def login(request):
     return HttpResponse(template.render(context, request))
 
 
+@login_not_required()
 def register(request):
     template = loader.get_template('Minecraftable/User/register.html')
 
@@ -108,31 +157,9 @@ def register(request):
             user = User.create_user(email=email, username=username, password=password)
             auth_login(request, user)
 
-            #Send confirmation email
-            from django.core.mail import EmailMessage
+            path = request.get_host() + '/Minecraftable/email_confirmed/'
+            send_confirmation_email(path, username, email)
 
-            data = {
-                'username': username,
-            }
-
-            register_path = request.build_absolute_uri(request.path)
-            message = loader.get_template('Minecraftable/User/confirmation-email.html').render({
-                'data': urlsafe_base64_encode(force_bytes(data)),
-                'path': register_path,
-            })
-
-            from Minecraftable.admin import EMAIL_ADMIN
-            mail = EmailMessage(
-                subject='Confirmation Email',
-                body=message,
-                from_email=EMAIL_ADMIN,
-                to=[email],
-                reply_to=[],
-            )
-
-            mail.content_subtype = 'html'
-            mail.send()
-            print_info('Confirmation Email send successfully!')
             return HttpResponseRedirect('confirmation/')
 
     context = {
@@ -143,6 +170,7 @@ def register(request):
 
 
 def register_confirmation(request):
+    print_info('Merge')
     template = loader.get_template('Minecraftable/User/register-confirmation.html')
 
     context = {}
@@ -178,27 +206,12 @@ def forgot_password(request):
             user.print()
             return JsonResponse({'error': user.get_error_message()}, status=200)
         
-        from django.core.mail import EmailMessage
+        if not user.email_confirmed:
+            return JsonResponse({'error': "Sorry, the email associated with this account was not confirmed. So you can't reset your password until you confirm it. Please check out your email history to find your confirmation email"}, status=200)
 
-        data = {
-            'username': user.username,
-        }
-        register_path = request.build_absolute_uri(request.path)
-        message = loader.get_template('Minecraftable/User/password-recovery-email.html').render({
-            'data': urlsafe_base64_encode(force_bytes(data)),
-            'path': register_path,
-        })
-        from Minecraftable.admin import EMAIL_ADMIN
-        mail = EmailMessage(
-            subject='Password Recovery',
-            body=message,
-            from_email=EMAIL_ADMIN,
-            to=[user.email],
-            reply_to=[],
-        )
-        mail.content_subtype = 'html'
-        mail.send()
-        print_info('Password Recovery Email send successfully!')
+        url = request.get_host() + '/Minecraftable/reset-password/'
+        reset_password_send(url, user.username, user.email)
+        print_info('Password Reset Email send successfully!')
         return JsonResponse({}, status=200)
 
     return HttpResponse(template.render({}, request))
@@ -228,8 +241,51 @@ def reset_password(request, data):
     return HttpResponse(template.render(context, request))
 
 
+def reset_email(request, data):
+    template = loader.get_template('Minecraftable/User/reset-email.html')
+    
+    from Minecraftable.forms import ResetEmailForm
+
+    if request.method == 'POST':
+        form = ResetEmailForm(request.POST)
+        if form.is_valid():
+            data = ast.literal_eval(urlsafe_base64_decode(data).decode("UTF-8"))
+
+            user = User.objects.get(username=data['username'])
+
+            email = form.cleaned_data['email']
+
+            taken = len(User.objects.filter(email=email)) > 0
+            if taken:
+                messages.error(request, "This email address is already taken!")
+                return HttpResponseRedirect(request.path_info)
+
+            user.email = email
+            user.email_confirmed = False
+            user.save()
+
+            path = request.get_host() + '/Minecraftable/email_confirmed/'
+            send_confirmation_email(path, user.username, email)
+
+            return redirect('/Minecraftable/email-reset-confirmation/')
+
+    form = ResetEmailForm()
+
+    context = {
+        'form': form,
+    }
+
+    return HttpResponse(template.render(context, request))
+
+
 def recovery_email_send(request):
     template = loader.get_template('Minecraftable/User/recovery-email-send.html')
+
+    return HttpResponse(template.render({}, request))
+
+
+def email_reset_confirmation(request):
+    template = loader.get_template('Minecraftable/User/email-reset-confirmation.html')
 
     return HttpResponse(template.render({}, request))
 

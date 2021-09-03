@@ -41,7 +41,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=200, unique=True)
     email = models.EmailField(max_length=100, unique=True)
     start_date = models.DateTimeField(default=timezone.now)
-    image = models.ImageField(null=True, blank=True)
+    image = models.ImageField(upload_to="users", null=True, blank=True)
 
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)

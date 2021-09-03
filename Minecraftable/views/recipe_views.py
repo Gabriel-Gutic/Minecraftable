@@ -6,8 +6,10 @@ from Minecraftable.models import Item, Tag, Recipe, GetElementTypeAndId
 from Minecraftable.recipes.creator_from_data import create_from_data
 from Minecraftable.recipes.recipe_types import RECIPE_TYPES
 from Minecraftable.printer import print_error, print_info
+from Minecraftable.decorators import datapack_owned
 
 
+@datapack_owned()
 def recipe(request, datapack_id, recipe_id):
     template = loader.get_template('Minecraftable/Datapack/Recipe.html')
 
@@ -165,5 +167,6 @@ def recipe(request, datapack_id, recipe_id):
     return HttpResponse(template.render(context, request))
 
 
+@datapack_owned()
 def create(request, datapack_id):
     return recipe(request, datapack_id, None)
