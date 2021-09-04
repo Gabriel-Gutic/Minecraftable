@@ -1,5 +1,5 @@
 from django.template import loader
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect
 
 from Minecraftable.printer import print_error, print_info
@@ -70,6 +70,17 @@ def settings(request, datapack_id):
 
 @datapack_owned()
 def datapack(request, datapack_id):
+    
+    if request.method == 'POST' and request.is_ajax():
+        if "recipe-delete" in request.POST:
+            recipe_id = int(request.POST.get('recipe-id'))
+            recipe = Recipe.objects.get(id=recipe_id)
+            recipe_name = recipe.name
+            recipe.delete()
+
+            print_info("Datapack " + recipe_name + " deleted")
+            return JsonResponse({"recipe_id": recipe_id}, status=200)
+
     template = loader.get_template('Minecraftable/Datapack/Datapack.html')
 
     datapack = Datapack.objects.get(id=datapack_id)

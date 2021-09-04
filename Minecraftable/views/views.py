@@ -25,9 +25,9 @@ def home(request):
             datapack_name = datapack.name
             datapack.delete()
 
-            print_info("Datapack %s deleted", datapack_name)
+            print_info("Datapack " + datapack_name + " deleted")
 
-            return JsonResponse({}, status=200)
+            return JsonResponse({"datapack_id": datapack_id}, status=200)
 
     user = request.user
     datapacks = []

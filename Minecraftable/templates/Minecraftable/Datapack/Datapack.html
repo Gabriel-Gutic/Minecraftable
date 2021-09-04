@@ -3,6 +3,7 @@
 {% block title %} Datapack {{datapack.name}} {% endblock title %}
 
 {% block content %}
+{% load static %}
 
 <div class="card p-4 position-absolute start-50 translate-middle-x text-center" style="max-width: 35rem; min-width: 35rem;">
     <h1 class="jumbotron-heading">Datapack: {{datapack.name}}</h1>
@@ -21,6 +22,16 @@
             <a href="recipe/create/" class="btn btn-primary">Create a new recipe</a>
         </li>
     </ul>
+
+    <p id="deleted-recipe-id" style="display: none;"></p>
 </div>
 
+<div id="modal-div"></div>
+
 {% endblock content %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.0/dist/js.cookie.min.js"></script>
+<script type="text/javascript" src="{% static 'js/modal/modal.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/datapack.js' %}"></script>
+{% endblock scripts %}
