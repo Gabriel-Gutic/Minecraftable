@@ -5,9 +5,9 @@ function GetXP()
 
 function SetXP(value)
 {
-    xp_data = $("#xp-data")
-    xp_data.text(value);
-    xp_data.trigger("change");
+    $xp_data = $("#xp-data")
+    $xp_data.text(value);
+    $xp_data.trigger("change");
 }
 
 $(document).ready(function()

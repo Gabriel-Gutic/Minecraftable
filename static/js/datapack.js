@@ -17,13 +17,13 @@ $(document).ready(function()
 
     $(".delete-button").on("click", function(){
 
-        let li = $(this).parent().parent();
-        let recipe_name = li.clone()    //clone the element
+        let $li = $(this).parent().parent();
+        let recipe_name = $li.clone()    //clone the element
                             .children() //select all the children
                             .remove()   //remove all the children
                             .end()  //again go back to selected element
                             .text();
-        let recipe_id = li.attr("id").split("-")[1];
+        let recipe_id = $li.attr("id").split("-")[1];
 
         $("#deleted-recipe-id").text(recipe_id);
         modalObject.Get$Body().text("You are about to delete the '" + recipe_name + "' recipe. Are you sure?")

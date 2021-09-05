@@ -1,0 +1,24 @@
+.data-card {
+    min-width: 25rem;
+    max-width: 55rem;
+}
+
+.data-col {
+    min-width: 25rem;
+}
+
+.object-list {
+    width: 100%;
+    max-height: 290px;
+    min-height: 290px;
+    overflow: auto;
+}
+
+.item-image {
+    max-height: 32px;
+    max-width: 32px;
+}
+
+.create-button {
+    max-width: 250px;
+}

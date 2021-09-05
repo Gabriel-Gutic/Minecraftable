@@ -11,15 +11,15 @@ $(document).ready(function() {
             for (var i = 0; i < items.length; i++) {
                 const id = "list-group-item-" + items[i].id
                 list.append(`<li id="` + id + `" class="list-group-item item-element d-flex justify-content-between align-items-center"></li>`)
-                var li = $("#" + id)
-                li.css("display", "none")
+                var $li = $("#" + id)
+                $li.css("display", "none")
 
-                item = new ElementList(items[i], 'item')
-                li.append(item.input)
+                let item = new ElementList(items[i], 'item')
+                $li.append(item.input)
 
                 image = item.image
                 if (image != null) {
-                    li.append(image)
+                    $li.append(image)
                 }
             }
 

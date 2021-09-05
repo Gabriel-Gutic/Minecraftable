@@ -7,7 +7,7 @@ from .smelting_recipe import SmeltingRecipe, BlastingRecipe, SmokingRecipe, Camp
 from .smithing_recipe import SmithingRecipe
 from .stonecutting_recipe import StonecuttingRecipe
 
-from Minecraftable.models import Recipe, Datapack, Item, Tag, GetElementTypeAndName
+from Minecraftable.models import Recipe, Datapack, Item, GetElementTypeAndName
 
 
 #Create a recipe from the data got from the webapp
@@ -24,22 +24,22 @@ def create_from_data(recipe_id : int, name : str, recipe_type, recipe_list, resu
 
         for element in recipe_list:
             if element is not None and element != '':
-                recipe.add_ingredient(GetElementTypeAndName(element))
+                recipe.add_ingredient(GetElementTypeAndName(data=element))
     elif recipe_type == "crafting_shaped":
         recipe = CraftingRecipeShaped()
 
         i = 0
         for element in recipe_list:
             if element is not None and element != '':
-                type_, name_ = GetElementTypeAndName(element)
+                type_, name_ = GetElementTypeAndName(data=element)
                 recipe.add_value(type_, name_, int(i / 3), i % 3)
             i += 1
     elif recipe_type == "smithing":
         recipe = SmithingRecipe()
-        type_, name_ = GetElementTypeAndName(recipe_list[0])
+        type_, name_ = GetElementTypeAndName(data=recipe_list[0])
         recipe.set_base(type_, name_)
 
-        type_, name_ = GetElementTypeAndName(recipe_list[1])
+        type_, name_ = GetElementTypeAndName(data=ecipe_list[1])
         recipe.set_addition(type_, name_)
     elif recipe_type == "smelting":
         recipe = SmeltingRecipe()
@@ -50,21 +50,21 @@ def create_from_data(recipe_id : int, name : str, recipe_type, recipe_list, resu
     elif recipe_type == "stonecutting":
         recipe = StonecuttingRecipe()
         for type_id in recipe_list:
-            type_, name_ = GetElementTypeAndName(type_id)
+            type_, name_ = GetElementTypeAndName(data=type_id)
             recipe.add_ingredient(type_, name_)
     elif recipe_type == "campfire_cooking":
         recipe = CampfireRecipe()
         result, timer = result.split('!')
 
         for type_id in recipe_list:
-            type_, name_ = GetElementTypeAndName(type_id)
+            type_, name_ = GetElementTypeAndName(data=type_id)
             recipe.add_ingredient(type_, name_)
 
         recipe.set_cooking_time_in_seconds(int(timer))
     
     if recipe_type in {"smelting", "smoking", "blasting"}:
         for type_id in recipe_list:
-            type_, name_ = GetElementTypeAndName(type_id)
+            type_, name_ = GetElementTypeAndName(data=type_id)
             recipe.add_ingredient(type_, name_)
         recipe.set_cooking_time_in_seconds(int(timer))
         recipe.set_experience(int(xp))

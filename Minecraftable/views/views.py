@@ -1,4 +1,3 @@
-import json
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template import loader
 from django.contrib import messages
@@ -6,10 +5,11 @@ from django.contrib.auth.hashers import check_password
 from django.shortcuts import redirect
 from django.contrib.auth import login as auth_login
 from django.utils.http import urlsafe_base64_decode
+import json
 import ast
 
 from Minecraftable.forms import LoginForm, RegisterForm, ResetPasswordForm
-from Minecraftable.models import Datapack, User, Recipe
+from Minecraftable.models import Datapack, User, Recipe, Tag
 from Minecraftable.printer import Error, print_info
 from Minecraftable.decorators import login_not_required, login_required
 from Minecraftable.utils import reset_password_send, reset_email_send, send_confirmation_email
@@ -18,25 +18,37 @@ from Minecraftable.utils import reset_password_send, reset_email_send, send_conf
 def home(request):
     template =  loader.get_template('Minecraftable/Home-Page.html')
 
-    if request.method == 'POST':
+    if request.method == 'POST' and request.is_ajax():
         if 'datapack-delete' in request.POST:
             datapack_id = int(request.POST.get('datapack-id'))
             datapack = Datapack.objects.get(id=datapack_id)
             datapack_name = datapack.name
             datapack.delete()
 
-            print_info("Datapack " + datapack_name + " deleted")
+            print_info("Datapack '" + datapack_name + "' deleted")
 
             return JsonResponse({"datapack_id": datapack_id}, status=200)
+        elif 'tag-delete' in request.POST:
+            tag_id = int(request.POST.get('tag-id'))
+            tag = Tag.objects.get(id=tag_id)
+            tag_name = tag.name
+            tag.delete()
+
+            print_info("Tag '" + tag_name + "' deleted")
+
+            return JsonResponse({"tag_id": tag_id}, status=200)
 
     user = request.user
     datapacks = []
-
+    tags = []
+    
     if user.is_authenticated:
         datapacks = Datapack.objects.filter(user=user)
+        tags = Tag.objects.filter(user=user)
 
     context = {
         'datapacks': datapacks,
+        'tags': tags,
     }
 
     return HttpResponse(template.render(context, request))

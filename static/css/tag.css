@@ -1,0 +1,28 @@
+
+#main-card {
+    width: 30%;
+    min-width: 400px;
+}
+
+.form-floating {
+    width: 100%;
+}
+
+.item-image {
+    max-height: 32px;
+    max-width: 32px;
+}
+
+.object-list {
+    width: 100%;
+    max-height: 290px;
+    overflow: auto;
+}
+
+.form-check-input {
+    cursor: pointer;
+}
+
+.undisplayed-data {
+    display: none !important;
+}

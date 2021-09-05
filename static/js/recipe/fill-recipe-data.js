@@ -110,8 +110,11 @@ function FillRecipeData() {
                         }
 
                         SetResultInPlot("campfire-plot-result", data.result);
-
                     }
+                    
+                    setTimeout(function() {
+                        $(".recipe-image").css("width", "100%").change()
+                    }, 10)
                 }, 10)
             }
         })

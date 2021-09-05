@@ -7,28 +7,28 @@ $(document).ready(function() {
         },
         success: function(data) {
 
-            var list = $("#tag-list")
+            var $list = $("#tag-list")
             const tags = data.tags;
             for (let i = 0; i < tags.length; i++) {
                 let tag_id = tags[i].id
                 const id = "list-group-tag-" + tag_id
-                list.append(`<li id="` + id + `" class="list-group-item tag-element d-flex justify-content-between align-items-center"></li>`)
-                var li = $("#" + id)
-                li.css("display", "none")
+                $list.append(`<li id="` + id + `" class="list-group-item tag-element d-flex justify-content-between align-items-center"></li>`)
+                var $li = $("#" + id)
+                $li.css("display", "none")
 
 
                 let tag = new ElementList(tags[i], 'tag')
-                li.append(tag.input)
+                $li.append(tag.input)
 
                 let image = tag.image
                 if (image != null) {
-                    li.append(image)
+                    $li.append(image)
 
                     items = tags[i].items
 
-                    image = $("#tag-image-" + tags[i].id)
+                    let $image = $("#tag-image-" + tags[i].id)
                     let popover_list = new PopoverList({
-                        parent: image,
+                        parent: $image,
                         id: "tag-" + tag_id + "-popover",
                         popover_classes: "tag-list-element-popover",
                     });

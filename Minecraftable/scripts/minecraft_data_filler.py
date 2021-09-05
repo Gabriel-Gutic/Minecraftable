@@ -123,8 +123,8 @@ class Filler():
                             tag_finished = False
                     
                     if tag_finished:
-                        image_path = 'tags/' + tag_name + '.png'
-                        if os.path.exists(self.static + '\\images\\tags\\' + tag_name + '.png'):
+                        image_path = 'default_tags/' + tag_name + '.png'
+                        if os.path.exists(self.static + '\\images\\default_tags\\' + tag_name + '.png'):
     
                             new_tag = Tag.objects.create(
                                 name=tag_name,
@@ -139,7 +139,7 @@ class Filler():
                                     print("Item '" + id + "' does not exist!" )
                             print_info("Tag " + tag_name + " finished!")
                         else:
-                            print("Image '" + image_path + "' not found!")
+                            print_error("Image '" + image_path + "' not found!")
                             return
 
 filler = Filler()

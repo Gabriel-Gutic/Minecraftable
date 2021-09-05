@@ -168,6 +168,13 @@ class InputPicture
         });
     }
 
+    HaveImage()
+    {
+        let input = document.getElementById(this.#id);
+        let file = input.files[0];
+        return file != undefined && !!file.type.match(/image.*/);
+    }
+
     Upload(options)
     {
         if (!options.url)
@@ -184,6 +191,9 @@ class InputPicture
             let formData= new FormData();
             if(!!file.type.match(/image.*/)){
                 formData.append("image", file);
+                for (const [key, value] of Object.entries(options.data)){
+                    formData.append(key, options.data[key]);
+                }
                 $.ajax({
                   url: options.url,
                   type: "POST",

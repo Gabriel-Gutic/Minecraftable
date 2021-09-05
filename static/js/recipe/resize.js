@@ -1,16 +1,16 @@
-function ResizeArea(area, base_image)
+function ResizeArea($area, $base_image)
 {
-    let width = base_image.width();
-    let height = base_image.height();
+    let width = $base_image.width();
+    let height = $base_image.height();
 
     if (width == 0 || height == 0)
         return;
 
-    let previousWidth = base_image.data("previous-width");
-    let previousHeight = base_image.data("previous-height");
+    let previousWidth = $base_image.data("previous-width");
+    let previousHeight = $base_image.data("previous-height");
 
-    old_coords = area.attr("coords").split(",");
-    new_coords = "";
+    let old_coords = $area.attr("coords").split(",");
+    let new_coords = "";
     for (let i = 0; i < old_coords.length; i+=2)
     {
         new_coords += parseFloat(old_coords[i]) * width / previousWidth + ",";
@@ -19,20 +19,20 @@ function ResizeArea(area, base_image)
             new_coords += ",";
     }
 
-    area.attr("coords", new_coords);
+    $area.attr("coords", new_coords);
 }
 
-function ResizeAreaById(area_id, base_image)
+function ResizeAreaById(area_id, $base_image)
 {
-    area = $("#" + area_id);
-    ResizeArea(area, base_image);
+    $area = $("#" + area_id);
+    ResizeArea($area, $base_image);
 }
 
 function GetCurrentImageRect() {
-    image = $(".recipe-image").not(".undisplayed-data")
+    $image = $(".recipe-image").not(".undisplayed-data")
     return {
-        width: parseFloat(image.width()),
-        height: parseFloat(image.height()),
+        width: parseFloat($image.width()),
+        height: parseFloat($image.height()),
     }
 }
 
@@ -41,38 +41,38 @@ function GetCurrentImageId()
     return $(".recipe-image").not(".undisplayed-data").attr("id");
 }
 
-function ResizePlotImageById(plot_id, base_image)
+function ResizePlotImageById(plot_id, $base_image)
 {
-    let width = base_image.width();
-    let height = base_image.height();
-    let plot_image = $("#" + plot_id + "-image");
+    let width = $base_image.width();
+    let height = $base_image.height();
+    let $plot_image = $("#" + plot_id + "-image");
     if (width == 0 || height == 0)
     {
-        plot_image.addClass("undisplayed-data");
+        $plot_image.addClass("undisplayed-data");
         return;
     }
-    plot_image.removeClass("undisplayed-data");
-    let previousWidth = base_image.data("previous-width");
-    let previousHeight = base_image.data("previous-height");
+    $plot_image.removeClass("undisplayed-data");
+    let previousWidth = $base_image.data("previous-width");
+    let previousHeight = $base_image.data("previous-height");
 
-    if (plot_image.length > 0) {
-        let old_width = parseFloat(plot_image.css("max-width"));
-        let old_height = parseFloat(plot_image.css("max-height"));
+    if ($plot_image.length > 0) {
+        let old_width = parseFloat($plot_image.css("max-width"));
+        let old_height = parseFloat($plot_image.css("max-height"));
 
-        plot_image.css("max-width", old_width * width / previousWidth);
-        plot_image.css("max-height", old_height * height / previousHeight);
+        $plot_image.css("max-width", old_width * width / previousWidth);
+        $plot_image.css("max-height", old_height * height / previousHeight);
 
-        let old_left = parseFloat(plot_image.css("left"));
-        let old_top = parseFloat(plot_image.css("top"));
+        let old_left = parseFloat($plot_image.css("left"));
+        let old_top = parseFloat($plot_image.css("top"));
 
-        plot_image.css("left", old_left * width / previousWidth);
-        plot_image.css("top", old_top * height / previousHeight);
+        $plot_image.css("left", old_left * width / previousWidth);
+        $plot_image.css("top", old_top * height / previousHeight);
     }
 }
 
 
-function ResizePlotImage(plot, base_image) {
-    ResizePlotImageById(plot.attr("id"), base_image);
+function ResizePlotImage($plot, $base_image) {
+    ResizePlotImageById($plot.attr("id"), $base_image);
 }
 
 function GetPlotImageRect(plot)
@@ -108,32 +108,33 @@ function GetPlotImageRect(plot)
     }
 }
 
-function SetImageRectForPlot(image, plot)
+function SetImageRectForPlot($image, $plot)
 {
-    let rect = GetPlotImageRect(plot)
+    let rect = GetPlotImageRect($plot)
 
-    image.css("max-width", rect.width);
-    image.css("max-height", rect.height);
+    $image.css("max-width", rect.width);
+    $image.css("max-height", rect.height);
 
-    let new_width = parseFloat(image.css("width"));
-    let new_height = parseFloat(image.css("height"));
+    let new_width = parseFloat($image.css("width"));
+    let new_height = parseFloat($image.css("height"));
 
     let max = rect.width;
 
-    image.css("left", rect.left + (max - new_width) / 2.0);
-    image.css("top", rect.top + (max - new_height) / 2.0);
+    $image.css("left", rect.left + (max - new_width) / 2.0);
+    $image.css("top", rect.top + (max - new_height) / 2.0);
 }
 
-function ResizeFont(parent, base_image)
+function ResizeFont($parent, $base_image)
 {
-    let height = base_image.height();
+    let height = $base_image.height();
     if (height == 0)
         return;
-    let previousHeight = base_image.data("previous-height");
+    let previousHeight = $base_image.data("previous-height");
 
-    old_font_size = parseFloat(parent.css("font-size"));
-    parent.css("font-size", old_font_size * height / previousHeight);
+    let old_font_size = parseFloat($parent.css("font-size"));
+    $parent.css("font-size", old_font_size * height / previousHeight);
 }
+
 $(document).ready(function() {
     $("#result-count").data("crafting-font-size", 15.0 / 100 * parseInt($("#crafting-recipe-image").prop("naturalHeight"), 10) + "px");
     $("#result-count").data("stonecutter-font-size", 20.0 / 100 * parseInt($("#stonecutter-recipe-image").prop("naturalHeight"), 10) + "px");
@@ -159,86 +160,86 @@ $(document).ready(function() {
             else 
                 $("#stonecutter-plot-ingredient-image").addClass("undisplayed-data");
 
-            let result_count = $("#result-count")
-            let timer_data = $("#timer-data");
-            let image = $("#" + image_id)
+            let $result_count = $("#result-count");
+            let $timer_data = $("#timer-data");
+            let $image = $("#" + image_id);
             if (image_id.includes("crafting")) {
 
                 $(".crafting-area").each(function(i, obj){
-                    ResizeAreaById(obj.id, image);
-                    ResizePlotImageById(obj.id, image);
+                    ResizeAreaById(obj.id, $image);
+                    ResizePlotImageById(obj.id, $image);
                 })
                 
                 if (width > 0)
                 {
-                    result_count.css("font-size", result_count.data("crafting-font-size"));
-                    ResizeFont($("#result-count"), image);
-                    result_count.data("crafting-font-size", result_count.css("font-size"));
+                    $result_count.css("font-size", $result_count.data("crafting-font-size"));
+                    ResizeFont($result_count, $image);
+                    $result_count.data("crafting-font-size", $result_count.css("font-size"));
                 }
             } 
             else if (image_id.includes("furnace")) {
 
                 $(".furnace-area").each(function(i, obj){
-                    ResizeAreaById(obj.id, image);
-                    ResizePlotImageById(obj.id, image);
+                    ResizeAreaById(obj.id, $image);
+                    ResizePlotImageById(obj.id, $image);
                 })
 
                 $(".furnace-button").each(function(i, obj){
-                    ResizeAreaById(obj.id, image)
+                    ResizeAreaById(obj.id, $image)
                 })
 
                 if (width > 0)
                 {
-                    timer_data.css("font-size", timer_data.data("furnace-font-size"));
-                    ResizeFont($("#timer-data"), image);
-                    timer_data.data("furnace-font-size", timer_data.css("font-size"));
+                    $timer_data.css("font-size", $timer_data.data("furnace-font-size"));
+                    ResizeFont($timer_data, $image);
+                    $timer_data.data("furnace-font-size", $timer_data.css("font-size"));
                 }
-                ResizeFont($("#xp-data"), image);
+                ResizeFont($("#xp-data"), $image);
             } 
             else if (image_id.includes("smithing")) {
 
                 $(".smithing-area").each(function(i, obj){
-                    ResizeAreaById(obj.id, image);
-                    ResizePlotImageById(obj.id, image);
+                    ResizeAreaById(obj.id, $image);
+                    ResizePlotImageById(obj.id, $image);
                 })
             }
             else if (image_id.includes("campfire"))
             {
                 $(".campfire-area").each(function(i, obj){
-                    ResizeAreaById(obj.id, image);
-                    ResizePlotImageById(obj.id, image);
+                    ResizeAreaById(obj.id, $image);
+                    ResizePlotImageById(obj.id, $image);
                 })
                 
                 $(".campfire-button").each(function(i, obj){
-                    ResizeAreaById(obj.id, image)
+                    ResizeAreaById(obj.id, $image)
                 })
 
                 if (width > 0)
                 {
-                    timer_data.css("font-size", timer_data.data("campfire-font-size"));
-                    ResizeFont($("#timer-data"), image);
-                    timer_data.data("campfire-font-size", timer_data.css("font-size"));
+                    $timer_data.css("font-size", $timer_data.data("campfire-font-size"));
+                    ResizeFont($("#timer-data"), $image);
+                    $timer_data.data("campfire-font-size", $timer_data.css("font-size"));
                 }
             }
             else if (image_id.includes("stonecutter"))
             {
                 $(".stonecutter-area").each(function(i, obj){
-                    ResizeAreaById(obj.id, image);
-                    ResizePlotImageById(obj.id, image);
+                    ResizeAreaById(obj.id, $image);
+                    ResizePlotImageById(obj.id, $image);
                 })  
 
                 if (width > 0) 
                 {
-                    result_count.css("font-size", result_count.data("stonecutter-font-size"));
-                    ResizeFont($("#result-count"), image);
-                    result_count.data("stonecutter-font-size", result_count.css("font-size"));
+                    $result_count.css("font-size", $result_count.data("stonecutter-font-size"));
+                    ResizeFont($("#result-count"), $image);
+                    $result_count.data("stonecutter-font-size", $result_count.css("font-size"));
                 }
             }
 
 
             if (width > 0 && height > 0) {
-                image.data("previous-width", width);
-                image.data("previous-height", height);
+                $image.data("previous-width", width);
+                $image.data("previous-height", height);
             }
         }
 

@@ -183,16 +183,16 @@ class Item(models.Model):
     def __str__(self):
         return self.name
 
-def GetElementTypeAndName(*args):
-    if len(args) == 0:
-        print_error("Not enough args for function GetElementTypeAndId")
+def GetElementTypeAndName(**kwargs):
+    if len(kwargs) == 0:
+        print_error("Not enough args for function GetElementTypeAndName")
         return
-    elif len(args) == 1:
-        type_, id = args[0].split("~")
-    elif len(args) == 2:
-        type_, id = args[0], args[1]
+    if 'data' in kwargs: #format type~id
+        type_, id = kwargs['data'].split("~")
+    elif 'type_' in kwargs and 'id' in kwargs:
+        type_, id = kwargs['type_'], kwargs['id']
     else:
-        print_error("Too many args for function GetElementTypeAndId")
+        print_error("Bad args for function GetElementTypeAndName")
         return
 
     if type_ == 'item':
@@ -203,21 +203,30 @@ def GetElementTypeAndName(*args):
     return None
 
 
-def GetElementTypeAndId(*args):
-    if len(args) == 0:
-        print_error("Not enough args for function GetElementTypeAndId")
+def GetElementTypeAndId(**kwargs):
+    if len(kwargs) == 0:
+        print_error("Not enough args for function GetElementTypeAndName")
         return
-    elif len(args) == 1:
-        type_, name = args[0].split("~")
-    elif len(args) == 2:
-        type_, name = args[0], args[1]
+    if 'data' in kwargs: #format type~name
+        type_, name = kwargs['data'].split("~")
+    elif 'type_' in kwargs and 'name' in kwargs:
+        type_, name = kwargs['type_'], kwargs['name']
     else:
-        print_error("Too many args for function GetElementTypeAndId")
+        print_error("Bad args for function GetElementTypeAndName")
         return
+
     if type_ == 'item':
         return (type_, Item.objects.get(id_name=name).id)
     elif type_ == 'tag':
-        return (type_, Tag.objects.filter(name=name)[0].id)
+        tags = Tag.objects.filter(name=name)
+
+        user = None
+        if 'user' in kwargs:
+            user = kwargs['user']
+
+        for tag in tags:
+            if tag.user == user or tag.user == None:
+                return (type_, tag.id)
     print_error("Unknown type: %s" % type_)
     return None
 

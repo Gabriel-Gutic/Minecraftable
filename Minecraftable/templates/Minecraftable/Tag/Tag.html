@@ -1,0 +1,55 @@
+{% extends "Minecraftable/base.html" %}
+{% block title %}Tag{% endblock title %}}
+
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/tag.css' %}">
+
+<div id="main-card" class="card p-4 position-absolute start-50 translate-middle-x align-items-center">
+    <h1 class="jumbotron-heading">Tag</h1>
+    {% csrf_token %}
+    <div class="form-floating mb-3 mt-2">
+        <input id="name-input" class="form-control" placeholder="irelevant" name="name_input"
+        {% if tag %}
+            value="{{tag.name}}"
+        {% endif %}>
+        <label for="name-input">Name</label>
+    </div>
+
+    {% if tag %}
+    <p id="tag-data" class="undisplayed-data">{{tag.id}}?{{tag.image.url}}</p>
+    {% endif %}
+    <div id="image-div"></div>
+
+    <div class="form-floating mb-3 mt-3">
+        <input class="form-control" id="search-input" placeholder="irelevant">
+        <label for="name-input">Search</label>
+    </div>
+
+    <ul id="item-list" class="list-group object-list border border-light border-2">
+        {% for item in items %}
+            <li id="list-group-item-{{item.id}}" class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    {% if tag and item in tag.item_set.all %}
+                        <input id="check-item-{{item.id}}" class="form-check-input check-item" type="checkbox" checked> 
+                    {% else %}
+                        <input id="check-item-{{item.id}}" class="form-check-input check-item" type="checkbox"> 
+                    {% endif %}
+                    <label id="label-item-{{item.id}}" class="form-check-label ms-2 item-label" for="check-item-{{item.id}}">
+                        {{item.name}}
+                    </label>
+                </div>
+            <img id="item-image-{{item.id}}" src="{{item.image.url}}" class="item-image"></li>
+        {% endfor %}
+    </ul>
+
+    <button id="save-button" class="mt-2 btn btn-primary">Save</button>
+</div>
+
+{% endblock content %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.0/dist/js.cookie.min.js"></script>
+<script type="text/javascript" src="{% static 'js/input-picture/input-picture.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/tag.js' %}"></script>
+{% endblock scripts %}

@@ -1,0 +1,15 @@
+{% extends "Minecraftable/base.html" %}
+
+{% block title %} Tag Not Exist {% endblock title %}
+
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/warning.css' %}">
+
+<br>
+<div id="warning-message">
+    <h2>Sorry!</h2>
+    <p>But, the tag you are searching for does not exist</p>
+    <a href="/Minecraftable/home/">Back to Home Page</a>
+</div>
+{% endblock content %}

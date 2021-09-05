@@ -82,8 +82,8 @@ $(document).ready(function() {
 
                 recipe.push(type + "~" + id);
             })
-            let data = $("#furnace-plot-result-image-data");
-            let valid = data.length > 0 && recipe.length > 0;
+            let $data = $("#furnace-plot-result-image-data");
+            let valid = $data.length > 0 && recipe.length > 0;
 
             if (!valid)
             {
@@ -98,7 +98,7 @@ $(document).ready(function() {
             timer = 60 * minutes + seconds; // Turn timer in seconds only
 
             let xp = $("#xp-data").text();
-            result = data.text() + "!" + timer + "!" + xp;
+            result = $data.text() + "!" + timer + "!" + xp;
         }
         else if (select == "stonecutting")
         {
@@ -114,8 +114,8 @@ $(document).ready(function() {
 
                 recipe.push(type + "~" + id);
             })
-            let data = $("#stonecutter-plot-result-image-data");
-            let valid = data.length > 0 && recipe.length > 0;
+            let $data = $("#stonecutter-plot-result-image-data");
+            let valid = $data.length > 0 && recipe.length > 0;
 
             if (!valid)
             {
@@ -123,8 +123,8 @@ $(document).ready(function() {
                 return;
             }
 
-            result_count = $("#result-count").text()
-            result = data.text() + "!" + result_count;
+            result_count = $("#result-count").text();
+            result = $data.text() + "!" + result_count;
         }
         else if (select == "campfire_cooking")
         {
@@ -140,8 +140,8 @@ $(document).ready(function() {
 
                 recipe.push(type + "~" + id);
             })
-            let data = $("#campfire-plot-result-image-data");
-            let valid = data.length > 0 && recipe.length > 0;
+            let $data = $("#campfire-plot-result-image-data");
+            let valid = $data.length > 0 && recipe.length > 0;
 
             if (!valid)
             {
@@ -155,7 +155,7 @@ $(document).ready(function() {
 
             timer = 60 * minutes + seconds; // Turn timer in seconds only
 
-            result = data.text() + "!" + timer;
+            result = $data.text() + "!" + timer;
         }
         else 
         {

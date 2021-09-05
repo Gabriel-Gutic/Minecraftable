@@ -89,12 +89,12 @@ def recipe(request, datapack_id, recipe_id):
                 data['crafting'] = crafting
             elif data['type'] == 'smithing':
                 base = first_from_dict(recipe.get_base())
-                type_, id = GetElementTypeAndId(base[0], base[1])
-                base = type_ + "~" + id
+                type_, id = GetElementTypeAndId(type_=base[0], name=base[1], user=request.user)
+                base = type_ + "~" + str(id)
 
                 addition = first_from_dict(recipe.get_addition())
-                type_, id = GetElementTypeAndId(addition[0] + "~" + addition[1])
-                addition = type_ + "~" + id
+                type_, id = GetElementTypeAndId(data=addition[0] + "~" + addition[1], user=request.user)
+                addition = type_ + "~" + str(id)
 
                 data['base'] = base
                 data['addition'] = addition 
@@ -105,7 +105,7 @@ def recipe(request, datapack_id, recipe_id):
                 data['ingredients'] = []
                 for ingredient in ingredients:
                     for key, value in ingredient.items():
-                        type_, id = GetElementTypeAndId(key, value)
+                        type_, id = GetElementTypeAndId(type_=key, name=value, user=request.user)
 
                         data['ingredients'].append((type_, id))
             elif data['type'] == 'stonecutting':
@@ -113,7 +113,7 @@ def recipe(request, datapack_id, recipe_id):
                 data['ingredients'] = []
                 for ingredient in ingredients:
                     for key, value in ingredient.items():
-                        type_, id = GetElementTypeAndId(key, value)
+                        type_, id = GetElementTypeAndId(type_=key, name=value, user=request.user)
 
                         data['ingredients'].append((type_, id))
             elif data['type'] == 'campfire_cooking':
@@ -121,7 +121,7 @@ def recipe(request, datapack_id, recipe_id):
                 data['ingredients'] = []
                 for ingredient in ingredients:
                     for key, value in ingredient.items():
-                        type_, id = GetElementTypeAndId(key, value)
+                        type_, id = GetElementTypeAndId(type_=key, name=value, user=request.user)
 
                         data['ingredients'].append((type_, id))
                 data['cooking_time'] = recipe.get_cooking_time_in_seconds()

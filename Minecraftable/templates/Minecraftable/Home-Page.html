@@ -3,28 +3,54 @@
 {% block content %}
 {% load static %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="{% static 'css/home-page.css' %}">
 
 {% if user.is_authenticated %}
-    <div class="card p-4 position-absolute start-50 translate-middle-x text-center" style="max-width: 35rem; min-width: 35rem;">
-        <h1 class="jumbotron-heading">Your datapacks:</h1>
-        <br>
-        <ul class="list-group">
-            {% for datapack in datapacks %}
-                <li id="datapack-item-{{datapack.id}}" class="list-group-item d-flex justify-content-between align-items-center">
-                    {{datapack.name}}
-                    <div>
-                        <a href="/Minecraftable/datapack/{{datapack.id}}/" class="btn btn-primary">Open</a>
-                        <a href="/Minecraftable/datapack/{{datapack.id}}/settings/" class="btn btn-secondary">Settings</a>
-                        <a id="{{datapack.id}}-delete" class="btn btn-danger delete-button">Delete</a>
-                    </div>
-                </li>
-            {% endfor %}
-            <li class="list-group-item justify-content-between align-items-center">
-                <a href="/Minecraftable/datapack/create/" class="btn btn-primary">Create a new datapack</a>
-            </li>
-        </ul>
-        
-        <p id="deleted-datapack-id" style="display: none;"></p>
+    <div class="row">
+        <div class="data-col col-sm-6">
+            <div class="data-card card p-4 text-center align-items-center">
+                <h1 class="jumbotron-heading">Your datapacks:</h1>
+                <br>
+                <ul class="list-group object-list">
+                    {% for datapack in datapacks %}
+                        <li id="datapack-item-{{datapack.id}}" class="list-group-item d-flex justify-content-between align-items-center">
+                            {{datapack.name}}
+                            <div>
+                                <a href="/Minecraftable/datapack/{{datapack.id}}/" class="btn btn-primary">Open</a>
+                                <a href="/Minecraftable/datapack/{{datapack.id}}/settings/" class="btn btn-secondary">Settings</a>
+                                <a id="{{datapack.id}}-delete" class="btn btn-danger datapack-delete-button">Delete</a>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <a href="/Minecraftable/datapack/create/" class="btn btn-primary create-button mt-3">Create a new datapack</a>
+                
+                <p id="deleted-datapack-id" style="display: none;"></p>
+            </div>
+        </div>
+        <div class="data-col col-sm-6">
+            <div class="data-card card p-4 text-center align-items-center">
+                <h1 class="jumbotron-heading">Your tags:</h1>
+                <br>
+                <ul class="list-group object-list">
+                    {% for tag in tags %}
+                        <li id="tag-item-{{tag.id}}" class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="left-div">
+                                <img src="{{tag.image.url}}" alt="{{tag.id}}" class="item-image">
+                                {{tag.name}}
+                            </div>
+                            <div>
+                                <a href="/Minecraftable/tag/{{tag.id}}/" class="btn btn-primary">Open</a>
+                                <a id="{{tag.id}}-delete" class="btn btn-danger tag-delete-button">Delete</a>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <a href="/Minecraftable/tag/create/" class="btn btn-primary create-button mt-3">Create a new tag</a>
+            
+                <p id="deleted-tag-id" style="display: none;"></p>
+            </div>
+        </div>
     </div>
 {% else %}
 
@@ -40,7 +66,8 @@
 
 {% endif %}
 
-<div id="modal-div"></div>
+<div id="modal-datapack"></div>
+<div id="modal-tag"></div>
 {% csrf_token %}
 {% endblock content %}
 
