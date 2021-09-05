@@ -169,4 +169,4 @@ def recipe(request, datapack_id, recipe_id):
 
 @datapack_owned()
 def create(request, datapack_id):
-    return recipe(request, datapack_id, None)
+    return recipe(request=request, datapack_id=datapack_id, recipe_id=None)

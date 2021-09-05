@@ -18,13 +18,11 @@ class SmithingRecipe(RawRecipe):
     def get_addition(self):
         return self.addition
 
-    def set_base(self, base): #Format: type~name
-        type_, name = base.split('~')
+    def set_base(self, type_, name):
         self.base.clear()
         self.base[type_] = name
 
-    def set_addition(self, addition): #Format: type~name
-        type_, name = addition.split('~')
+    def set_addition(self, type_, name):
         self.addition.clear()
         self.addition[type_] = name
 

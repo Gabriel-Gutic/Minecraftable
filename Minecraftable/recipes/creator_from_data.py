@@ -24,7 +24,8 @@ def create_from_data(recipe_id : int, name : str, recipe_type, recipe_list, resu
 
         for element in recipe_list:
             if element is not None and element != '':
-                recipe.add_ingredient(GetElementTypeAndName(data=element))
+                type_, name_ = GetElementTypeAndName(data=element)
+                recipe.add_ingredient(type_, name_)
     elif recipe_type == "crafting_shaped":
         recipe = CraftingRecipeShaped()
 
@@ -39,7 +40,7 @@ def create_from_data(recipe_id : int, name : str, recipe_type, recipe_list, resu
         type_, name_ = GetElementTypeAndName(data=recipe_list[0])
         recipe.set_base(type_, name_)
 
-        type_, name_ = GetElementTypeAndName(data=ecipe_list[1])
+        type_, name_ = GetElementTypeAndName(data=recipe_list[1])
         recipe.set_addition(type_, name_)
     elif recipe_type == "smelting":
         recipe = SmeltingRecipe()
@@ -74,7 +75,7 @@ def create_from_data(recipe_id : int, name : str, recipe_type, recipe_list, resu
         print_error("Result must be item!")
         return None
     recipe.set_result(Item.objects.get(id=result_id).id_name)
-    recipe.set_result_count(result_count)
+    recipe.set_result_count(int(result_count))
 
     if recipe_id == -1: #Create new recipe_instance
         message = 'created'

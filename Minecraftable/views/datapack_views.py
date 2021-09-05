@@ -78,7 +78,7 @@ def datapack(request, datapack_id):
             recipe_name = recipe.name
             recipe.delete()
 
-            print_info("Datapack " + recipe_name + " deleted")
+            print_info("Recipe '" + recipe_name + "' deleted")
             return JsonResponse({"recipe_id": recipe_id}, status=200)
 
     template = loader.get_template('Minecraftable/Datapack/Datapack.html')

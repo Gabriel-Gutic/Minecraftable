@@ -14,13 +14,13 @@ class StonecuttingRecipe(RawRecipe):
     def get_ingredients(self):
         return self.ingredients
 
-    def add_ingredient(self, type_, name): #ingredient format: type~name
+    def add_ingredient(self, type_, name):
         for ingredient in self.ingredients:
             if name in ingredient.values():
                 return
         self.ingredients.append({ type_: name })
     
-    def remove_ingredient(self, type_, name): #ingredient format: type~name
+    def remove_ingredient(self, type_, name):
         i = 0
         for ingredient in self.ingredients:
             if type_ in ingredient:

@@ -23,6 +23,12 @@ class RawRecipe():
     def set_result_count(self, result_count):
         self.result_count = result_count
 
+    def get_result(self):
+        return self.result
+
+    def get_count(self):
+        return self.result_count
+
     #Protected method to put every inherited recipe's data in self.dictionary
     def _fill_dictionary_(self):
         pass

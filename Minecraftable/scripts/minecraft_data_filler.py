@@ -27,7 +27,11 @@ class Filler():
         Item.objects.all().delete()
     
     def remove_all_tags(self):
-        Tag.objects.all().delete()
+        file = open('MineSite/Minecraftable/scripts/default_tags.txt', 'r')
+        for line in file.readlines():
+            line = line[:-1]
+            Tag.objects.filter(name=line).delete()
+        
 
     def fill_items(self):
         #Iterate through all 9 pages that contain ids
@@ -47,7 +51,7 @@ class Filler():
                 name = parts[1].string
                 if name == 'Air':
                     continue
-                id = parts[2].string[10:]
+                id = parts[2].string
 
                 image_path = None
                 image = item.find('img')
@@ -65,19 +69,25 @@ class Filler():
                 else:
                     extra_items_path = self.static + '/images/extra-items/'
 
-                    if os.path.exists(extra_items_path + id + '.png'):
-                        image_path = 'extra-items/' + id + '.png'
+                    if os.path.exists(extra_items_path + id[10:] + '.png'):
+                        image_path = 'extra-items/' + id[10:] + '.png'
+                        print_error("Image path: " + image_path)
                 #If the item is not already existing, create it
                 items = Item.objects.filter(id_name=id)
                 if len(items) == 0 and (image_path is not None):
-                    item = Item.objects.create(
-                        id_name=id,
-                        name=name,
-                        image=image_path,
-                    )
-                    item.save()
+                    try:
+                        item = Item.objects.create(
+                            id_name=id,
+                            name=name,
+                            image=image_path,
+                        )
+                        item.save()
 
-                    print_info("Item %s successfully created!" % item)
+                        print_info("Item %s successfully created!" % item)
+                    except Item.DoesNotExist:
+                        item = Item.objects.get(id_name=id)
+                        print_error("Id name: '" + id + "' is  already taken  by item: " + item.id + " --- " + item.name)
+                        return
     
     def fill_tags(self):
         #Open the page with tags
@@ -98,7 +108,8 @@ class Filler():
                 parts = item.findAll('td')
 
                 #The tag names have a '\n' character at the end
-                tag_name = parts[0].string[:-1]
+                image_name = parts[0].string[:-1]
+                tag_name = 'minecraft:' + image_name
 
                 tags = Tag.objects.filter(name=tag_name)
                 if len(tags) == 0:
@@ -107,10 +118,12 @@ class Filler():
                     #Get the items that are containing the curent tag
                     ids = parts[1].text.split(', ')
                     ids[-1] = str(ids[-1])[:-1]
+                    for i in range(len(ids)):
+                        ids[i] = 'minecraft:' + ids[i]
                     #Get the tags that are specified for the curent tag
                     other_tags = parts[1].findAll('a')
                     for other_tag in other_tags:
-                        other_tag_name = other_tag.string.replace('#','')
+                        other_tag_name = 'minecraft:' + other_tag.string.replace('#','')
 
                         #Check if this tag already exists:
                         t = Tag.objects.filter(name=other_tag_name)
@@ -123,9 +136,8 @@ class Filler():
                             tag_finished = False
                     
                     if tag_finished:
-                        image_path = 'default_tags/' + tag_name + '.png'
-                        if os.path.exists(self.static + '\\images\\default_tags\\' + tag_name + '.png'):
-    
+                        image_path = 'default_tags/' + image_name + '.png'
+                        if os.path.exists(self.static + '\\images\\' + image_path):
                             new_tag = Tag.objects.create(
                                 name=tag_name,
                                 image=image_path,
@@ -147,8 +159,6 @@ filler.remove_all_items()
 filler.remove_all_tags()
 filler.fill_items()
 filler.fill_tags()
-
-        
         
 
 

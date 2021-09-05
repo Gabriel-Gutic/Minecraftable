@@ -5,73 +5,57 @@ from Minecraftable.recipes.smelting_recipe import SmeltingRecipe, BlastingRecipe
 
 class SmeltingRecipeTest(TestCase):
 
+    def __test_smelting_recipe__(self, recipe):
+        recipe.add_ingredient('item', 'minecraft:granite')
+        recipe.add_ingredient('item', 'minecraft:granite')
+        recipe.add_ingredient('tag',  'minecraft:leaves')
+        self.assertEqual(recipe.get_ingredients(), [{'item': 'minecraft:granite'}, {'tag': 'minecraft:leaves'}])
+
+        recipe.add_ingredient('item', 'minecraft:stone')
+        recipe.remove_ingredient('item', 'minecraft:stone')
+        self.assertEqual(recipe.get_ingredients(), [{'item': 'minecraft:granite'}, {'tag': 'minecraft:leaves'}])
+
+        recipe.add_ingredient('tag', 'minecraft:stone')
+        recipe.remove_ingredient('tag', 'minecraft:stone')
+        self.assertEqual(recipe.get_ingredients(), [{'item': 'minecraft:granite'}, {'tag': 'minecraft:leaves'}])
+
+        recipe.set_result('minecraft:grass_block')
+        self.assertEqual(recipe.get_result(), 'minecraft:grass_block')
+
+        recipe.set_cooking_time_in_seconds(2)
+        self.assertEqual(recipe.get_cooking_time_in_seconds(), 2)
+
+        recipe.set_experience(100)
+        self.assertEqual(recipe.get_experience(), 100)
+
     def test_smelting_recipe(self):
         sr = SmeltingRecipe()
 
-        sr.add_ingredient('item', 'granite')
-        sr.add_ingredient('item', 'granite')
-        sr.add_ingredient('tag', 'leaves')
-
-        sr.add_ingredient('item', 'stone')
-        sr.remove_ingredient('item', 'stone')
-
-        sr.add_ingredient('tag', 'stone')
-        sr.remove_ingredient('tag', 'stone')
-
-        sr.set_result('grass_block')
-        sr.set_cooking_time_in_seconds(2)
-        sr.set_experience(100)
+        self.__test_smelting_recipe__(sr)
 
         sr.write('test files/smelting_recipe.json')
+
 
     def test_blasting_recipe(self):
         br = BlastingRecipe()
 
-        br.add_ingredient('item', 'granite')
-        br.add_ingredient('tag', 'leaves')
-
-        br.add_ingredient('item', 'stone')
-        br.remove_ingredient('item', 'stone')
-
-        br.add_ingredient('tag', 'stone')
-        br.remove_ingredient('tag', 'stone')
-
-        br.set_result('grass_block')
-        br.set_experience(100)
+        self.__test_smelting_recipe__(br)
 
         br.write('test files/blasting_recipe.json')
+
 
     def test_smoking_recipe(self):
         sr = SmokingRecipe()
 
-        sr.add_ingredient('item', 'granite')
-        sr.add_ingredient('tag', 'leaves')
-
-        sr.add_ingredient('item', 'stone')
-        sr.remove_ingredient('item', 'stone')
-
-        sr.add_ingredient('tag', 'stone')
-        sr.remove_ingredient('tag', 'stone')
-
-        sr.set_result('grass_block')
-        sr.set_experience(100)
+        self.__test_smelting_recipe__(sr)
 
         sr.write('test files/smoking_recipe.json')
+
 
     def test_campfire_recipe(self):
         cr = CampfireRecipe()
 
-        cr.add_ingredient('item', 'granite')
-        cr.add_ingredient('tag', 'leaves')
-
-        cr.add_ingredient('item', 'stone')
-        cr.remove_ingredient('item', 'stone')
-
-        cr.add_ingredient('tag', 'stone')
-        cr.remove_ingredient('tag', 'stone')
-
-        cr.set_result('grass_block')
-        cr.set_experience(100)
+        self.__test_smelting_recipe__(cr)
 
         cr.write('test files/campfire_recipe.json')
 

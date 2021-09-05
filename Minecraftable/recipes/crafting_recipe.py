@@ -81,10 +81,10 @@ class CraftingRecipeShaped(RawRecipe):
     def get_keys(self):
         return self.keys
 
-    def add_value(self, type_, name, i, j): #element format: type~id
+    def add_value(self, type_, name, i, j):
         for key, value in self.keys.items():
             if type_ in value:
-                if value[type_] == id:
+                if value[type_] == name:
                     self.pattern[i][j] = key
                     return
 
@@ -94,7 +94,7 @@ class CraftingRecipeShaped(RawRecipe):
         self.pattern[i][j] = key
         self.keys[key] = {type_: name}
 
-    def remove_value(self, type_, name): #element format: type~id
+    def remove_value(self, type_, name):
         for key, value in self.keys.items():
             if type_ in value:
                 if value[type_] == name:

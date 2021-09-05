@@ -76,8 +76,9 @@ $(document).ready(function()
             delete data.create;
             data['update'] = "";
             data['tag-id'] = parseInt($tag_data.text().split("?")[0], 10);
-        }    
 
+        }    
+        
         if (inputPicture.HaveImage())
         {
             inputPicture.Upload({
@@ -95,7 +96,25 @@ $(document).ready(function()
                 }
             })
         }
-        else {
+        else if ($tag_data.length > 0)
+        {
+            $.ajax({
+                headers: { "X-CSRFToken": Cookies.get("csrftoken") },
+                url: "/Minecraftable/tag/update/",
+                type: "POST",
+                data: data,
+                success: function(data){
+                    if (!!data.error)
+                    {
+                        Error(data.error);
+                        return;
+                    }
+                    window.location.replace("/Minecraftable/home/");
+                }
+            })
+        }
+        else
+        {
             alert("Please select an image!")
         }
     })
