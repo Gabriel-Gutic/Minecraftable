@@ -1,18 +1,38 @@
+from posixpath import dirname
 from django.template import loader
 
 from Minecraftable.printer import print_info
 
 
-def get_matrix_from_request_post(request_post, matrix_name : str):
-    recipe = []
-    i = 0
-    key = matrix_name + "[" + str(i) + "][]"
-    while key in request_post:
-        recipe.append(request_post.getlist(key))
-        i += 1
-        key = matrix_name + "[" + str(i) + "][]"
-    
-    return recipe
+def zip_from_directory(dir_path):
+    from zipfile import ZipFile
+    import zipfile
+    import os
+    from os.path import basename
+
+    zip_path = dir_path + ".zip"
+    location = dir_path[:len(dir_path) - len(basename(dir_path))]
+    with ZipFile(zip_path, 'w') as zip_file:
+        for folderName, subFolders, fileNames in os.walk(dir_path):
+            zfi = zipfile.ZipInfo(folderName.replace(location, '', 1))
+            zfi.external_attr = 16
+            zip_file.writestr(zfi, '')
+            for fileName in fileNames:
+                filePath = os.path.join(folderName, fileName)
+                zip_file.write(filePath, filePath.replace(location, "", 1))
+        zip_file.close()
+        return zip_file.filename
+
+
+def remove_files_that_contain(text):
+    from django.core.files.storage import FileSystemStorage
+    from django.conf import settings as django_settings
+
+    fs = FileSystemStorage()
+    dirs, files = fs.listdir(django_settings.MEDIA_ROOT)
+    for file in files:
+        if text in str(file):
+            fs.delete(file)
 
 
 def next_alpha(s):

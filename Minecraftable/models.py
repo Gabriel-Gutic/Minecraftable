@@ -52,6 +52,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email']
 
+    def delete(self, *args, **kwargs):
+        self.image.storage.delete()
+        super().delete(*args, **kwargs)
+
     def __str__(self):
         return self.username
 
@@ -171,6 +175,10 @@ class Tag(models.Model):
     def __str__(self):
         return self.name
 
+    def delete(self, *args, **kwargs):
+        self.image.storage.delete()
+        super().delete(*args, **kwargs)
+
 
 class Item(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -182,6 +190,10 @@ class Item(models.Model):
 
     def __str__(self):
         return self.name
+
+    def delete(self, *args, **kwargs):
+        self.image.storage.delete()
+        super().delete(*args, **kwargs)
 
 def GetElementTypeAndName(**kwargs):
     if len(kwargs) == 0:

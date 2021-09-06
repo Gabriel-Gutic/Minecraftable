@@ -44,18 +44,18 @@
             <div class="mt-3 d-flex justify-content-center">
                 <div id="image-div" class="text-center mb-2">
 
-                    <img id="crafting-recipe-image" src="{% static 'images/crafting-table-interface.png' %}" class="rounded recipe-image" alt="Crafting-Interface" usemap="#crafting-table-map">
+                    <img id="crafting-recipe-image" src="{% static 'images/recipe/crafting-table-interface.png' %}" class="rounded recipe-image" alt="Crafting-Interface" usemap="#crafting-table-map">
                     
-                    <img id="furnace-recipe-image" src="{% static 'images/furnace-interface.gif' %}"         class="rounded recipe-image undisplayed-data" alt="Furnace-Interface" usemap="#furnace-map">
-                    <img id="furnace-plot-ingredient-image" src="{% static 'images/hover.jpg' %}"            class="plot-list-image undisplayed-data">
+                    <img id="furnace-recipe-image" src="{% static 'images/recipe/furnace-interface.gif' %}"         class="rounded recipe-image undisplayed-data" alt="Furnace-Interface" usemap="#furnace-map">
+                    <img id="furnace-plot-ingredient-image" src="{% static 'images/recipe/hover.jpg' %}"            class="plot-list-image undisplayed-data">
 
-                    <img id="smithing-recipe-image" src="{% static 'images/smithing_table_interface.png' %}" class="rounded recipe-image undisplayed-data" alt="Smithing-Table-Interface" usemap="#smithing-table-map">
+                    <img id="smithing-recipe-image" src="{% static 'images/recipe/smithing_table_interface.png' %}" class="rounded recipe-image undisplayed-data" alt="Smithing-Table-Interface" usemap="#smithing-table-map">
 
-                    <img id="stonecutter-recipe-image" src="{% static 'images/stonecutter_interface.gif' %}" class="rounded recipe-image undisplayed-data" alt="Stonecutter-Interface" usemap="#stonecutter-map">
-                    <img id="stonecutter-plot-ingredient-image" src="{% static 'images/hover.jpg' %}"            class="plot-list-image undisplayed-data">
+                    <img id="stonecutter-recipe-image" src="{% static 'images/recipe/stonecutter_interface.gif' %}" class="rounded recipe-image undisplayed-data" alt="Stonecutter-Interface" usemap="#stonecutter-map">
+                    <img id="stonecutter-plot-ingredient-image" src="{% static 'images/recipe/hover.jpg' %}"            class="plot-list-image undisplayed-data">
 
-                    <img id="campfire-recipe-image" src="{% static 'images/campfire_interface.gif' %}" class="rounded recipe-image undisplayed-data" alt="Campfire-Interface" usemap="#campfire-map">
-                    <img id="campfire-plot-ingredient-image" src="{% static 'images/hover.jpg' %}"  class="plot-list-image undisplayed-data">
+                    <img id="campfire-recipe-image" src="{% static 'images/recipe/campfire_interface.gif' %}" class="rounded recipe-image undisplayed-data" alt="Campfire-Interface" usemap="#campfire-map">
+                    <img id="campfire-plot-ingredient-image" src="{% static 'images/recipe/hover.jpg' %}"  class="plot-list-image undisplayed-data">
 
                     <p id="result-count" name="result-count" class="recipe-data fw-bold text-white">
                         {% if recipe_id  is None %}
@@ -64,7 +64,7 @@
                     </p>
                     <p id="timer-data" name="timer-data" class="recipe-data cooking-data fw-bold text-black undisplayed-data">00: 10</p>
                     <p id="xp-data"    name="xp-data"    class="recipe-data cooking-data fw-bold text-black undisplayed-data">0</p>
-                    <img id="plot-hover-image" src="{% static 'images/hover.jpg' %}">
+                    <img id="plot-hover-image" src="{% static 'images/recipe/hover.jpg' %}">
                 </div>
                 <map name="crafting-table-map">
                     <area id="crafting-plot-0-0"    class="crafting-area recipe-image-plot recipe-plot" coords="25,24,80,80"     shape="rect">

@@ -75,7 +75,8 @@ def create_from_data(recipe_id : int, name : str, recipe_type, recipe_list, resu
         print_error("Result must be item!")
         return None
     recipe.set_result(Item.objects.get(id=result_id).id_name)
-    recipe.set_result_count(int(result_count))
+    if result_count is not None:
+        recipe.set_result_count(int(result_count))
 
     if recipe_id == -1: #Create new recipe_instance
         message = 'created'

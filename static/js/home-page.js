@@ -82,4 +82,31 @@ $(document).ready(function() {
         })
     })
 
+    $(".download-datapack").on("click", function() {
+        $li = $(this).parent().parent();
+        let datapack_id = parseInt($li.attr("id").split("-")[2], 10);
+
+        $.ajax({
+            url: "/Minecraftable/datapack/" + datapack_id + "/download/",
+            type: "GET",
+            success: function(data) {
+                var element = document.createElement('a');
+                element.style.display = "none";
+                element.setAttribute('href', data.zip_url);
+                element.setAttribute('download', data.zip_name);
+                document.body.appendChild(element);
+                element.click();
+                document.body.removeChild(element);
+
+                $.ajax({
+                    url: "/Minecraftable/datapack/download/complete/" + data.zip_name + "/",
+                    type: "GET",
+                    success: function(data) {
+                        console.log("Downloaded successfully!")
+                    }
+                })
+            }
+        })
+    })
+
 })

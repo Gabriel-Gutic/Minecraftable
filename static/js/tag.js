@@ -8,16 +8,21 @@ $(document).ready(function()
     $("#search-input").on("input", function()
     {
         let text = $(this).val().toLowerCase();
+        let checked = $("#items-checked").prop("checked");       
 
         let list = $(".item-label")
         for (let i = 0; i < list.length; i++)
         {
-            let $element = $("#" + list[i].id);
+            let $element = $(list[i]);
             item_name = $element.text().toLowerCase();
-            if (!item_name.includes(text))
-                $element.parent().parent().addClass("undisplayed-data");
-            else
+
+            let checked_item = $element.parent().find("input").prop("checked");
+
+            //Check for name and check value
+            if (item_name.includes(text) && (checked_item == checked || checked == false))
                 $element.parent().parent().removeClass("undisplayed-data");
+            else
+                $element.parent().parent().addClass("undisplayed-data");
         }
     })
 
@@ -39,6 +44,26 @@ $(document).ready(function()
 
     inputPicture.OnChange(function(temp_path){
         inputPicture.SetImage(temp_path);
+    })
+
+    $("#items-checked").on("click", function()
+    {
+        const checked = $(this).prop("checked");
+        
+        $("#search-input").trigger("input");
+        /*if (checked)
+        {
+            let list = $(".list-group-item").not(".undisplayed-data");
+            for (let i = 0; i < list.length; i++)
+            {
+                $li = $(list[i]);
+                if (!$li.find("input").prop("checked"))
+                    $li.addClass("undisplayed-data");
+            }
+        }
+        else 
+        {
+        }*/
     })
 
     $("#save-button").on("click", function()

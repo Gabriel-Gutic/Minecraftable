@@ -24,7 +24,14 @@
     <div class="form-floating mb-3 mt-3">
         <input class="form-control" id="search-input" placeholder="irelevant">
         <label for="name-input">Search</label>
+    <div class="form-check form-switch mt-3">
+        <input class="form-check-input" type="checkbox" value="" id="items-checked">
+        <label class="form-check-label" for="items-checked">
+            Selected Ones
+        </label>
     </div>
+    </div>
+
 
     <ul id="item-list" class="list-group object-list border border-light border-2">
         {% for item in items %}
