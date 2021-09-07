@@ -4,7 +4,7 @@ from django.shortcuts import redirect
 
 from Minecraftable.printer import print_error, print_info
 from Minecraftable.forms import NewDatapackForm
-from Minecraftable.models import Datapack, Recipe, Tag
+from Minecraftable.models import Datapack, Recipe, Tag, Item
 from Minecraftable.decorators import datapack_owned
 from Minecraftable.decorators import login_required
 
@@ -84,7 +84,17 @@ def datapack(request, datapack_id):
     template = loader.get_template('Minecraftable/Datapack/Datapack.html')
 
     datapack = Datapack.objects.get(id=datapack_id)
-    recipes = Recipe.objects.filter(datapack=datapack)
+    recipes_ = Recipe.objects.filter(datapack=datapack)
+    recipes = []
+    for recipe_ in recipes_:
+        recipe = recipe_.get_recipe()
+        id_name = recipe.get_result()
+
+        recipes.append({ 
+            'id': recipe_.id,
+            'name': recipe_.name,
+            "image": Item.objects.get(id_name=id_name).image.url,
+        })
 
     context = {
         'datapack': datapack,

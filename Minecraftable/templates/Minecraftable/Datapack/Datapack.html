@@ -4,6 +4,7 @@
 
 {% block content %}
 {% load static %}
+<link rel="stylesheet" href="{% static 'css/datapack.css' %}">
 
 <div class="card p-4 position-absolute start-50 translate-middle-x text-center" style="max-width: 35rem; min-width: 35rem;">
     <h1 class="jumbotron-heading">Datapack: {{datapack.name}}</h1>
@@ -11,7 +12,10 @@
     <ul class="list-group">
         {% for recipe in recipes %}
             <li id="recipe-{{recipe.id}}" class="list-group-item d-flex justify-content-between align-items-center">
-                {{recipe.name}}
+                <div>
+                    <img class="recipe-image" src="{{recipe.image}}" alt="No Image">
+                    {{recipe.name}}
+                </div>
                 <div>
                     <a href="recipe/{{recipe.id}}/" class="btn btn-primary">Open</a>
                     <a id="{{recipe.id}}-delete" class="btn btn-danger delete-button"><p id="{{recipe.id}}-name" style="display: none;">{{recipe.name}}</p>Delete</a>

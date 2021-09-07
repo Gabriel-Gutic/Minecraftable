@@ -128,3 +128,13 @@ area {
 .fa-trash-alt {
     cursor: pointer;
 }
+
+.type-image
+{
+    max-width: 32px;
+    max-height: 32px;
+}
+
+input[type='radio'] { 
+    transform: scale(1.5); 
+}

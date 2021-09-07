@@ -17,11 +17,11 @@ $(document).ready(function() {
             }
         }
 
-        let select = $("#recipe-type-select").find(":selected").val();
+        let type = $("#type-select-data").val();
 
         //Crafting recipes
         let recipe = null
-        if (select == "crafting_shapeless" || select == "crafting_shaped") {
+        if (type == "crafting_shapeless" || type == "crafting_shaped") {
             let valid = false
 
             for (let i = 0; i < 3 && !valid; i++)
@@ -48,7 +48,7 @@ $(document).ready(function() {
                 }
             result_count = $("#result-count").text()
             result = $("#crafting-plot-result-image-data").text() + "!" + result_count;
-        } else if (select == "smithing") {
+        } else if (type == "smithing") {
             let valid = true;
             $(".smithing-plot").each(function(i, obj) {
                 has_image = $("#" + obj.id + "-image").length > 0;
@@ -68,7 +68,7 @@ $(document).ready(function() {
 
             result = $("#smithing-plot-result-image-data").text()
         } 
-        else if (select == "smelting" || select == "blasting" || select == "smoking")
+        else if (type == "smelting" || type == "blasting" || type == "smoking")
         {
             let popover_list = $("#furnace-plot-ingredient-image").data("popover-list");
             recipe = []
@@ -100,7 +100,7 @@ $(document).ready(function() {
             let xp = $("#xp-data").text();
             result = $data.text() + "!" + timer + "!" + xp;
         }
-        else if (select == "stonecutting")
+        else if (type == "stonecutting")
         {
             let popover_list = $("#stonecutter-plot-ingredient-image").data("popover-list");
             recipe = []
@@ -126,7 +126,7 @@ $(document).ready(function() {
             result_count = $("#result-count").text();
             result = $data.text() + "!" + result_count;
         }
-        else if (select == "campfire_cooking")
+        else if (type == "campfire_cooking")
         {
             let popover_list = $("#campfire-plot-ingredient-image").data("popover-list");
             recipe = []
@@ -172,7 +172,7 @@ $(document).ready(function() {
             data: {
                 'recipe_id': recipe_id,
                 'name': name,
-                'type': select,
+                'type': type,
                 'recipe': recipe,
                 'result': result,
             },

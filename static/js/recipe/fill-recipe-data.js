@@ -42,7 +42,7 @@ function FillRecipeData() {
             {
                 let name = data.name;
                 $("#name-input").val(name)
-                $("#recipe-type-select").val(data.type).change()
+                $("#type-select").SetType(data.type);
 
                 setTimeout(function() {
                     if (data.type == "crafting_shapeless") 
@@ -119,7 +119,5 @@ function FillRecipeData() {
             }
         })
 
-    } else {
-        $("#recipe-type-select").val("crafting_shapeless").change()
     }
 }

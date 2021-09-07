@@ -31,7 +31,7 @@ $(document).ready(function()
     })
     $("#xp-data").on("change", function()
     {
-        type = $("#recipe-type-select").val();
+        let type = $("#type-select-data").val();
         if (['smelting','smoking','blasting'].includes(type))
         {    
             xp = GetXP();

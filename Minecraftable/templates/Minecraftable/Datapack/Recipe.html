@@ -18,11 +18,32 @@
                 <input class="form-control" id="name-input" placeholder="irelevant">
                 <label for="name-input">Name</label>
             </div>
+            <!--
             <select id="recipe-type-select" class="form-select" aria-label="Default select example">
                 {% for type in recipe_types %}
                     <option value="{{type.1}}">{{type.2}}</option>
                 {% endfor %}
             </select>
+            -->
+            <div id="type-select">
+                <input id="type-select-data" class="undisplayed-data" value="">
+                <button class="form-select" type="button" id="type-select-button" data-bs-toggle="dropdown" aria-expanded="false">
+                </button>
+                <ul id="type-list" class="dropdown-menu" aria-labelledby="type-select-button">
+                    {% for type in recipe_types %}
+                    <li>
+                        <a class="dropdown-item type-item" data-type="{{type.1}}">
+                            <div>
+                                {% with "/media/recipe/types/"|add:type.1|add:".png" as img_src %}
+                                    <img class="type-image" src="{{img_src}}">
+                                {% endwith %}
+                                {{type.2}}
+                            </div>
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
 
             <div class="row mt-3">
                 <div class="col-md-2">
@@ -140,10 +161,11 @@
 <script type="text/javascript" src="{% static 'js/popover-list/main.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/popover-list/utils.js' %}"></script>
 
+<script type="text/javascript" src="{% static 'js/recipe/type-dropdown.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/recipe/utils-buttons/count.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/recipe/utils-buttons/erase.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/recipe/utils-buttons/timer.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/recipe/utils-buttons/xp.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/recipe/recipe-type-select.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/recipe/ElementList.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/recipe/set-element-in-plot.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/recipe/fill-item-list.js' %}"></script>

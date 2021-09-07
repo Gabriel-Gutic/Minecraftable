@@ -54,7 +54,7 @@ $(document).ready(function(){
     })
 
     $("#timer-data").on("change", function(){
-        type = $("#recipe-type-select").val();
+        let type = $("#type-select-data").val();
         if (['smelting','smoking','blasting', 'campfire_cooking'].includes(type))
         {
             let left, top;

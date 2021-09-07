@@ -1,16 +1,5 @@
 $(document).ready(function() {
-
-    $("#erase-plot-button").on("click", function() {
-        class_name = "btn-primary"
-
-        if ($(this).hasClass(class_name)) {
-            $(this).removeClass(class_name);
-        } else {
-            $(this).addClass(class_name);
-        }
-
-    })
-
+    
     $("#increment-result-count-button").on("click", function() {
         let $counter = $("#result-count");
         let count = parseInt($counter.text(), 10);
@@ -24,7 +13,7 @@ $(document).ready(function() {
     })
 
     $("#result-count").on("change", function() {
-        let selected = $("#recipe-type-select").val()
+        let selected = $("#type-select-data").val()
         
         let $increment = $("#increment-result-count-button")
         let $decrement = $("#decrement-result-count-button")

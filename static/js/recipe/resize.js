@@ -253,4 +253,16 @@ $(document).ready(function() {
 
         resize_object.observe(images[i]);
     }
+
+    const resize_dropdown = new ResizeObserver(function(entries){
+        for (const entry of entries) {
+            let rect = entry.contentRect;
+
+            const width = rect.width;
+
+            $("#type-list").css("width", width + 50);
+        }
+    })
+
+    resize_dropdown.observe(document.getElementById("type-select-button"));
 })
