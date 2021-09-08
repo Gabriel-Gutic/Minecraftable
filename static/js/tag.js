@@ -48,22 +48,7 @@ $(document).ready(function()
 
     $("#items-checked").on("click", function()
     {
-        const checked = $(this).prop("checked");
-        
         $("#search-input").trigger("input");
-        /*if (checked)
-        {
-            let list = $(".list-group-item").not(".undisplayed-data");
-            for (let i = 0; i < list.length; i++)
-            {
-                $li = $(list[i]);
-                if (!$li.find("input").prop("checked"))
-                    $li.addClass("undisplayed-data");
-            }
-        }
-        else 
-        {
-        }*/
     })
 
     $("#save-button").on("click", function()
@@ -108,7 +93,7 @@ $(document).ready(function()
         {
             inputPicture.Upload({
                 headers: { "X-CSRFToken": Cookies.get("csrftoken") },
-                url: "/Minecraftable/tag/update/",
+                url: "/tag/update/",
                 data: data,
                 success: function(data)
                 {
@@ -117,7 +102,7 @@ $(document).ready(function()
                         Error(data.error);
                         return;
                     }
-                    window.location.replace("/Minecraftable/home/");
+                    window.location.replace("/home/");
                 }
             })
         }
@@ -125,7 +110,7 @@ $(document).ready(function()
         {
             $.ajax({
                 headers: { "X-CSRFToken": Cookies.get("csrftoken") },
-                url: "/Minecraftable/tag/update/",
+                url: "/tag/update/",
                 type: "POST",
                 data: data,
                 success: function(data){
@@ -134,7 +119,7 @@ $(document).ready(function()
                         Error(data.error);
                         return;
                     }
-                    window.location.replace("/Minecraftable/home/");
+                    window.location.replace("/home/");
                 }
             })
         }

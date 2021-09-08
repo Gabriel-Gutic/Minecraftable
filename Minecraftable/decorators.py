@@ -12,12 +12,12 @@ def datapack_owned():
             try:
                 datapack = Datapack.objects.get(id=datapack_id)
             except Datapack.DoesNotExist:
-                return redirect('/Minecraftable/datapack/not-exist/') 
+                return redirect('/datapack/not-exist/') 
 
             if datapack.user == user or user.is_staff:
                 return view_func(request, *args, **kwargs)
             else:
-                return redirect('/Minecraftable/not-permission/')
+                return redirect('/not-permission/')
             
         return wrapper_func
     return decorator
@@ -32,12 +32,12 @@ def tag_owned():
             try:
                 tag = Tag.objects.get(id=tag_id)
             except Tag.DoesNotExist:
-                return redirect('/Minecraftable/tag/not-exist/') 
+                return redirect('/tag/not-exist/') 
 
             if tag.user == user or user.is_staff:
                 return view_func(request, *args, **kwargs)
             else:
-                return redirect('/Minecraftable/not-permission/')
+                return redirect('/not-permission/')
             
         return wrapper_func
     return decorator
@@ -49,7 +49,7 @@ def login_required():
             user = request.user
 
             if not user.is_authenticated:
-                return redirect('/Minecraftable/login/') 
+                return redirect('/login/') 
             return view_func(request, *args, **kwargs)
         return wrapper_func
     return decorator
@@ -60,7 +60,7 @@ def login_not_required():
             user = request.user
 
             if user.is_authenticated:
-                return redirect('/Minecraftable/home/') 
+                return redirect('/home/') 
             return view_func(request, *args, **kwargs)
         return wrapper_func
     return decorator

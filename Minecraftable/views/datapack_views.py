@@ -23,7 +23,7 @@ def create(request):
             datapack = Datapack.objects.create(name=name, description=description, version=version, user=request.user)
             datapack.save()
             print_info("Datapack %s successfully created!")
-            return redirect('/Minecraftable/home/')
+            return redirect('/home/')
 
     context = {
         'form': form,

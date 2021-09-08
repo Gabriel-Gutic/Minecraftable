@@ -60,14 +60,14 @@ def profile(request):
     if request.method == 'GET' and request.is_ajax():
         if 'change-email' in request.GET:
             if user.email_confirmed:
-                url = request.get_host() + '/Minecraftable/reset-email/'
+                url = request.get_host() + '/reset-email/'
                 reset_email_send(url, user.username, user.email)
                 print_info('Reset Email send successfully!')
             else:
                 return JsonResponse({'error': "Sorry, the last email associated with this account was not confirmed. So you can't reset your email until you confirm it. Please check out your email history to find your confirmation email"}, status=200)
         elif 'change-password' in request.GET:
             if user.email_confirmed:
-                url = request.get_host() + '/Minecraftable/reset-password/'
+                url = request.get_host() + '/reset-password/'
                 reset_password_send(url, user.username, user.email)
                 print_info('Password Reset Email send successfully!')
             else:
@@ -117,7 +117,7 @@ def login(request):
                     user = User.objects.get(email=username_email)
                 except User.DoesNotExist:
                     messages.error(request, error_message)
-                    return redirect('/Minecraftable/login/')
+                    return redirect('/login/')
             
             password = form.cleaned_data['password']
             result = check_password(password, user.password)
@@ -131,12 +131,12 @@ def login(request):
                     request.session.set_expiry(None) #unlimited time
                     request.session.modified = True
                 next = request.GET.get('next')
-                if next == "/Minecraftable/logout/" or next == None or next == "/Minecraftable/login/" or next == "/Minecraftable/register/":
-                    return redirect("/Minecraftable/home/")
+                if next == "/logout/" or next == None or next == "/login/" or next == "/register/":
+                    return redirect("/home/")
                 return HttpResponseRedirect(next)
             else:
                 messages.error(request, error_message)
-                return redirect('/Minecraftable/login/')
+                return redirect('/login/')
 
 
 
@@ -164,12 +164,12 @@ def register(request):
             if result is not None:
                 result.print()
                 messages.error(request, result)
-                return redirect('/Minecraftable/register/')
+                return redirect('/register/')
             
             user = User.create_user(email=email, username=username, password=password)
             auth_login(request, user)
 
-            path = request.get_host() + '/Minecraftable/email_confirmed/'
+            path = request.get_host() + '/email_confirmed/'
             send_confirmation_email(path, username, email)
 
             return HttpResponseRedirect('confirmation/')
@@ -221,7 +221,7 @@ def forgot_password(request):
         if not user.email_confirmed:
             return JsonResponse({'error': "Sorry, the email associated with this account was not confirmed. So you can't reset your password until you confirm it. Please check out your email history to find your confirmation email"}, status=200)
 
-        url = request.get_host() + '/Minecraftable/reset-password/'
+        url = request.get_host() + '/reset-password/'
         reset_password_send(url, user.username, user.email)
         print_info('Password Reset Email send successfully!')
         return JsonResponse({}, status=200)
@@ -242,7 +242,7 @@ def reset_password(request, data):
             password = form.cleaned_data['password']
             user.set_password(password)
             user.save()
-            return redirect('/Minecraftable/home/')
+            return redirect('/home/')
 
     form = ResetPasswordForm()
 
@@ -276,10 +276,10 @@ def reset_email(request, data):
             user.email_confirmed = False
             user.save()
 
-            path = request.get_host() + '/Minecraftable/email_confirmed/'
+            path = request.get_host() + '/email_confirmed/'
             send_confirmation_email(path, user.username, email)
 
-            return redirect('/Minecraftable/email-reset-confirmation/')
+            return redirect('/email-reset-confirmation/')
 
     form = ResetEmailForm()
 

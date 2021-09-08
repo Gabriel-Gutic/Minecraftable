@@ -27,7 +27,7 @@ $(document).ready(function(){
                         Error(data.error);
                     }
                     else
-                        window.location.replace("/Minecraftable/recovery-email-send/");
+                        window.location.replace("/recovery-email-send/");
                 }
             })
         }

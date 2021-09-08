@@ -13,6 +13,7 @@ function ResizeArea($area, $base_image)
     let new_coords = "";
     for (let i = 0; i < old_coords.length; i+=2)
     {
+        console.log(previousWidth);
         new_coords += parseFloat(old_coords[i]) * width / previousWidth + ",";
         new_coords += parseFloat(old_coords[i+1]) * height / previousHeight;
         if (i + 2 < old_coords.length)
@@ -108,20 +109,30 @@ function GetPlotImageRect(plot)
     }
 }
 
-function SetImageRectForPlot($image, $plot)
+function SetImageRectForPlot($image, $plot, addition_function = () => {})
 {
-    let rect = GetPlotImageRect($plot)
+    var func = () => {
+        addition_function();
+        let rect = GetPlotImageRect($plot)
 
-    $image.css("max-width", rect.width);
-    $image.css("max-height", rect.height);
+        $image.css("max-width", rect.width);
+        $image.css("max-height", rect.height);
 
-    let new_width = parseFloat($image.css("width"));
-    let new_height = parseFloat($image.css("height"));
+        let new_width = parseFloat($image.css("width"));
+        let new_height = parseFloat($image.css("height"));
 
-    let max = rect.width;
+        let max = rect.width;
 
-    $image.css("left", rect.left + (max - new_width) / 2.0);
-    $image.css("top", rect.top + (max - new_height) / 2.0);
+        $image.css("left", rect.left + (max - new_width) / 2.0);
+        $image.css("top", rect.top + (max - new_height) / 2.0);
+    }
+
+    $image.on("load", func);
+
+    if ($image.prop("complete") && $image.prop("naturalHeight") !== 0)
+    {
+        $image.trigger("load");
+    }
 }
 
 function ResizeFont($parent, $base_image)
@@ -136,6 +147,7 @@ function ResizeFont($parent, $base_image)
 }
 
 $(document).ready(function() {
+    
     $("#result-count").data("crafting-font-size", 15.0 / 100 * parseInt($("#crafting-recipe-image").prop("naturalHeight"), 10) + "px");
     $("#result-count").data("stonecutter-font-size", 20.0 / 100 * parseInt($("#stonecutter-recipe-image").prop("naturalHeight"), 10) + "px");
     $("#result-count").css("font-size", $("#result-count").data("crafting-font-size"));
@@ -248,16 +260,22 @@ $(document).ready(function() {
     images = document.getElementsByClassName("recipe-image");
     for (let i = 0; i < images.length; i++) 
     {
-        $("#" + images[i].id).data("previous-width", images[i].naturalWidth)
-        $("#" + images[i].id).data("previous-height", images[i].naturalHeight)
+        let $image = $(images[i]);
+        images[i].onload = function () {
+            $image.data("previous-width", images[i].naturalWidth);
+            $image.data("previous-height", images[i].naturalHeight);
 
-        resize_object.observe(images[i]);
+            resize_object.observe(images[i]);
+        }
+
+        if (images[i].complete && images[i].naturalWidth !== 0) {
+            $image.trigger("load");
+        }
     }
 
     const resize_dropdown = new ResizeObserver(function(entries){
         for (const entry of entries) {
             let rect = entry.contentRect;
-
             const width = rect.width;
 
             $("#type-list").css("width", width + 50);

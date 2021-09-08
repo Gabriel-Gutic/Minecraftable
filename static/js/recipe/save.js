@@ -177,7 +177,7 @@ $(document).ready(function() {
                 'result': result,
             },
             success: function(data) {
-                window.location.href = '/Minecraftable/datapack/' + data.datapack_id + '/'
+                window.location.href = '/datapack/' + data.datapack_id + '/'
             }
         })
         

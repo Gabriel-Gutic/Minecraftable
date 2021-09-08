@@ -150,3 +150,4 @@ EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 
 STATIC_PATH = config['static']
+

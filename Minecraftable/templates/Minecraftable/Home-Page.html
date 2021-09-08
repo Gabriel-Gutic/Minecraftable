@@ -16,15 +16,15 @@
                         <li id="datapack-item-{{datapack.id}}" class="list-group-item d-flex justify-content-between align-items-center">
                             {{datapack.name}}
                             <div>
-                                <a href="/Minecraftable/datapack/{{datapack.id}}/" class="btn btn-primary">Open</a>
+                                <a href="/datapack/{{datapack.id}}/" class="btn btn-primary">Open</a>
                                 <a class="btn btn-primary download-datapack">Download</a>
-                                <a href="/Minecraftable/datapack/{{datapack.id}}/settings/" class="btn btn-secondary">Settings</a>
+                                <a href="/datapack/{{datapack.id}}/settings/" class="btn btn-secondary">Settings</a>
                                 <a id="{{datapack.id}}-delete" class="btn btn-danger datapack-delete-button">Delete</a>
                             </div>
                         </li>
                     {% endfor %}
                 </ul>
-                <a href="/Minecraftable/datapack/create/" class="btn btn-primary create-button mt-3">Create a new datapack</a>
+                <a href="/datapack/create/" class="btn btn-primary create-button mt-3">Create a new datapack</a>
                 
                 <p id="deleted-datapack-id" style="display: none;"></p>
             </div>
@@ -41,13 +41,13 @@
                                 {{tag.name}}
                             </div>
                             <div>
-                                <a href="/Minecraftable/tag/{{tag.id}}/" class="btn btn-primary">Open</a>
+                                <a href="/tag/{{tag.id}}/" class="btn btn-primary">Open</a>
                                 <a id="{{tag.id}}-delete" class="btn btn-danger tag-delete-button">Delete</a>
                             </div>
                         </li>
                     {% endfor %}
                 </ul>
-                <a href="/Minecraftable/tag/create/" class="btn btn-primary create-button mt-3">Create a new tag</a>
+                <a href="/tag/create/" class="btn btn-primary create-button mt-3">Create a new tag</a>
             
                 <p id="deleted-tag-id" style="display: none;"></p>
             </div>
@@ -60,8 +60,8 @@
         <p class="lead text-muted">Welcome to the Minecraftable! A very good site that allows you to create your own Minecraft recipes.</p>
         <p class="lead text-muted">Enjoy!</p>
         <p>
-            <a href="/Minecraftable/login/" class="btn btn-primary my-2">Login</a>
-            <a href="/Minecraftable/register/" class="btn btn-primary my-2">Create a new account</a>
+            <a href="/login/" class="btn btn-primary my-2">Login</a>
+            <a href="/register/" class="btn btn-primary my-2">Create a new account</a>
         </p>
     </div>    
 

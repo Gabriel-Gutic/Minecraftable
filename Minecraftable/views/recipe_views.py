@@ -70,7 +70,6 @@ def recipe(request, datapack_id, recipe_id):
                     else:
                         print_error("Unknown ingredient!")
                 data['ingredients'] = ingredients_list
-                
             elif data['type'] == 'crafting_shaped':
                 crafting = [['', '', ''], ['', '', ''], ['', '', '']]
                 rp = recipe.get_pattern()

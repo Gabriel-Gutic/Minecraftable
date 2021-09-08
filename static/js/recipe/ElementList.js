@@ -9,7 +9,7 @@ class ElementList {
         this.type = type;
         this.image = null;
         if (element.image != null && element.image != "None") {
-            this.image = `<img id="` + type + `-image-` + element.id + `" src="` + element.image + `" class="` + type + `-image element-image">`
+            this.image = `<img id="` + type + `-image-` + element.id + `" src="` + element.image + `" class="` + type + `-image element-image" loading="lazy">`
         }
     }
 }

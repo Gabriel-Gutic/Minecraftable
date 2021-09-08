@@ -38,7 +38,7 @@ $(document).ready(function() {
         $.ajax({
             headers: { "X-CSRFToken": Cookies.get("csrftoken") },
             type: "POST",
-            url: "#",
+            url: "",
             dataType: 'json',
             data: {
                 "datapack-delete": "",
@@ -68,7 +68,7 @@ $(document).ready(function() {
         $.ajax({
             headers: { "X-CSRFToken": Cookies.get("csrftoken") },
             type: "POST",
-            url: "#",
+            url: "",
             dataType: 'json',
             data: {
                 "tag-delete": "",
@@ -87,7 +87,7 @@ $(document).ready(function() {
         let datapack_id = parseInt($li.attr("id").split("-")[2], 10);
 
         $.ajax({
-            url: "/Minecraftable/datapack/" + datapack_id + "/download/",
+            url: "/datapack/" + datapack_id + "/download/",
             type: "GET",
             success: function(data) {
                 var element = document.createElement('a');
@@ -99,7 +99,7 @@ $(document).ready(function() {
                 document.body.removeChild(element);
 
                 $.ajax({
-                    url: "/Minecraftable/datapack/download/complete/" + data.zip_name + "/",
+                    url: "/datapack/download/complete/" + data.zip_name + "/",
                     type: "GET",
                     success: function(data) {
                         console.log("Downloaded successfully!")

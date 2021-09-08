@@ -13,7 +13,7 @@ $(document).ready(function() {
 
         $.ajax({
             type: "GET",
-            url: "#",
+            url: "",
             data: {
                 "changed-settings": "",
                 "name": $("#name-field").val(),

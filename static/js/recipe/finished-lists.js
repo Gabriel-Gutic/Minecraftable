@@ -5,7 +5,7 @@ $(document).ready(function() {
         ok2 = $("#tag-list-finished").val()
 
         if (ok1 == "true" && ok2 == "true") {
-            FillRecipeData()
+            FillRecipeData();
         }
     })
 

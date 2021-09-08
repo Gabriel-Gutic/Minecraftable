@@ -35,7 +35,7 @@ $(document).ready(function()
         $.ajax({
             headers: { "X-CSRFToken": Cookies.get("csrftoken") },
             type: "POST",
-            url: "#",
+            url: "",
             dataType: 'json',
             data: {
                 "recipe-delete": "",

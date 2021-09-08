@@ -64,14 +64,16 @@ function SetElementInPlot($plot, $element, show_popover = true) {
         $image.remove();
         $("#" + img_id + "-data").remove();
     } 
+
     $("#image-div").append(`<img id="` + img_id + `" src="` + element_image + `" class="plot-image">`)
     $("#image-div").append(`<p id="` + img_id + `-data" class="undisplayed-data">` + type + `~` + element_id + `</p>`)
     var $image = $("#" + img_id);
-    if (type == "tag") {
-        SetPopoverFromTagRadio($image, $element, "plot-tag-popover", "plot-tag-popover", show_popover)
-    }
-    
-    SetImageRectForPlot($image, $plot);
+
+    SetImageRectForPlot($image, $plot, () => {
+        if (type == "tag") {
+            SetPopoverFromTagRadio($image, $element, "plot-tag-popover", "plot-tag-popover", show_popover)
+        }
+    });
 }
 
 
