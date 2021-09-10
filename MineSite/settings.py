@@ -10,6 +10,14 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+from dotenv import load_dotenv
+load_dotenv()
+
+import environ
+# Initialise environment variables
+env = environ.Env()
+environ.Env.read_env()
+
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -136,7 +144,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'Minecraftable.User'
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+'''
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 
@@ -149,5 +157,16 @@ EMAIL_HOST_PASSWORD = config['password']
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 
-STATIC_PATH = config['static']
+'''
+STATIC_PATH = os.path.join(BASE_DIR, 'static')
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST_USER = os.getenv("DEFAULT_FROM_EMAIL", "")
+EMAIL_HOST_PASSWORD = os.getenv("FROM_EMAIL_PASSWORD", "")
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "")
 

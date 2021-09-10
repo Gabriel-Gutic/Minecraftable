@@ -97,14 +97,6 @@ $(document).ready(function() {
                 document.body.appendChild(element);
                 element.click();
                 document.body.removeChild(element);
-
-                $.ajax({
-                    url: "/datapack/download/complete/" + data.zip_name + "/",
-                    type: "GET",
-                    success: function(data) {
-                        console.log("Downloaded successfully!")
-                    }
-                })
             }
         })
     })

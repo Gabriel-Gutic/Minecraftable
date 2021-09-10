@@ -1,3 +1,4 @@
+from multiprocessing import process
 from django.template import loader
 from django.http import HttpResponse, JsonResponse, response
 from django.shortcuts import redirect
@@ -122,9 +123,12 @@ def download(request, datapack_id):
         i += 1
         main_folder = os.path.join(static_root, name + "_" + str(i))
     
-    os.mkdir(main_folder)
 
-    with open(os.path.join(main_folder, 'pack.mcmeta'), 'w') as pack_file:
+    os.mkdir(main_folder)
+    second_folder = os.path.join(main_folder, name)
+    os.mkdir(second_folder)
+
+    with open(os.path.join(second_folder, 'pack.mcmeta'), 'w') as pack_file:
         pack_data = {
             "pack": {
             "pack_format": datapack.version,
@@ -138,7 +142,7 @@ def download(request, datapack_id):
         pack_file.write(pack_content) 
         pack_file.close()
 
-    data_folder = os.path.join(main_folder, 'data')
+    data_folder = os.path.join(second_folder, 'data')
     os.mkdir(data_folder)
 
     os.mkdir(os.path.join(data_folder, "minecraft"))
@@ -178,26 +182,24 @@ def download(request, datapack_id):
         json_file.close()
 
     from Minecraftable.utils import zip_from_directory
+    print_info("Datapack folder: " + main_folder)
     zip_path = zip_from_directory(main_folder)
+    print_info("Datapack zip: " + zip_path)
+
     zip_name = basename(zip_path)
 
     shutil.rmtree(main_folder)
     zip = open(zip_path, "rb")
 
     from django.core.files.storage import FileSystemStorage
-    fs = FileSystemStorage()
+    finished_root = os.path.join(static_root, 'finished')
+    fs = FileSystemStorage(finished_root, base_url='/static/datapacks/finished')
     fs.delete(zip_name)
     zip_file = fs.save(zip_name, zip)
     zip_url = fs.url(zip_file)
+    print_info(zip_url)
     zip.close()
+
     os.remove(zip_path)
 
     return JsonResponse({"zip_url": zip_url, "zip_name": zip_name}, status=200)
-
-
-def download_complete(request, zip_name):
-    from django.core.files.storage import FileSystemStorage
-    fs = FileSystemStorage()
-
-    fs.delete(zip_name)
-    return JsonResponse({}, status=200)

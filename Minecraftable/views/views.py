@@ -182,7 +182,6 @@ def register(request):
 
 
 def register_confirmation(request):
-    print_info('Merge')
     template = loader.get_template('Minecraftable/User/register-confirmation.html')
 
     context = {}

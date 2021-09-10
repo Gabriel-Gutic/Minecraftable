@@ -139,8 +139,10 @@ def recipe(request, datapack_id, recipe_id):
                 })
             return JsonResponse({'items': items_dict}, status=200)
         elif 'prepare-tags' in request.GET:
+            from itertools import chain
             tags_dict = []
-            tags = Tag.objects.all()
+            tags = sorted(list(chain(Tag.objects.filter(user=None), Tag.objects.filter(user=request.user))),
+                    key=lambda instance: instance.id)
             for tag in tags:
                 items = []
                 for item in tag.item_set.all():

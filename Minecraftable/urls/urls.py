@@ -20,7 +20,6 @@ urlpatterns = [
     path('not-permission/', views.not_permission, name='not-permission'),
     path('datapack/create/', datapack_views.create, name='datapack-create'),
     path('datapack/not-exist/', datapack_views.not_exist, name='not-exist'),
-    path('datapack/download/complete/<str:zip_name>/', datapack_views.download_complete, name='download-complete'),
     path('datapack/<int:datapack_id>/', include('Minecraftable.urls.datapack_urls')),
     path('tag/create/', tag_views.create, name='tag-create'),
     path('tag/not-exist/', tag_views.not_exist, name='not-exist'),
